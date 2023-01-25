@@ -102,6 +102,31 @@ function tableproduction() {
   // console.log("menu :", datamenu);
 
   // -------------------------------------
+  const [pdkeycheck, setPdkeycheck] = useState<any>("");
+  console.log("pdkeycheck", pdkeycheck);
+
+  useEffect(() => {
+    if (pdkeycheck === "") {
+      const AutoUpdataPD_keyManpower = async () => {
+        const { data, error } = await supabase
+          .from("Manpower_record")
+          .update({
+            PD_key: localStorage.getItem("PD_key"),
+            activate_data: "activated",
+          })
+          .eq("Work_order_id", localStorage.getItem("Work_order_id"))
+          .eq("activate_data", "not");
+
+        if (data) {
+          console.log("Autoup PD_key Manpower_record Success", data);
+          setPdkeycheck("updatemanpower Success");
+        } else {
+          console.log("Autoup PD_key Manpower_record Error", error);
+        }
+      };
+      AutoUpdataPD_keyManpower();
+    }
+  }, []);
 
   useEffect(() => {
     const FetchData = async () => {
@@ -319,29 +344,6 @@ function tableproduction() {
     return () => clearInterval(intervalId);
   });
   //----up date PD_key to Manpower_record
-
-  useEffect(() => {
-    const LocalPD_key = localStorage.getItem("PD_key");
-    if (LocalPD_key) {
-      const AutoUpdataPD_keyManpower = async () => {
-        const { data, error } = await supabase
-          .from("Manpower_record")
-          .update({
-            PD_key: localStorage.getItem("PD_key"),
-            activate_data: "activated",
-          })
-          .eq("Work_order_id", localStorage.getItem("Work_order_id"))
-          .eq("activate_data", "not");
-
-        if (data) {
-          console.log("Autoup PD_key Manpower_record Success", data);
-        } else {
-          console.log("Autoup PD_key Manpower_record Error", error);
-        }
-      };
-      AutoUpdataPD_keyManpower();
-    }
-  }, []);
 
   //I
   const [dataNGShow, setDataNGShow] = useState<any>(0);
