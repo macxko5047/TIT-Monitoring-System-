@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import supabase from "../../compunentConfig/supabase";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function tablePeople() {
-
+  const [loading, setLoading] = useState<any>(false);
   const columns: GridColDef[] = [
     { field: "emp_no", headerName: "no", width: 60 },
     { field: "emp_name", headerName: "Name", width: 200 },
@@ -14,6 +15,7 @@ export default function tablePeople() {
 
   const [dataManpower, setDataManpower] = useState<any>([]);
   useEffect(() => {
+    setLoading(true);
     const FetchdataManpower_record = async () => {
       let { data, error } = await supabase
         .from("Manpower_record")
@@ -26,6 +28,7 @@ export default function tablePeople() {
       }
     };
     FetchdataManpower_record();
+    setLoading(false);
   }, []);
 
   const ReloadManpower_record = async () => {
@@ -58,6 +61,13 @@ export default function tablePeople() {
       supabase.removeChannel(ManpowerRecord);
     };
   }, [dataManpower]);
+
+  if (loading)
+    return (
+      <div>
+        <CircularProgress />
+      </div>
+    ); //รอโหลดข้อมูล
   return (
     <div style={{ height: 320, width: "100%" }}>
       <DataGrid
