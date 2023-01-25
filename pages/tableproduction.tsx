@@ -82,6 +82,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function tableproduction() {
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
+  const [loading1, setLoading1] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   //ระบุเวลา กด start pause stop
   let [timestart, setTimestart] = useState<any>("");
 
@@ -105,7 +106,7 @@ function tableproduction() {
 
   useEffect(() => {
     const pdkeycheck = localStorage.getItem("CheckWo");
-    setLoading(true);
+    setLoading1(true);
     const AutoUpdataPD_keyManpower = async () => {
       const { data, error } = await supabase
         .from("Manpower_record")
@@ -838,6 +839,13 @@ function tableproduction() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography sx={{ fontSize: 50 }}>Loading...</Typography>
+        <CircularProgress />
+      </Box>
+    ); //รอโหลดข้อมูล
+  if (loading1)
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography sx={{ fontSize: 50 }}>Loading1...</Typography>
         <CircularProgress />
       </Box>
     ); //รอโหลดข้อมูล
