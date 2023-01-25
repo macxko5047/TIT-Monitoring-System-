@@ -25,7 +25,7 @@ function CircularProgressWithLabel(
         }}
       >
         <Typography
-          variant="caption"
+          variant="h5"
           component="div"
           color="text.secondary"
         >{`${Math.round(props.value)}%`}</Typography>
@@ -35,7 +35,6 @@ function CircularProgressWithLabel(
 }
 
 export default function loadings() {
-  
   const [progress, setProgress] = useState<any>(0);
 
   useEffect(() => {
@@ -94,5 +93,7 @@ export default function loadings() {
 
   //0------------------------------------------------------------
 
-  return <CircularProgressWithLabel value={progress} />;
+  return (
+    <CircularProgressWithLabel value={progress} size="5.5rem" color="primary" />
+  );
 }
