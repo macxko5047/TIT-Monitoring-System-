@@ -102,11 +102,10 @@ function tableproduction() {
   // console.log("menu :", datamenu);
 
   // -------------------------------------
-  const [pdkeycheck, setPdkeycheck] = useState<any>("OK");
-  console.log("pdkeycheck", pdkeycheck);
 
   useEffect(() => {
-    if (pdkeycheck === "OK") {
+    const pdkeycheck = localStorage.getItem("CheckWo");
+    if (pdkeycheck) {
       const AutoUpdataPD_keyManpower = async () => {
         const { data, error } = await supabase
           .from("Manpower_record")
@@ -119,14 +118,13 @@ function tableproduction() {
 
         if (data) {
           console.log("Autoup PD_key Manpower_record Success", data);
-          setPdkeycheck("updatemanpower Success");
         } else {
           console.log("Autoup PD_key Manpower_record Error", error);
         }
       };
       AutoUpdataPD_keyManpower();
     }
-  }, [pdkeycheck]);
+  }, []);
 
   useEffect(() => {
     const FetchData = async () => {
