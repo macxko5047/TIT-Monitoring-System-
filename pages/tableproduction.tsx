@@ -126,7 +126,7 @@ function tableproduction() {
       };
       AutoUpdataPD_keyManpower();
     }
-  }, []);
+  }, [pdkeycheck]);
 
   useEffect(() => {
     const FetchData = async () => {
