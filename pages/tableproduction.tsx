@@ -124,6 +124,7 @@ function tableproduction() {
       }
     };
     AutoUpdataPD_keyManpower();
+    setLoading1(false);
   }, [loading1]);
 
   useEffect(() => {
