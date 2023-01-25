@@ -274,13 +274,16 @@ export default function tablework1() {
       ConfrimOpen();
     }
   };
-  const handleConfirm = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    fetchCheckPass();
+    await setLoading(true);
+    await fetchCheckPass();
+    await setLoading(false);
   };
   const [passConfrim, setPassConfrim] = useState("");
 
   const fetchCheckPass = async () => {
+    setLoading(true);
     const { data, error } = await supabase
       .from("userID")
       .select("*")
@@ -300,6 +303,7 @@ export default function tablework1() {
     } else {
       console.log("Password is incorrect", error);
     }
+    setLoading(false);
   };
   // push Agree
   const removeItem = () => {
