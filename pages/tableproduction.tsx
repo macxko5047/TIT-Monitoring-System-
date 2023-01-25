@@ -102,11 +102,11 @@ function tableproduction() {
   // console.log("menu :", datamenu);
 
   // -------------------------------------
-  const [pdkeycheck, setPdkeycheck] = useState<any>("1");
+  const [pdkeycheck, setPdkeycheck] = useState<any>("UP");
   console.log("pdkeycheck", pdkeycheck);
 
   useEffect(() => {
-    if (pdkeycheck === 1) {
+    if (pdkeycheck === "UP") {
       const AutoUpdataPD_keyManpower = async () => {
         const { data, error } = await supabase
           .from("Manpower_record")
