@@ -1118,7 +1118,7 @@ function tableproduction() {
             <Typography variant="h1">Down Time</Typography>
 
             <Typography sx={{ fontSize: 30 }}>Time pause : {times}</Typography>
-            <InputLabel sx={{ fontSize: 30 }}>Detal</InputLabel>
+            <InputLabel sx={{ fontSize: 30 }}>Detail</InputLabel>
             <Select
               label="Detals"
               fullWidth
