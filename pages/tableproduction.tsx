@@ -321,25 +321,26 @@ function tableproduction() {
   //----up date PD_key to Manpower_record
 
   useEffect(() => {
-    setLoading(true);
-    const AutoUpdataPD_keyManpower = async () => {
-      const { data, error } = await supabase
-        .from("Manpower_record")
-        .update({
-          PD_key: localStorage.getItem("PD_key"),
-          activate_data: "activated",
-        })
-        .eq("Work_order_id", localStorage.getItem("Work_order_id"))
-        .eq("activate_data", "not")
-        .is("PD_key", null);
-      if (data) {
-        console.log("Autoup PD_key Manpower_record Success", data);
-      } else {
-        console.log("Autoup PD_key Manpower_record Error", error);
-      }
-    };
-    AutoUpdataPD_keyManpower();
-    setLoading(false);
+    const LocalPD_key = localStorage.getItem("PD_key");
+    if (LocalPD_key != null) {
+      const AutoUpdataPD_keyManpower = async () => {
+        const { data, error } = await supabase
+          .from("Manpower_record")
+          .update({
+            PD_key: localStorage.getItem("PD_key"),
+            activate_data: "activated",
+          })
+          .eq("Work_order_id", localStorage.getItem("Work_order_id"))
+          .eq("activate_data", "not")
+          .is("PD_key", null);
+        if (data) {
+          console.log("Autoup PD_key Manpower_record Success", data);
+        } else {
+          console.log("Autoup PD_key Manpower_record Error", error);
+        }
+      };
+      AutoUpdataPD_keyManpower();
+    }
   }, []);
 
   //I
