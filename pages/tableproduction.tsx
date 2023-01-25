@@ -103,6 +103,7 @@ function tableproduction() {
   //----up date PD_key to Manpower_record
 
   useEffect(() => {
+    setLoading(true);
     const AutoUpdataPD_keyManpower = async () => {
       const { data, error } = await supabase
         .from("Manpower_record")
@@ -120,6 +121,7 @@ function tableproduction() {
       }
     };
     AutoUpdataPD_keyManpower();
+    setLoading(false);
   }, []);
 
   // -------------------------------------
