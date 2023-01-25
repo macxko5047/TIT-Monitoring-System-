@@ -113,7 +113,7 @@ export default function tablework1() {
   const [open, setOpen] = useState(false);
   const [datasec, setdataSec] = useState<any>([]);
   const [datasec01, setdataSec01] = useState<any>("");
-  
+
   const [PlayConfirm_Success, soundConfirm_Success] = useSound(
     "/Confirm_Success.mp3"
   );
@@ -265,7 +265,7 @@ export default function tablework1() {
   //======================================================
   // confrim
   const handleropenConfirm = () => {
-    const LocalPD_key = localStorage.getItem("PD_key")
+    const LocalPD_key = localStorage.getItem("PD_key");
     if (LocalPD_key != null) {
       alert("Please push STOP button before proceed next WO");
     }
@@ -511,12 +511,14 @@ export default function tablework1() {
   };
 
   const insertManpower = async () => {
+    setLoading(true);
     let { data, error } = await supabase.rpc("upmanpower", {
       wo: localStorage.getItem("Work_order_id"),
     });
 
     if (error) console.error(error);
-    else console.log("Up User Success", data);
+    else setLoading(false);
+    console.log("Up User Success", data);
   };
   //-----------------------------------------------------------------------
   const columnsAddPeople: GridColDef[] = [
@@ -568,12 +570,13 @@ export default function tablework1() {
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
 
-  if (loading)
+  if (loading) {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography sx={{ fontSize: 50 }}>Loading...</Typography>
       </Box>
     ); //รอโหลดข้อมูล
+  }
 
   if (!mounted) return null;
 
