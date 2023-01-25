@@ -322,7 +322,7 @@ function tableproduction() {
 
   useEffect(() => {
     const LocalPD_key = localStorage.getItem("PD_key");
-    if (LocalPD_key != null) {
+    if (LocalPD_key) {
       const AutoUpdataPD_keyManpower = async () => {
         const { data, error } = await supabase
           .from("Manpower_record")
