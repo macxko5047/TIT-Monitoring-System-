@@ -105,7 +105,7 @@ function tableproduction() {
 
   useEffect(() => {
     const pdkeycheck = localStorage.getItem("CheckWo");
-
+    setLoading(true);
     const AutoUpdataPD_keyManpower = async () => {
       const { data, error } = await supabase
         .from("Manpower_record")
