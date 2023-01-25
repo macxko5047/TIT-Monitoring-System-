@@ -331,8 +331,8 @@ function tableproduction() {
             activate_data: "activated",
           })
           .eq("Work_order_id", localStorage.getItem("Work_order_id"))
-          .eq("activate_data", "not")
-          .is("PD_key", null);
+          .eq("activate_data", "not");
+
         if (data) {
           console.log("Autoup PD_key Manpower_record Success", data);
         } else {
