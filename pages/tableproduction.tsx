@@ -105,7 +105,6 @@ function tableproduction() {
   // -------------------------------------
 
   useEffect(() => {
-    const pdkeycheck = localStorage.getItem("CheckWo");
     setLoading1(true);
     const AutoUpdataPD_keyManpower = async () => {
       const { data, error } = await supabase
@@ -114,7 +113,7 @@ function tableproduction() {
           PD_key: localStorage.getItem("PD_key"),
           activate_data: "activated",
         })
-        .eq("Work_order_id", pdkeycheck)
+        .eq("Work_order_id", localStorage.getItem("CheckWo"))
         .eq("activate_data", "not");
 
       if (data) {
@@ -125,7 +124,7 @@ function tableproduction() {
     };
     AutoUpdataPD_keyManpower();
     setLoading1(false);
-  }, [loading1]);
+  }, []);
 
   useEffect(() => {
     const FetchData = async () => {
