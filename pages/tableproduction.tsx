@@ -32,7 +32,7 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import NgError from "./component/NgError";
 import TextField from "@mui/material/TextField";
 import Editpeople from "./component/editpeople";
-import useSound from 'use-sound';
+import useSound from "use-sound";
 import TablePeople from "./component/tablePeople";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
@@ -84,14 +84,12 @@ function tableproduction() {
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   //ระบุเวลา กด start pause stop
   let [timestart, setTimestart] = useState<any>("");
-  
+
   let [timepause, setTimepause] = useState<any>("");
   let [timePE, setTimePE] = useState<any>("");
   let [timestop, setTimestop] = useState<any>("");
   const [details, setDetails] = useState<any>("");
-  
-  
- 
+
   // const Open_qty: any = localStorage.getItem("Open_qty");
   // const Complete_qty: any = localStorage.getItem("Complete_qty");
   // const NG_qty: any = localStorage.getItem("NG_qty_WO");
@@ -113,7 +111,8 @@ function tableproduction() {
           activate_data: "activated",
         })
         .eq("Work_order_id", localStorage.getItem("Work_order_id"))
-        .eq("activate_data", "not");
+        .eq("activate_data", "not")
+        .is("PD_key", null);
       if (data) {
         console.log("Autoup PD_key Manpower_record Success", data);
       } else {
@@ -279,7 +278,7 @@ function tableproduction() {
       console.log(error);
     }
   };
-  
+
   const handlerClickStart = async () => {
     const Timestart1 = localStorage.getItem("TimeStart");
     if (Timestart1 === null) {
@@ -637,11 +636,11 @@ function tableproduction() {
   //========================================
 
   // กด submit Stop ครั้งสุดท้าย
-  const [timeStart_stamp ,setTimeStart_stamp] = useState<any>("")
+  const [timeStart_stamp, setTimeStart_stamp] = useState<any>("");
   // console.log('timeStart_stamp',timeStart_stamp);
-    const fatchTimeStart_stamp = async () =>{
-        setTimeStart_stamp(localStorage.getItem("timeStampStart"))
-    }
+  const fatchTimeStart_stamp = async () => {
+    setTimeStart_stamp(localStorage.getItem("timeStampStart"));
+  };
   const [timestampEnd, setTimestampEnd] = useState<any>("");
 
   const handlerSubmitStop = async () => {
@@ -665,7 +664,7 @@ function tableproduction() {
     };
     UpManpowerAutoduration();
   }, [timestampEnd]);
- 
+
   useEffect(() => {
     const UpProductionAutoduration = async () => {
       if (diffsStop > 0) {
