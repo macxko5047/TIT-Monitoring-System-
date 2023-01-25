@@ -122,10 +122,6 @@ function tableproduction() {
     }
   };
 
-  if (dataManuptest === "") {
-    AutoUpdataPD_keyManpower();
-  }
-
   useEffect(() => {
     const FetchData = async () => {
       const { data } = await supabase
@@ -464,6 +460,7 @@ function tableproduction() {
         .limit(1); //ใช้แทน single
       if (data.length) {
         setShowDaynight(data[0].Shift);
+        AutoUpdataPD_keyManpower();
       } else {
         console.log(error);
       }
