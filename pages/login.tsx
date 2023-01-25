@@ -13,7 +13,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState, useEffect, useContext } from "react";
-import supabaseUser from "./compunentConfig/supabaseUser";
+import supabase from "../compunentConfig/supabase";
 import AppContext from "../src/context/Appcontext";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -36,7 +36,7 @@ export default function Login() {
   const [data1, setData1] = useState<any>("");
   console.log(data1);
   const FetchData = async () => {
-    const { data, error } = await supabaseUser
+    const { data, error } = await supabase
       .from("userID")
       .select("*")
       .eq("emp_no", username)

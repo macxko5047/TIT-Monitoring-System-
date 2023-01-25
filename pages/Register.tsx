@@ -104,8 +104,13 @@ export default function Register() {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    router.push("/");
+    if (localStorage.getItem("PD_key") === null) {
+      localStorage.clear();
+      router.push("/");
+    }
+    if (localStorage.getItem("PD_key") != null) {
+      alert("Please push STOP button before proceed  Logout !");
+    }
   };
 
   const menuShowAdmin = () => {

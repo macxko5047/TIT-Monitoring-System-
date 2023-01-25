@@ -14,7 +14,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import supabase from "../compunentConfig/supabaseUser";
+import supabase from "../../compunentConfig/supabase";
 import Select from "@mui/material/Select";
 import { useRouter } from "next/router";
 import Image from "next/image";

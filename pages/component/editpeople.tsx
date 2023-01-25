@@ -21,7 +21,7 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 import LogoutIcon from "@mui/icons-material/Logout";
 import handler from "../api/hello";
 
@@ -56,8 +56,8 @@ const editpeople = (props: Props) => {
   let sec = ("0" + date.getSeconds()).slice(-2);
   const timestamp = date.getTime();
   const times: any = `${Hours}:${Min}:${sec}`;
-  const LocalPD_key = localStorage.getItem("PD_key");
-  const WorkOrederID = localStorage.getItem("Work_order_id");
+  
+  
   const [dataManpower, setDataManpower] = useState<any>([]);
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const editpeople = (props: Props) => {
       let { data, error } = await supabase
         .from("Manpower_record")
         .select("*")
-        .eq("PD_key", LocalPD_key);
+        .eq("PD_key", localStorage.getItem("PD_key"));
       if (data) {
         setDataManpower(data);
       } else {
@@ -79,7 +79,7 @@ const editpeople = (props: Props) => {
     let { data, error } = await supabase
       .from("Manpower_record")
       .select("*")
-      .eq("PD_key", LocalPD_key);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       setDataManpower(data);
     } else {
@@ -90,6 +90,8 @@ const editpeople = (props: Props) => {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
     setOpenModal(true);
+    fatchTimeStart_stamp();
+
   };
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -108,18 +110,27 @@ const editpeople = (props: Props) => {
     SetID(cellValues.row.id);
   };
 
-  const timeStart_stamp: any = localStorage.getItem("timeStampStart");
+  const [timeStart_stamp ,setTimeStart_stamp] = useState<any>("")
+  // console.log('timeStart_stamp',timeStart_stamp);
+    const fatchTimeStart_stamp = async () =>{
+        setTimeStart_stamp(localStorage.getItem("timeStampStart"))
+    }
+    
+     
+ 
+
   const [timestampEnd, setTimestampEnd] = useState<any>("");
 
   const diffs: any = Math.ceil(
     ((timestampEnd - timeStart_stamp) * 60) / 3600 / 1000
   );
 
+
   const durationManpowerTime = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
       .update({ task_time: diffs })
-      .eq("PD_key", LocalPD_key)
+      .eq("PD_key", localStorage.getItem("PD_key"))
       .eq("id", selectId);
     if (data) {
       console.log("Duration Success");
@@ -136,7 +147,7 @@ const editpeople = (props: Props) => {
     const { data, error } = await supabase
       .from("Manpower_record")
       .update({ end_datetime: times })
-      .eq("PD_key", LocalPD_key)
+      .eq("PD_key", localStorage.getItem("PD_key"))
       .eq("id", selectId);
     if (data) {
       await alert("LogoutTime Success");
@@ -195,11 +206,11 @@ const editpeople = (props: Props) => {
     if (user1 != "") {
       const { data, error } = await supabase.from("Manpower_record").insert([
         {
-          PD_key: LocalPD_key,
+          PD_key: localStorage.getItem("PD_key"),
           emp_no: user1,
           emp_name: dataName,
           department: dataDepartment,
-          Work_order_id: WorkOrederID,
+          Work_order_id: localStorage.getItem("Work_order_id"),
           start_datetime: times,
           activate_data: "activated",
         },

@@ -6,7 +6,7 @@ import {
   GridToolbarQuickFilter,
   filterableGridColumnsIdsSelector,
 } from "@mui/x-data-grid";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 import { Typography } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
@@ -60,16 +60,16 @@ function QuickSearchToolbar() {
 }
 
 export default function QuickFilteringCustomizedGrid() {
-  const [openAdd, setOpenAdd] = React.useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
   const handleOpen = () => setOpenAdd(true);
   const handleClose = () => setOpenAdd(false);
 
-  const [openDel, setOpenDel] = React.useState(false);
+  const [openDel, setOpenDel] = useState(false);
   const DeleteOpen = () => setOpenDel(true);
   const DeleteClose = () => setOpenDel(false);
   const [selectId, SetID] = useState("");
   const [TextConfirm, SetConfirm] = useState("");
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const EditOpen = () => setOpenEdit(true);
   const EditClose = () => setOpenEdit(false);
   const [selectIdEdit, setIDEdit] = useState<any>("");
@@ -90,7 +90,7 @@ export default function QuickFilteringCustomizedGrid() {
   const [SumNgPcs, SetNgPcs] = useState<Number>(0);
   const [ngAll, setNgAll] = useState<Number>(0);
 
-  const LocalPDkey = localStorage.getItem("PD_key");
+ 
 
   const [mounted, setMounted] = useState(false);
   const [dataNg, setdata] = useState<any>([]);
@@ -98,12 +98,12 @@ export default function QuickFilteringCustomizedGrid() {
   const [TextError, SetText] = useState<any>("");
 
   const NGsplit = selectNG.split(":");
-  document.addEventListener("keydown", function (event) {
-    if (event.ctrlKey && event.altKey && event.key === "5") {
-      handleOpen();
-    }
-    //console.log(event.key);
-  });
+  // document.addEventListener("keydown", function (event) {
+  //   if (event.ctrlKey && event.altKey && event.key === "5") {
+  //     handleOpen();
+  //   }
+  //   //console.log(event.key);
+  // });
 
   // Otherwise filter will be applied on fields such as the hidden column id
   const columns: any = [
@@ -155,7 +155,7 @@ export default function QuickFilteringCustomizedGrid() {
         .from("NG_record")
         .select("*")
         .order("NG_code")
-        .filter("PD_key", "in", "(" + LocalPDkey + ")");
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
       setdata(data);
     };
     FetchData();
@@ -167,7 +167,7 @@ export default function QuickFilteringCustomizedGrid() {
     const { data, error, count } = await supabase
       .from("NG_record")
       .select("NG_qty", { count: "exact" })
-      .filter("PD_key", "in", "(" + LocalPDkey + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
     if (!error) {
       const sumNGqty: any = data.reduce((a, b) => a + b.NG_qty, 0);
       await setNgAll(sumNGqty);
@@ -179,7 +179,7 @@ export default function QuickFilteringCustomizedGrid() {
     const { data, error } = await supabase
       .from("Production_history")
       .update({ NG_qty: ngAll })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       console.log(data);
     } else {
@@ -210,7 +210,7 @@ export default function QuickFilteringCustomizedGrid() {
       .from("NG_record")
       .select("*")
       .order("NG_code")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
     setdata(data);
   };
 
@@ -232,12 +232,6 @@ export default function QuickFilteringCustomizedGrid() {
     setDetailNG(cellValues.row.NG_description);
     setIDEdit(cellValues.row.id);
   };
-  // const updateDel = async () => {
-  //   const { data, error } = await supabase
-  //     .from("Production_history")
-  //     .update({ NG_qty: "otherValue" })
-  //     .eq("id", selectId);
-  // };
 
   const DelNG = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

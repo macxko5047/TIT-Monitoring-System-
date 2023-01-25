@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 
 export default function tablePeople() {
-  const LocalPD_key = localStorage.getItem("PD_key");
-  const WorkOrederID = localStorage.getItem("Work_order_id");
 
   const columns: GridColDef[] = [
     { field: "emp_no", headerName: "no", width: 60 },
@@ -20,7 +18,7 @@ export default function tablePeople() {
       let { data, error } = await supabase
         .from("Manpower_record")
         .select("*")
-        .eq("PD_key", LocalPD_key);
+        .eq("PD_key", localStorage.getItem("PD_key"));
       if (data) {
         setDataManpower(data);
       } else {
@@ -34,7 +32,7 @@ export default function tablePeople() {
     let { data, error } = await supabase
       .from("Manpower_record")
       .select("*")
-      .eq("PD_key", LocalPD_key);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       setDataManpower(data);
     } else {

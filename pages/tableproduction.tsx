@@ -18,7 +18,6 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { useStopwatch } from "react-timer-hook";
-import supabase from "./compunentConfig/supabase";
 import LoadingsNG from "./component/loadingsNG";
 import CircularProgress from "@mui/material/CircularProgress";
 import Table from "@mui/material/Table";
@@ -33,12 +32,12 @@ import StopCircleIcon from "@mui/icons-material/StopCircle";
 import NgError from "./component/NgError";
 import TextField from "@mui/material/TextField";
 import Editpeople from "./component/editpeople";
-import useSound from "use-sound";
+import useSound from 'use-sound';
 import TablePeople from "./component/tablePeople";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
-import supabaseUser from "./compunentConfig/supabaseUser";
+import supabase from "../compunentConfig/supabase";
 
 const style = {
   position: "absolute" as "absolute",
@@ -85,17 +84,17 @@ function tableproduction() {
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   //ระบุเวลา กด start pause stop
   let [timestart, setTimestart] = useState<any>("");
-  const LocalTimeStart = localStorage.getItem("TimeStart");
+  
   let [timepause, setTimepause] = useState<any>("");
   let [timePE, setTimePE] = useState<any>("");
   let [timestop, setTimestop] = useState<any>("");
   const [details, setDetails] = useState<any>("");
-  const WO_id = localStorage.getItem("Work_order_id");
-  const ProdUnit = localStorage.getItem("Production_unit");
-  const LocalPDkey = localStorage.getItem("PD_key");
-  const Open_qty: any = localStorage.getItem("Open_qty");
-  const Complete_qty: any = localStorage.getItem("Complete_qty");
-  const NG_qty: any = localStorage.getItem("NG_qty_WO");
+  
+  
+ 
+  // const Open_qty: any = localStorage.getItem("Open_qty");
+  // const Complete_qty: any = localStorage.getItem("Complete_qty");
+  // const NG_qty: any = localStorage.getItem("NG_qty_WO");
   const [dataOK, setOK] = useState(0);
   // const [dataNg, setNG] = useState(0);
   // split string แบ่ง ออกเพื่อส่งไปเก็บใน database
@@ -168,7 +167,7 @@ function tableproduction() {
       const { data, error } = await supabase.from("Downtime_record").insert([
         {
           Work_order_id: localStorage.getItem("Work_order_id"),
-          PD_key: LocalPDkey,
+          PD_key: localStorage.getItem("PD_key"),
           Downtime_code: menusplit[0],
           Begin_time: times,
           Downtime_description: menusplit[1],
@@ -192,6 +191,7 @@ function tableproduction() {
     fetchManpower();
     fetchRuntime();
     fetchWO();
+    fatchTimeStart_stamp();
     setOpenModal3(true);
   };
   const handleCloseModal3 = () => {
@@ -210,7 +210,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Production_history")
       .update({ OK_qty: dataOK_qty, NG_qty: dataNG_qty })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       console.log("Susscess Edit", data);
     } else {
@@ -259,7 +259,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Production_history")
       .update({ Begin_time: times, Status: "Online" })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
 
     if (data) {
       console.log(data);
@@ -271,7 +271,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Manpower_record")
       .update({ start_datetime: times })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
 
     if (data) {
       console.log(data);
@@ -279,8 +279,9 @@ function tableproduction() {
       console.log(error);
     }
   };
-  const Timestart1 = localStorage.getItem("TimeStart");
+  
   const handlerClickStart = async () => {
+    const Timestart1 = localStorage.getItem("TimeStart");
     if (Timestart1 === null) {
       setTimestart(times);
       upBegin_Time();
@@ -291,6 +292,7 @@ function tableproduction() {
     }
   };
   const handlerContinue = async () => {
+    const LocalTimeStart = localStorage.getItem("TimeStart");
     if (timePE === "" && LocalTimeStart != "") {
       await setTimePE(times);
       await setTimestamp02(timestamps);
@@ -347,7 +349,7 @@ function tableproduction() {
       const { data, error, count } = await supabase
         .from("Production_history")
         .select("NG_qty", { count: "exact" })
-        .filter("PD_key", "in", "(" + LocalPDkey + ")");
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
 
       if (!error) {
         const sumNGqty = data.reduce((a, b) => a + b.NG_qty, 0);
@@ -362,7 +364,7 @@ function tableproduction() {
       const { data, error, count } = await supabase
         .from("Production_history")
         .select("NG_qty", { count: "exact" })
-        .filter("PD_key", "in", "(" + LocalPDkey + ")");
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
 
       if (!error) {
         const sumNGqty = data.reduce((a, b) => a + b.NG_qty, 0);
@@ -395,7 +397,7 @@ function tableproduction() {
       const { data, error, count } = await supabase
         .from("Production_history")
         .select("OK_qty", { count: "exact" })
-        .filter("PD_key", "in", "(" + LocalPDkey + ")");
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
 
       if (!error) {
         const sumOKqty = data.reduce((a, b) => a + b.OK_qty, 0);
@@ -410,7 +412,7 @@ function tableproduction() {
       const { data, error, count } = await supabase
         .from("Production_history")
         .select("OK_qty", { count: "exact" })
-        .filter("PD_key", "in", "(" + LocalPDkey + ")");
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
 
       if (!error) {
         const sumOKqty = data.reduce((a, b) => a + b.OK_qty, 0);
@@ -424,7 +426,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Production_history")
       .select("OK_qty, Order_qty, NG_qty , Open_qty")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")")
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
       .single();
     playOK();
     if (!error) {
@@ -442,7 +444,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Production_history")
       .update({ OK_qty: OK_qty })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     ReloadOK();
   };
 
@@ -475,8 +477,8 @@ function tableproduction() {
     let { data, error } = await supabase
       .from("Production_history")
       .select("*")
-      .eq("PD_key", LocalPDkey);
-    if (data) {
+      .eq("PD_key", localStorage.getItem("PD_key"));
+    if (data?.length) {
       setDataProduction_history(data);
       setDataOK_qty(data[0].OK_qty);
       setDataNG_qty(data[0].NG_qty);
@@ -488,7 +490,7 @@ function tableproduction() {
   };
 
   // function NG --------------------------------------------------------------
-  const [openAdd, setOpenAdd] = React.useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
   const handleOpenNG = () => {
     setOpenAdd(true);
     playNG();
@@ -515,7 +517,7 @@ function tableproduction() {
     const { data, error, count } = await supabase
       .from("NG_record")
       .select("NG_qty", { count: "exact" })
-      .filter("PD_key", "in", "(" + LocalPDkey + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
     if (!error) {
       const sumNGqty: any = data.reduce((a, b) => a + b.NG_qty, 0);
       await setNgAll(sumNGqty);
@@ -529,7 +531,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Production_history")
       .update({ NG_qty: ngAll })
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       console.log(data);
     } else {
@@ -551,7 +553,7 @@ function tableproduction() {
       .from("NG_record")
       .select("id, NG_qty")
       .filter("NG_code", "in", "(" + NGsplit[0] + ")")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")")
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
       .limit(1);
 
     if (!error) {
@@ -567,13 +569,13 @@ function tableproduction() {
   const AddNg = async () => {
     const { data, error } = await supabase.from("NG_record").insert([
       {
-        Work_order_id: WO_id,
+        Work_order_id: localStorage.getItem("Work_order_id"),
         NG_code: NGsplit[0],
         NG_description: NGsplit[1],
         NG_qty: selectQty,
         Production_date: checkdates,
-        Production_unit: ProdUnit,
-        PD_key: LocalPDkey,
+        Production_unit: localStorage.getItem("Production_unit"),
+        PD_key: localStorage.getItem("PD_key"),
       },
     ]);
     if (data) {
@@ -627,7 +629,7 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Downtime_record")
       .select("Duration_downtime")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
     if (data) {
       setDataduDownTime(data.map((files) => files.Duration_downtime));
     }
@@ -635,7 +637,11 @@ function tableproduction() {
   //========================================
 
   // กด submit Stop ครั้งสุดท้าย
-  const timeStart_stamp: any = localStorage.getItem("timeStampStart");
+  const [timeStart_stamp ,setTimeStart_stamp] = useState<any>("")
+  // console.log('timeStart_stamp',timeStart_stamp);
+    const fatchTimeStart_stamp = async () =>{
+        setTimeStart_stamp(localStorage.getItem("timeStampStart"))
+    }
   const [timestampEnd, setTimestampEnd] = useState<any>("");
 
   const handlerSubmitStop = async () => {
@@ -648,7 +654,7 @@ function tableproduction() {
         const { data, error } = await supabase
           .from("Manpower_record")
           .update({ end_datetime: times, task_time: diffsStop })
-          .eq("PD_key", LocalPDkey)
+          .eq("PD_key", localStorage.getItem("PD_key"))
           .is("end_datetime", null);
         if (data) {
           console.log("UpManpowerAutoduration Success", data);
@@ -659,7 +665,7 @@ function tableproduction() {
     };
     UpManpowerAutoduration();
   }, [timestampEnd]);
-  const Emp_no = localStorage.getItem("emp_no");
+ 
   useEffect(() => {
     const UpProductionAutoduration = async () => {
       if (diffsStop > 0) {
@@ -668,7 +674,7 @@ function tableproduction() {
           .update({
             End_time: times,
             Duration_time: diffsStop,
-            OP_confirm_after: Emp_no,
+            OP_confirm_after: localStorage.getItem("emp_no"),
             Manpower_number: Manpowers1.length,
             Runtime: RuntimeData,
             Cycle_time: CycleTime.toFixed(2),
@@ -676,7 +682,7 @@ function tableproduction() {
             Quality_percent: Qualitypercen.toFixed(2),
             Status: "Offline",
           })
-          .eq("PD_key", LocalPDkey)
+          .eq("PD_key", localStorage.getItem("PD_key"))
           .is("End_time", null);
 
         if (data) {
@@ -696,7 +702,7 @@ function tableproduction() {
     let { data: Work_order, error } = await supabase
       .from("Work_order")
       .select("*")
-      .eq("Work_order_id", WO_id);
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
     if (Work_order) {
       setDataComplete_qty(Work_order[0].Complete_qty);
       setDataOpen_qty(Work_order[0].Open_qty);
@@ -719,7 +725,7 @@ function tableproduction() {
         Open_qty: calculeteOpen_qty,
         NG_qty: calculeteNG_qty,
       })
-      .eq("Work_order_id", WO_id);
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
     if (!error) {
       console.log("UpDateWork_order_id Success", data);
       await playStop_complete();
@@ -782,7 +788,7 @@ function tableproduction() {
     let { data, error } = await supabase
       .from("Manpower_record")
       .select("emp_no")
-      .eq("PD_key", LocalPDkey);
+      .eq("PD_key", localStorage.getItem("PD_key"));
     if (data) {
       console.log("fetchManpower Success", data);
       setEmpNO(data);
@@ -799,7 +805,7 @@ function tableproduction() {
   const [passConfrimEnd, setPassConfrimEnd] = useState("");
 
   const fetchCheckPassEnd = async () => {
-    const { data, error } = await supabaseUser
+    const { data, error } = await supabase
       .from("userID")
       .select("*")
       .eq("emp_name", localStorage.getItem("userName"))
@@ -936,7 +942,7 @@ function tableproduction() {
                   }}
                   variant="h4"
                 >
-                  {Open_qty}
+                  {localStorage.getItem("Open_qty")}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                   <Loadings />
@@ -985,7 +991,7 @@ function tableproduction() {
                   }}
                   variant="h4"
                 >
-                  {Open_qty}
+                  {localStorage.getItem("Open_qty")}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                   <LoadingsNG />

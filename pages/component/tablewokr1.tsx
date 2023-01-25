@@ -13,7 +13,7 @@ import {
 } from "@mui/x-data-grid";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import supabasetit from "../compunentConfig/supabase";
+import supabasetit from "../../compunentConfig/supabase";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
@@ -32,14 +32,13 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useRouter } from "next/router";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import { styled, ThemeProvider } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import supabaseUser from "../compunentConfig/supabaseUser";
 import Alert from "@mui/material/Alert";
 import useSound from "use-sound";
 const style = {
@@ -114,7 +113,7 @@ export default function tablework1() {
   const [open, setOpen] = useState(false);
   const [datasec, setdataSec] = useState<any>([]);
   const [datasec01, setdataSec01] = useState<any>("");
-  const LocalPD_key = localStorage.getItem("PD_key");
+  
   const [PlayConfirm_Success, soundConfirm_Success] = useSound(
     "/Confirm_Success.mp3"
   );
@@ -246,8 +245,8 @@ export default function tablework1() {
   };
 
   //click ปุ่ม select WO
-  const dataCheckWoSelet = localStorage.getItem("CheckWo");
-  console.log("testCheck", dataCheckWoSelet);
+  // const dataCheckWoSelet = localStorage.getItem("CheckWo");
+  // console.log("testCheck", dataCheckWoSelet);
 
   const handleClickOpen = async (event: any, cellValues: { row: any }) => {
     await setOpen(true);
@@ -266,6 +265,7 @@ export default function tablework1() {
   //======================================================
   // confrim
   const handleropenConfirm = () => {
+    const LocalPD_key = localStorage.getItem("PD_key")
     if (LocalPD_key != null) {
       alert("Please push STOP button before proceed next WO");
     }
@@ -281,7 +281,7 @@ export default function tablework1() {
   const [passConfrim, setPassConfrim] = useState("");
 
   const fetchCheckPass = async () => {
-    const { data, error } = await supabaseUser
+    const { data, error } = await supabase
       .from("userID")
       .select("*")
       .eq("emp_name", localStorage.getItem("userName"))

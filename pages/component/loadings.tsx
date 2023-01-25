@@ -4,7 +4,7 @@ import CircularProgress, {
 } from "@mui/material/CircularProgress";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 
 function CircularProgressWithLabel(
   props: CircularProgressProps & { value: number }
@@ -35,8 +35,7 @@ function CircularProgressWithLabel(
 }
 
 export default function loadings() {
-  const LocalPDkey = localStorage.getItem("PD_key");
-
+  
   const [progress, setProgress] = useState<any>(0);
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function loadings() {
       const { data, error } = await supabase
         .from("Production_history")
         .select("Open_qty, OK_qty")
-        .filter("PD_key", "in", "(" + LocalPDkey + ")")
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
         .single();
       if (data) {
         if (data.OK_qty < data.Open_qty) {
@@ -79,7 +78,7 @@ export default function loadings() {
     const { data, error } = await supabase
       .from("Production_history")
       .select("Open_qty, OK_qty")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")")
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
       .single();
     if (data) {
       if (data.OK_qty < data.Open_qty) {

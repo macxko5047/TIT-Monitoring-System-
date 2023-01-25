@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 // import supabase from "../compunentConfig/supabase";
 import { Typography } from "@mui/material";
-import supabase from "../compunentConfig/supabase";
+import supabase from "../../compunentConfig/supabase";
 import CircularProgress from "@mui/material/CircularProgress";
 
 function QuickSearchToolbar() {
@@ -32,7 +32,7 @@ function QuickSearchToolbar() {
 export default function QuickFilteringCustomizedGrid() {
   const [mounted, setMounted] = useState(false);
   const [data, setdata] = useState<any>([]);
-  const LocalPDkey = localStorage.getItem("PD_key");
+ 
 
   //รีเฟสเฉพาะอันนั้น
   // console.log({ data });
@@ -87,7 +87,7 @@ export default function QuickFilteringCustomizedGrid() {
     const { data, error } = await supabase
       .from("Downtime_record")
       .select("*")
-      .filter("PD_key", "in", "(" + LocalPDkey + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
     setdata(data);
   };
 
