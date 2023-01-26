@@ -25,10 +25,10 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/draw1": [
+    "/draw": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/draw1.js"
+      "static/chunks/pages/draw.js"
     ]
   },
   "ampFirstPages": []

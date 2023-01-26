@@ -575,6 +575,7 @@ function tableproduction() {
         Production_date: checkdates,
         Production_unit: localStorage.getItem("Production_unit"),
         PD_key: localStorage.getItem("PD_key"),
+        Item_number: localStorage.getItem("ItemNumber"),
       },
     ]);
     if (data) {
@@ -676,10 +677,12 @@ function tableproduction() {
             OP_confirm_after: localStorage.getItem("emp_no"),
             Manpower_number: Manpowers1.length,
             Runtime: RuntimeData,
-            Cycle_time: CycleTime.toFixed(2),
-            Availability_percent: Ap.toFixed(2),
-            Quality_percent: Qualitypercen.toFixed(2),
+            Cycle_time: CycleTime.toFixed(4),
+            Availability_percent: Ap.toFixed(4),
+            Quality_percent: Qualitypercen.toFixed(4),
             Status: "Offline",
+            Standard_time: cct_standard,
+            Performance_percent: Performance_Percen.toFixed(4),
           })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("End_time", null);
@@ -743,6 +746,25 @@ function tableproduction() {
       console.log("UpDateWork_order_id Error", error);
     }
   };
+  const [cct_standard, setCct_standard] = useState<any>([]);
+  console.log("cct_standard", cct_standard);
+
+  useEffect(() => {
+    const fetchdataBom = async () => {
+      let { data, error } = await supabase
+        .from("BOM")
+        .select("cct_standard")
+        .eq("Item_number", localStorage.getItem("ItemNumber"))
+        .eq("Production_unit", localStorage.getItem("Production_unit"));
+      if (data?.length) {
+        setCct_standard(data[0].cct_standard);
+        console.log("fetchdataBom Success", data);
+      } else {
+        console.log("fetchdataBom Error", error);
+      }
+    };
+    fetchdataBom();
+  }, []);
 
   const diffsStop: any = Math.ceil(
     ((timestampEnd - timeStart_stamp) * 60) / 3600 / 1000
@@ -758,6 +780,7 @@ function tableproduction() {
     sum += item;
   }
   // console.log("SumDowntime", sum);
+  //================= คือ Downtime ทั้งหมด + กัน แล้ว - เวลาในการทำงานทั้งหมด(duration time) ====
   const RuntimeData: number = diffsStop - sum;
   // console.log("RuntimeData", RuntimeData);
   //============================================
@@ -776,6 +799,15 @@ function tableproduction() {
   // console.log("Qualitypercen", Qualitypercen);
 
   //------------------------------------------------------------
+  //============Performance_Percen=========================
+  const Runtime_M = RuntimeData * 60;
+
+  console.log("Runtime_M", Runtime_M);
+
+  const Performance_Percen = (cct_standard * (dataOK + dataNGShow)) / Runtime_M;
+  console.log("Performance_deff", Performance_Percen);
+
+  //-----------------
   //==== duration Manpower =================
   const [empNO, setEmpNO] = useState<any>([]);
   const Manpower: any = empNO.map((ress: { emp_no: number }) => ress.emp_no);
@@ -1131,7 +1163,7 @@ function tableproduction() {
                   sx={{ fontSize: 28 }}
                   value={menus.code + ":" + menus.desc_th}
                 >
-                  {menus.code} : {menus.desc_th}
+                  {menus.code} : {menus.desc_th} : {menus.desc_china}
                 </MenuItem>
               ))}
             </Select>
@@ -1454,9 +1486,9 @@ function tableproduction() {
                 <MenuItem
                   key={menus.code}
                   sx={{ fontSize: 28 }}
-                  value={menus.code + ":" + menus.desc}
+                  value={menus.code + ":" + menus.desc + ":"}
                 >
-                  {menus.code} : {menus.desc}
+                  {menus.code} : {menus.desc} : {menus.desc_china}
                 </MenuItem>
               ))}
             </Select>

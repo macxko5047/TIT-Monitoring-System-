@@ -31,14 +31,10 @@ const register1 = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!user1 || !dataName || !dataDepartment || !pass1 || !level1) {
+    if (!user1 || !pass1 || !level1) {
       setFromError(alert("กรุณากรอกข้อมูลให้ครบ"));
       return;
     }
-
-    alert("Register Success");
-    router.push("/draw");
-
     const { data, error } = await supabase.from("userID").insert([
       {
         emp_no: user1,
@@ -54,9 +50,13 @@ const register1 = () => {
     }
     if (data) {
       console.log(data);
+
       setFromError(null);
     }
+    alert("Register Success");
+    router.push("/draw");
   };
+
   useEffect(() => {
     const FetchData = async () => {
       let headersList = {
