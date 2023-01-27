@@ -136,8 +136,14 @@ function tableproduction() {
   //เปิด - ปิด modal v.1
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
-    setOpenModal(true);
-    playPause();
+    const TimeCheck = localStorage.getItem("TimeStart");
+    if (TimeCheck === null) {
+      alert("Please press the start button first.");
+    }
+    if (TimeCheck != null) {
+      setOpenModal(true);
+      playPause();
+    }
   };
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -183,13 +189,19 @@ function tableproduction() {
   //เปิด - ปิด modal v.3
   const [openModal3, setOpenModal3] = useState(false);
   const handleOpenModal3 = () => {
-    playStop();
-    fetchProduction_history();
-    fetchManpower();
-    fetchRuntime();
-    fetchWO();
-    fatchTimeStart_stamp();
-    setOpenModal3(true);
+    const TimeCheck = localStorage.getItem("TimeStart");
+    if (TimeCheck === null) {
+      alert("Please press the start button first.");
+    }
+    if (TimeCheck != null) {
+      playStop();
+      fetchProduction_history();
+      fetchManpower();
+      fetchRuntime();
+      fetchWO();
+      fatchTimeStart_stamp();
+      setOpenModal3(true);
+    }
   };
   const handleCloseModal3 = () => {
     setOpenModal3(false);
@@ -512,8 +524,14 @@ function tableproduction() {
   // function NG --------------------------------------------------------------
   const [openAdd, setOpenAdd] = useState(false);
   const handleOpenNG = () => {
-    setOpenAdd(true);
-    playNG();
+    const TimeCheck = localStorage.getItem("TimeStart");
+    if (TimeCheck === null) {
+      alert("Please press the start button first.");
+    }
+    if (TimeCheck != null) {
+      setOpenAdd(true);
+      playNG();
+    }
   };
   const handleCloseNG = () => setOpenAdd(false);
   const [selectNG, setNG] = useState<String>("");
