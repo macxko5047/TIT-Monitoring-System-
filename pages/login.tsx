@@ -70,7 +70,7 @@ export default function Login() {
         if (data[0].level === "Leader") {
           router.push("/draw");
         }
-        if (data[0].level === "Operator") {
+        if (data[0].level === "Foreman") {
           router.push("/draw");
         }
       }
