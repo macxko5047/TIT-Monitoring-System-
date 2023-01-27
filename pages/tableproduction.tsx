@@ -436,20 +436,26 @@ function tableproduction() {
   };
 
   const ChOkay = async () => {
-    const { data, error } = await supabase
-      .from("Production_history")
-      .select("OK_qty, Order_qty, NG_qty , Open_qty")
-      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
-      .single();
-    playOK();
-    if (!error) {
-      if (data) {
-        if (data.OK_qty < data.Open_qty) {
-          UpdateOK(Number(data.OK_qty + 1));
+    const TimeCheck = localStorage.getItem("TimeStart");
+    if (TimeCheck === null) {
+      alert("Please press the start button first.");
+    }
+    if (TimeCheck != null) {
+      const { data, error } = await supabase
+        .from("Production_history")
+        .select("OK_qty, Order_qty, NG_qty , Open_qty")
+        .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
+        .single();
+      playOK();
+      if (!error) {
+        if (data) {
+          if (data.OK_qty < data.Open_qty) {
+            UpdateOK(Number(data.OK_qty + 1));
+          }
         }
+      } else {
+        console.log(error);
       }
-    } else {
-      console.log(error);
     }
   };
 
