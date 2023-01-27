@@ -90,6 +90,16 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 function PersistentDrawerLeft() {
   const theme = useTheme();
   const router = useRouter();
+  // ตัวเช็คหน้า workOder ถ้าไม่มี WorkOder ใน localstorage
+  // ให้กลับไปหน้าเลือก workoder ก่อน
+  useEffect(() => {
+    const ItemSelect = localStorage.getItem("Work_order_id");
+    if (!ItemSelect) {
+      router.push("/draw");
+      alert("กรุณา กลับ ไปเลือก WorkOder ก่อน");
+    }
+  }, []);
+
   const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
@@ -292,16 +302,6 @@ function PersistentDrawerLeft() {
       );
     }
   };
-
-  // ตัวเช็คหน้า workOder ถ้าไม่มี WorkOder ใน localstorage
-  // ให้กลับไปหน้าเลือก workoder ก่อน
-  useEffect(() => {
-    const ItemSelect = localStorage.getItem("Work_order_id");
-    if (!ItemSelect) {
-      router.push("/draw");
-      alert("กรุณา กลับ ไปเลือก WorkOder ก่อน");
-    }
-  }, []);
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
