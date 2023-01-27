@@ -10,6 +10,8 @@ import {
   GridToolbarDensitySelector,
   GridColDef,
   GridValueGetterParams,
+  GridCellParams,
+  GridColumns,
 } from "@mui/x-data-grid";
 import Grid from "@mui/material/Unstable_Grid2";
 
@@ -41,6 +43,8 @@ import { styled, ThemeProvider } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Alert from "@mui/material/Alert";
 import useSound from "use-sound";
+import clsx from "clsx";
+
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -82,8 +86,8 @@ function CustomToolbar() {
           display: "flex",
           pb: 0,
           justifyContent: "center",
-          p: 3,
-          m: 3,
+          p: 1,
+          m: 1,
           bgcolor: "background.paper",
           borderRadius: 1,
         }}
@@ -177,6 +181,19 @@ export default function tablework1() {
   }, [CheckdataPD, datasec01]);
 
   //-----------------------
+  //========= check data Work order Online ==========
+  const [dataWOcheck, setDataWOcheck] = useState<any>([]);
+  console.log("dataWOcheck", dataWOcheck);
+
+  useEffect(() => {
+    const fetchWO_onoff = async () => {
+      let { data: Production_history, error } = await supabase
+        .from("Production_history")
+        .select("Work_order_id,Status");
+      setDataWOcheck(Production_history);
+    };
+    fetchWO_onoff();
+  }, []);
   // ------------------------------------------------
   const [datecheck1, setDatecheck1] = useState<any>([]);
   // console.log("YM get:", datecheck1);
@@ -249,13 +266,17 @@ export default function tablework1() {
   // console.log("testCheck", dataCheckWoSelet);
 
   const handleClickOpen = async (event: any, cellValues: { row: any }) => {
-    await setOpen(true);
-    await setdataSec([cellValues.row]);
-    await setdataSec01(cellValues.row.Production_unit);
-    await fectdataDESC();
-    await checkDaynight();
-    await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
-    await fetchDataPeople();
+    if (cellValues.row.Status_working === "Online") {
+      alert("Already on proceeding in production!");
+    } else {
+      await setOpen(true);
+      await setdataSec([cellValues.row]);
+      await setdataSec01(cellValues.row.Production_unit);
+      await fectdataDESC();
+      await checkDaynight();
+      await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
+      await fetchDataPeople();
+    }
   };
 
   const handleClose = () => {
@@ -404,10 +425,12 @@ export default function tablework1() {
   }, []);
 
   // Otherwise filter will be applied on fields such as the hidden column id
-  const columns = [
+
+  const columns: GridColumns = [
     {
       field: "Select Item ",
       width: 110,
+      headerClassName: "super-app-theme--header",
       renderCell: (cellValues: any) => {
         return (
           <Box>
@@ -424,16 +447,177 @@ export default function tablework1() {
         );
       },
     },
-    { field: "Work_order_id", headerName: "Work order id", width: 120 },
-    { field: "Item_number", headerName: "Item number", width: 160 },
-    { field: "WO_status", headerName: "WO status", width: 135 },
-    { field: "Order_qty", headerName: "Order qty" },
-    { field: "Complete_qty", headerName: "Complete qty" },
-    { field: "Open_qty", headerName: "Open qty" },
-    { field: "Due_over", headerName: "Due_over" },
-    { field: "Due_date_PD", headerName: "Due date PD" },
-    { field: "Release_date", headerName: "Release date" },
-    { field: "Production_unit", headerName: "Production unit", width: 140 },
+    {
+      field: "Work_order_id",
+      headerName: "Work order id",
+      width: 120,
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+
+    {
+      field: "Item_number",
+      headerName: "Item number",
+      width: 160,
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "WO_status",
+      headerName: "WO status",
+      width: 135,
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Order_qty",
+      headerName: "Order qty",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Complete_qty",
+      headerName: "Complete qty",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Open_qty",
+      headerName: "Open qty",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Due_over",
+      headerName: "Due_over",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Due_date_PD",
+      headerName: "Due date PD",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Release_date",
+      headerName: "Release date",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Production_unit",
+      headerName: "Production unit",
+      width: 140,
+      headerClassName: "super-app-theme--header",
+      cellClassName: (params: GridCellParams<any>) => {
+        if (params.row.Status_working == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: params.row.Status_working === "Online",
+          positive: params.row.Status_working === "Offline",
+        });
+      },
+    },
+    {
+      field: "Status_working",
+      width: 150,
+      headerName: "Status_working",
+      headerClassName: "super-app-theme--header",
+      cellClassName: (Status_working: GridCellParams<any>) => {
+        if (Status_working.value == null) {
+          return "";
+        }
+
+        return clsx("super-app", {
+          negative: Status_working.value === "Online",
+          positive: Status_working.value === "Offline",
+        });
+      },
+    },
   ];
 
   useEffect(() => {
@@ -585,7 +769,31 @@ export default function tablework1() {
   if (!mounted) return null;
 
   return (
-    <Box sx={{ height: 550, width: "100%" }}>
+    <Box
+      sx={{
+        height: 650,
+        width: "100%",
+        "& .super-app.negative": {
+          backgroundColor: "rgba(157, 255, 118, 0.49)",
+          color: "#000000",
+          fontWeight: "500",
+          borderBlockColor: "#F8F8FF",
+        },
+        "& .super-app.positive": {
+          backgroundColor: "#DCDCDC",
+          color: "#000000",
+          fontWeight: "500",
+          // borderBlockColor: "red",
+          borderBlockColor: "#F8F8FF",
+        },
+        "& .super-app-theme--header": {
+          backgroundColor: "#99CCFF",
+          color: "#000000",
+          fontWeight: "500",
+          borderBlockColor: "#F8F8FF",
+        },
+      }}
+    >
       <DataGrid
         rows={sData}
         columns={columns}

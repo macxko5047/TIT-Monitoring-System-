@@ -7,6 +7,7 @@
         "datacheck",
         "datamenu",
         "datasec",
+        "datastatus",
         "datastop",
         "datatest",
         "datatimeup",

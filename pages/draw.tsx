@@ -362,7 +362,6 @@ export default function PersistentDrawerLeft() {
           <Main open={open}>
             <DrawerHeader />
             <Typography>
-              System Control
               <Tablework1 />
             </Typography>
           </Main>

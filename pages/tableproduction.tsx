@@ -264,6 +264,20 @@ function tableproduction() {
       console.log(error);
     }
   };
+  const upStatusWoStart = async () => {
+    const { data, error } = await supabase
+      .from("Work_order")
+      .update({ Status_working: "Online" })
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+
+    if (data) {
+      console.log(data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  };
+
   const upStartTimeManpower = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
@@ -282,6 +296,7 @@ function tableproduction() {
     if (Timestart1 === null) {
       setTimestart(times);
       upBegin_Time();
+      upStatusWoStart();
       upStartTimeManpower();
       localStorage.setItem("TimeStart", times);
       localStorage.setItem("timeStampStart", timestamps);
@@ -646,6 +661,8 @@ function tableproduction() {
 
   const handlerSubmitStop = async () => {
     await setTimestampEnd(timestamps);
+    await upTrigger();
+    await upStatusWoStop();
     await upWork_order_id();
   };
   useEffect(() => {
@@ -683,6 +700,9 @@ function tableproduction() {
             Status: "Offline",
             Standard_time: cct_standard,
             Performance_percent: Performance_Percen.toFixed(4),
+            OBU_status: "Waiting_transfer",
+            Open_qty: calculeteOpen_qty,
+            OEE_percent: calculateOEE.toFixed(4),
           })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("End_time", null);
@@ -719,6 +739,36 @@ function tableproduction() {
   // console.log("calculeteNG_qty", calculeteNG_qty);
 
   const router = useRouter();
+
+  const upStatusWoStop = async () => {
+    const { data, error } = await supabase
+      .from("Work_order")
+      .update({ Status_working: "Offline" })
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+
+    if (data) {
+      console.log("update Status WO Success", data);
+    }
+    if (error) {
+      console.log(error);
+    }
+  };
+
+  const upTrigger = async () => {
+    const { data, error } = await supabase.from("trigger_dairy_report").insert([
+      {
+        PD_key: localStorage.getItem("PD_key"),
+        status_trigger: "Waiting_transfer",
+      },
+    ]);
+    if (data) {
+      console.log("upTrigger success", data);
+    }
+    if (error) {
+      console.log("upTrigger error", error);
+    }
+  };
+
   const upWork_order_id = async () => {
     const { data, error } = await supabase
       .from("Work_order")
@@ -808,6 +858,11 @@ function tableproduction() {
   console.log("Performance_deff", Performance_Percen);
 
   //-----------------
+  //============ calculate OEE% ============
+  const calculateOEE = Ap * Qualitypercen * Performance_Percen;
+  console.log("calculateOEE", calculateOEE);
+
+  //----------------------------------------
   //==== duration Manpower =================
   const [empNO, setEmpNO] = useState<any>([]);
   const Manpower: any = empNO.map((ress: { emp_no: number }) => ress.emp_no);
@@ -855,6 +910,9 @@ function tableproduction() {
       console.log("Password is incorrect", error);
     }
   };
+  //=====================================================
+
+  //-----------------------------------------------------
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
