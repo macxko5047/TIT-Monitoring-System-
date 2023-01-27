@@ -186,7 +186,7 @@ export default function PersistentDrawerLeft() {
       );
     }
   };
-  const menuShowLeader = () => {
+  const menuShowSupervisor = () => {
     const datalevel = localStorage.Level;
     if (datalevel === "Supervisor") {
       return (
@@ -223,7 +223,7 @@ export default function PersistentDrawerLeft() {
       );
     }
   };
-  const menuShowOperator = () => {
+  const menuShowLeader = () => {
     const datalevel = localStorage.Level;
     if (datalevel === "Leader") {
       return (
@@ -248,6 +248,37 @@ export default function PersistentDrawerLeft() {
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="โชว์ปุ่ม Leader" />
+            </ListItemButton>
+          </List>
+        </div>
+      );
+    }
+  };
+  const menuShowForeman = () => {
+    const datalevel = localStorage.Level;
+    if (datalevel === "Foreman") {
+      return (
+        <div>
+          <List>
+            <ListItemButton href="/draw">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Select WorkOder" />
+            </ListItemButton>
+
+            <ListItemButton href="/draw1">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Item Run" />
+            </ListItemButton>
+            <Divider />
+            <ListItemButton>
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="โชว์ปุ่ม Foreman" />
             </ListItemButton>
           </List>
         </div>
@@ -355,8 +386,9 @@ export default function PersistentDrawerLeft() {
             <Divider />
             {menuShowMeneger()}
             {menuShowAdmin()}
+            {menuShowSupervisor()}
             {menuShowLeader()}
-            {menuShowOperator()}
+            {menuShowForeman()}
             <Divider />
           </Drawer>
           <Main open={open}>

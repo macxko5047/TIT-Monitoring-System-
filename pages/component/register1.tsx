@@ -125,31 +125,6 @@ const register1 = () => {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                {/* <Grid item xs={12} sm={6}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="f_name"
-                    required
-                    fullWidth
-                    id="f_name"
-                    label="First Name"
-                    value={f_name1}
-                    onChange={(event) => setF_name(event.target.value)}
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="l_Name"
-                    label="Last Name"
-                    name="l_Name"
-                    value={l_name1}
-                    onChange={(event) => setL_name(event.target.value)}
-                    autoComplete="family-name"
-                  />
-                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -196,19 +171,7 @@ const register1 = () => {
                     onChange={(event) => setPass(event.target.value)}
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="email"
-                    label="Email"
-                    type="email"
-                    id="email"
-                    autoComplete="new-email"
-                    value={email1}
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                </Grid> */}
+
                 <Grid item xs={12}>
                   <InputLabel>Level</InputLabel>
                   <Select
@@ -221,6 +184,7 @@ const register1 = () => {
                     onChange={(event) => setLevel(event.target.value)}
                   >
                     <MenuItem value="Leader">Leader</MenuItem>
+                    <MenuItem value="Foreman">Foreman</MenuItem>
                     <MenuItem value="Supervisor">Supervisor</MenuItem>
                     <MenuItem value="Manager">Manager</MenuItem>
                   </Select>
