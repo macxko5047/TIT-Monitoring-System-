@@ -96,7 +96,7 @@ function PersistentDrawerLeft() {
     const ItemSelect = localStorage.getItem("Work_order_id");
     if (!ItemSelect) {
       router.push("/draw");
-      alert("กรุณา กลับ ไปเลือก WorkOder ก่อน");
+      alert("Do not have selected production !");
     }
   }, []);
 
