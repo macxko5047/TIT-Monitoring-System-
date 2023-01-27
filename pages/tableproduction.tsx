@@ -581,6 +581,7 @@ function tableproduction() {
     }
   };
   const AddNg = async () => {
+    setLoading(true);
     const { data, error } = await supabase.from("NG_record").insert([
       {
         Work_order_id: localStorage.getItem("Work_order_id"),
@@ -604,7 +605,7 @@ function tableproduction() {
     await ReloadNG();
     // await ngProduction();
     await handleCloseNG();
-
+    await setLoading(false);
     // console.log(data);
   };
 

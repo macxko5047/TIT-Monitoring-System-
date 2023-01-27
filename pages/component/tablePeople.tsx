@@ -62,12 +62,14 @@ export default function tablePeople() {
     };
   }, [dataManpower]);
 
-  if (loading)
+  if (loading) {
     return (
       <div>
         <CircularProgress />
       </div>
     ); //รอโหลดข้อมูล
+  }
+
   return (
     <div style={{ height: 320, width: "100%" }}>
       <DataGrid
