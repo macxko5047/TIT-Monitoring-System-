@@ -254,6 +254,9 @@ function tableproduction() {
   let Min = ("0" + date.getMinutes()).slice(-2);
   let sec = ("0" + date.getSeconds()).slice(-2);
   const timestamps = date.getTime();
+  let HoursStamp = "0" + (date.getTime() * 60) / 3600 / 1000;
+  console.log("HoursStamp", HoursStamp);
+
   // console.log(timestamps);
 
   let checkdates = `${year}-${month}-${day}`;
@@ -270,6 +273,19 @@ function tableproduction() {
     ((timestamp02 - timestamp01) * 60) / 3600 / 1000
   );
   // console.log(diffs);
+  const upProductionUnitGroup = async () => {
+    const { data, error } = await supabase
+      .from("Production_unit_group")
+      .update({ status_run: "Online", PD_key: localStorage.getItem("PD_key") })
+      .eq("PD_line", localStorage.getItem("Production_unit"));
+  };
+  const upProductionUnitGroupOffline = async () => {
+    const { data, error } = await supabase
+      .from("Production_unit_group")
+      .update({ status_run: "Offline", PD_key: "" })
+      .eq("PD_line", localStorage.getItem("Production_unit"));
+  };
+
   const upBegin_Time = async () => {
     const { data, error } = await supabase
       .from("Production_history")
@@ -316,8 +332,10 @@ function tableproduction() {
       upBegin_Time();
       upStatusWoStart();
       upStartTimeManpower();
+      upProductionUnitGroup();
       localStorage.setItem("TimeStart", times);
       localStorage.setItem("timeStampStart", timestamps);
+      localStorage.setItem("StatusOnline", "Online");
       playStart();
     }
   };
@@ -695,6 +713,7 @@ function tableproduction() {
   const handlerSubmitStop = async () => {
     await setTimestampEnd(timestamps);
     await upTrigger();
+    await upProductionUnitGroupOffline();
     await upStatusWoStop();
     await upWork_order_id();
   };
@@ -825,6 +844,7 @@ function tableproduction() {
       localStorage.removeItem("ItemNumber");
       localStorage.removeItem("Open_qty");
       localStorage.removeItem("Complete_qty");
+      localStorage.removeItem("StatusOnline");
     } else {
       console.log("UpDateWork_order_id Error", error);
     }
@@ -946,9 +966,82 @@ function tableproduction() {
     }
     await setLoading(false);
   };
-  //=====================================================
+  //====================get total - Open_qty ===============================
+  const [wo_OpenQty, setWo_OpenQty] = useState<any>("");
+  // console.log("wo_OpenQty", wo_OpenQty);
 
+  const WorkOrder = supabase
+    .channel("custom-update-wo-open-qty")
+    .on(
+      "postgres_changes",
+      { event: "UPDATE", schema: "public", table: "Work_order" },
+      (payload) => {
+        console.log("Change received! up date WorkOder ", payload);
+        ReloadfetchWO_OpenQTY();
+        upOnlineAuto();
+        checkAutoupWoStatus();
+      }
+    )
+    .subscribe();
+
+  const ReloadfetchWO_OpenQTY = async () => {
+    let { data: Work_order, error } = await supabase
+      .from("Work_order")
+      .select("Open_qty")
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+    if (Work_order) {
+      console.log("Open_qty", Work_order);
+      setWo_OpenQty(Work_order.map((res: any) => res.Open_qty));
+    } else {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    const fetdataWO_OpenQTY = async () => {
+      let { data: Work_order, error } = await supabase
+        .from("Work_order")
+        .select("Open_qty")
+        .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+      if (Work_order) {
+        console.log("Open_qty", Work_order);
+        setWo_OpenQty(Work_order.map((res: any) => res.Open_qty));
+      } else {
+        console.log(error);
+      }
+    };
+    fetdataWO_OpenQTY();
+  }, []);
   //-----------------------------------------------------
+  const [checkWO_OnOff, setCheckWO_OnOff] = useState<any>("");
+  console.log("checkWO_OnOff", checkWO_OnOff);
+
+  const upOnlineAuto = async () => {
+    let { data: Work_order, error } = await supabase
+      .from("Work_order")
+      .select("Status_working")
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+    if (Work_order) {
+      setCheckWO_OnOff(Work_order.map((res1: any) => res1.Status_working));
+    } else {
+      console.log(error);
+    }
+  };
+
+  const checkAutoupWoStatus = async () => {
+    if (checkWO_OnOff != localStorage.getItem("Work_order_id")) {
+      const { data, error } = await supabase
+        .from("Work_order")
+        .update({ Status_working: "Online" })
+        .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+      if (data) {
+        console.log("up date status WO success");
+      }
+      if (error) {
+        console.log(error);
+      }
+    }
+  };
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
@@ -1074,7 +1167,7 @@ function tableproduction() {
                   }}
                   variant="h4"
                 >
-                  {localStorage.getItem("Open_qty")}
+                  {wo_OpenQty}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                   <Loadings />
@@ -1123,7 +1216,7 @@ function tableproduction() {
                   }}
                   variant="h4"
                 >
-                  {localStorage.getItem("Open_qty")}
+                  {wo_OpenQty}
                 </Typography>
                 <Typography sx={{ p: 1 }}>
                   <LoadingsNG />

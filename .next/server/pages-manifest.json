@@ -2,6 +2,6 @@
   "/_error": "pages/_error.js",
   "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/draw": "pages/draw.js",
-  "/": "pages/index.js"
+  "/draw1": "pages/draw1.js",
+  "/draw": "pages/draw.js"
 }

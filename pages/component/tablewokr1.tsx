@@ -45,6 +45,12 @@ import Alert from "@mui/material/Alert";
 import useSound from "use-sound";
 import clsx from "clsx";
 import CircularProgress from "@mui/material/CircularProgress";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import ProductionUnitError from "./ProductionUnitError";
 
 const style = {
   position: "absolute" as "absolute",
@@ -118,6 +124,13 @@ export default function tablework1() {
   const [open, setOpen] = useState(false);
   const [datasec, setdataSec] = useState<any>([]);
   const [datasec01, setdataSec01] = useState<any>("");
+  const [TextError, SetText] = useState<any>("");
+
+  const [age, setAge] = React.useState("");
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value);
+  };
 
   const [PlayConfirm_Success, soundConfirm_Success] = useSound(
     "/Confirm_Success.mp3"
@@ -160,7 +173,9 @@ export default function tablework1() {
 
   // เช็คค่าที่เท้ากับแล้วเซ็ตค่าใส่ ------------------------------
   const [CheckdataPD, setCheckdataPD] = useState<any>("");
-  // console.log(CheckdataPD);
+  console.log("CheckdataPD", CheckdataPD);
+  const [checkdataGroup, setCheckdataGroup] = useState<any>("");
+  console.log("checkdataGroup", checkdataGroup);
 
   //----เช็คค่า group ออกมา
   useEffect(() => {
@@ -172,6 +187,7 @@ export default function tablework1() {
         .limit(1); //ใช้แทน single
       if (data.length) {
         setCheckdataPD(data[0].Digit_group);
+        setCheckdataGroup(data[0].Group_name);
       } else {
         console.log(error);
       }
@@ -182,6 +198,38 @@ export default function tablework1() {
   }, [CheckdataPD, datasec01]);
 
   //-----------------------
+  //============ เรียก production Unit จาก group ได้ค่ามาจาก CheckdataPD ====
+  const [dataUnit_gruop, setDataUnit_gruop] = useState<any>([]);
+  const [dataUnit_select, setDataUnit_select] = useState<any>("");
+  // console.log("dataUnit_select", dataUnit_select);
+  //===============.ใช้เช็คค่าว่าถ้ามี Production_Unit Onilne ให้ไม่สามารถทำงานซ้ำกันในที่เดียวได้
+  // const dataSelectUnitCheck = dataUnit_gruop.filter(
+  //   (res: any) => res.PD_line == dataUnit_select
+  // );
+  // const dataSelectUnitCheckMAP = dataUnit_gruop.map(
+  //   (testss: any) => testss.PD_line == dataUnit_select
+  // );
+  // // console.log("dataSelectUnitCheck", dataSelectUnitCheck);
+  // console.log("dataSelectUnitCheckMAP", dataSelectUnitCheckMAP);
+
+  useEffect(() => {
+    const FetchDataunitgruop = async () => {
+      const { data, error }: any = await supabase
+        .from("Production_unit_group")
+        .select("*")
+        .filter("Group_name", "in", "(" + checkdataGroup + ")")
+        .filter("status_run", "in", "(Offline)")
+        .order("PD_line", { ascending: true });
+      if (data) {
+        setDataUnit_gruop(data);
+      }
+      if (error) {
+        console.log("FetchDataunitgruop Error", error);
+      }
+    };
+    FetchDataunitgruop();
+  }, [CheckdataPD]);
+  //-------------------------------------------------------------------
   //========= check data Work order Online ==========
   const [dataWOcheck, setDataWOcheck] = useState<any>([]);
   console.log("dataWOcheck", dataWOcheck);
@@ -246,7 +294,7 @@ export default function tablework1() {
         PD_key: PDkey,
         Work_order_id: datasec[0].Work_order_id,
         Item_number: datasec[0].Item_number,
-        Production_unit: datasec[0].Production_unit,
+        Production_unit: dataUnit_select,
         Production_date: currentDate,
         Shift: kokks,
         Order_qty: datasec[0].Order_qty,
@@ -267,33 +315,57 @@ export default function tablework1() {
   // console.log("testCheck", dataCheckWoSelet);
 
   const handleClickOpen = async (event: any, cellValues: { row: any }) => {
-    if (cellValues.row.Status_working === "Online") {
-      alert("Already on proceeding in production!");
-    } else {
-      await setOpen(true);
-      await setdataSec([cellValues.row]);
-      await setdataSec01(cellValues.row.Production_unit);
-      await fectdataDESC();
-      await checkDaynight();
-      await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
-      await fetchDataPeople();
-    }
+    // if (cellValues.row.Status_working === "Online") {
+    //   alert("Already on proceeding in production!");
+    // } else {
+    await setOpen(true);
+    await setdataSec([cellValues.row]);
+    await setdataSec01(cellValues.row.Production_unit);
+    await fectdataDESC();
+    await checkDaynight();
+    await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
+    await fetchDataPeople();
+    // }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
   //-----------------------
-  //======================================================
+  //================ fetch Production unit มาเช็ค จาก Production unit==================
+  const [dataUnitcheck, setDataUnitcheck] = useState<any>([]);
+  console.log("dataUnitcheck", dataUnitcheck);
+
+  useEffect(() => {
+    const fetchProductionUnit = async () => {
+      let { data: Production_unit_group, error } = await supabase
+        .from("Production_unit_group")
+        .select("*")
+        .filter("status_run", "in", "(Online)");
+      if (Production_unit_group) {
+        setDataUnitcheck(Production_unit_group);
+      }
+    };
+    fetchProductionUnit();
+  }, []);
+  //---------------------------------------------------------------------
+
   // confrim
   const handleropenConfirm = () => {
     const LocalPD_key = localStorage.getItem("PD_key");
-    if (LocalPD_key != null) {
-      alert("Please push STOP button before proceed next WO");
-    }
-    if (LocalPD_key === null) {
-      fectdataDESC();
-      ConfrimOpen();
+
+    if (!dataUnit_select) {
+      return SetText(<ProductionUnitError />);
+    } else {
+      SetText("");
+
+      if (LocalPD_key != null) {
+        alert("Please push STOP button before proceed next WO");
+      }
+      if (LocalPD_key === null) {
+        fectdataDESC();
+        ConfrimOpen();
+      }
     }
   };
   const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -338,7 +410,7 @@ export default function tablework1() {
       await insertDigit();
     }
     await localStorage.setItem("Work_order_id", datasec[0].Work_order_id);
-    await localStorage.setItem("Production_unit", datasec[0].Production_unit);
+    await localStorage.setItem("Production_unit", dataUnit_select);
     await localStorage.setItem(
       "PD_key",
       `${CheckdataPD}${Fulltimeday}${putPDKEY}`
@@ -587,22 +659,22 @@ export default function tablework1() {
         });
       },
     },
-    {
-      field: "Production_unit",
-      headerName: "Production unit",
-      width: 140,
-      headerClassName: "super-app-theme--header",
-      cellClassName: (params: GridCellParams<any>) => {
-        if (params.row.Status_working == null) {
-          return "";
-        }
+    // {
+    //   field: "Production_unit",
+    //   headerName: "Production unit",
+    //   width: 140,
+    //   headerClassName: "super-app-theme--header",
+    //   cellClassName: (params: GridCellParams<any>) => {
+    //     if (params.row.Status_working == null) {
+    //       return "";
+    //     }
 
-        return clsx("super-app", {
-          negative: params.row.Status_working === "Online",
-          positive: params.row.Status_working === "Offline",
-        });
-      },
-    },
+    //     return clsx("super-app", {
+    //       negative: params.row.Status_working === "Online",
+    //       positive: params.row.Status_working === "Offline",
+    //     });
+    //   },
+    // },
     {
       field: "Status_working",
       width: 150,
@@ -865,7 +937,7 @@ export default function tablework1() {
                 <TableCell align="right">Open_qty</TableCell>
                 <TableCell align="right">Release_date</TableCell>
                 <TableCell align="right">Due_date_PD</TableCell>
-                <TableCell align="right">Production_unit</TableCell>
+
                 <TableCell align="right">PD_Key</TableCell>
               </TableRow>
             </TableHead>
@@ -887,13 +959,43 @@ export default function tablework1() {
                   <TableCell align="right">{rowss.Open_qty}</TableCell>
                   <TableCell align="right">{rowss.Release_date}</TableCell>
                   <TableCell align="right">{rowss.Due_date_PD}</TableCell>
-                  <TableCell align="right">{rowss.Production_unit}</TableCell>
+
                   <TableCell align="right">{`${CheckdataPD}${Fulltimeday}${putPDKEY}`}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </TableContainer>
-
+          <Stack
+            sx={{ mt: 1, p: 1 }}
+            direction="row"
+            // justifyContent="space-around"
+            alignItems="center"
+            spacing={2}
+          >
+            <Typography>Production Unit</Typography>
+            <FormControl sx={{ m: 1, minWidth: 200 }}>
+              <Select
+                value={dataUnit_select}
+                onChange={(event) => setDataUnit_select(event.target.value)}
+                fullWidth
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {dataUnit_gruop.map((fetchdata: any) => (
+                  <MenuItem
+                    key={fetchdata.PD_line}
+                    sx={{ fontSize: 24 }}
+                    value={fetchdata.PD_line}
+                  >
+                    {fetchdata.PD_line} : {fetchdata.Group_name}
+                  </MenuItem>
+                ))}
+              </Select>
+              {/* <FormHelperText>With label + helper text</FormHelperText> */}
+            </FormControl>
+            {TextError}
+          </Stack>
           <Box sx={{ flexGrow: 1, p: 1 }}>
             <Grid container>
               <Grid container xs={12} md={12} lg={12}>
