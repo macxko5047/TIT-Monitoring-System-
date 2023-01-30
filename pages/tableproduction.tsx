@@ -38,6 +38,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
 import supabase from "../compunentConfig/supabase";
+import DowntimeError from "./component/DowntimeError";
 
 const style = {
   position: "absolute" as "absolute",
@@ -161,29 +162,34 @@ function tableproduction() {
   };
 
   const handleSubmitModal = async () => {
-    if (timepause === "") {
-      await setTimepause(times);
-      await setTimestamp01(timestamps);
-      await playOn_Downtime();
-    }
-    if (timepause === "") {
-      const { data, error } = await supabase.from("Downtime_record").insert([
-        {
-          Work_order_id: localStorage.getItem("Work_order_id"),
-          PD_key: localStorage.getItem("PD_key"),
-          Downtime_code: menusplit[0],
-          Begin_time: times,
-          Downtime_description: menusplit[1],
-        },
-      ]);
-      if (error) {
-        console.log(error);
+    if (!details) {
+      return SetText1(<DowntimeError />);
+    } else {
+      SetText1("");
+      if (timepause === "") {
+        await setTimepause(times);
+        await setTimestamp01(timestamps);
+        await playOn_Downtime();
       }
-      if (data) {
-        console.log(data);
+      if (timepause === "") {
+        const { data, error } = await supabase.from("Downtime_record").insert([
+          {
+            Work_order_id: localStorage.getItem("Work_order_id"),
+            PD_key: localStorage.getItem("PD_key"),
+            Downtime_code: menusplit[0],
+            Begin_time: times,
+            Downtime_description: menusplit[1],
+          },
+        ]);
+        if (error) {
+          console.log(error);
+        }
+        if (data) {
+          console.log(data);
+        }
+        await setOpenModal(false);
+        await handleOpenModal1();
       }
-      await setOpenModal(false);
-      await handleOpenModal1();
     }
   };
   //เปิด - ปิด modal v.3
@@ -538,6 +544,7 @@ function tableproduction() {
   const [selectQty, setQty] = useState<Number>(1);
   const [ShowCodeNG, setCode] = useState<any>([]);
   const [TextError, SetText] = useState<any>("");
+  const [TextError1, SetText1] = useState<any>("");
   const [TextConfirm, SetConfirm] = useState("");
   const [ngAll, setNgAll] = useState<Number>(0);
   const NGsplit = selectNG.split(":");
@@ -581,6 +588,7 @@ function tableproduction() {
     if (!selectNG || !selectQty) {
       return SetText(<NgError />);
     } else {
+      SetText("");
       await ChNgCode();
       await playNG_Success();
     }
@@ -911,11 +919,13 @@ function tableproduction() {
   //=========== confirm The End ======================
   const handleConfirmEnd = (event: any) => {
     event.preventDefault();
+
     fetchCheckPassEnd();
   };
   const [passConfrimEnd, setPassConfrimEnd] = useState("");
 
   const fetchCheckPassEnd = async () => {
+    await setLoading(true);
     const { data, error } = await supabase
       .from("userID")
       .select("*")
@@ -934,6 +944,7 @@ function tableproduction() {
     } else {
       console.log("Password is incorrect", error);
     }
+    await setLoading(false);
   };
   //=====================================================
 
@@ -1250,6 +1261,11 @@ function tableproduction() {
                 </MenuItem>
               ))}
             </Select>
+            <div>
+              <br />
+            </div>
+            {TextError1}
+
             <Stack
               direction="row"
               justifyContent="space-around"
