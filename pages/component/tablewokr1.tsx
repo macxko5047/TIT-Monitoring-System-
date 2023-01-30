@@ -44,6 +44,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Alert from "@mui/material/Alert";
 import useSound from "use-sound";
 import clsx from "clsx";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const style = {
   position: "absolute" as "absolute",
@@ -762,6 +763,7 @@ export default function tablework1() {
     return (
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography sx={{ fontSize: 50 }}>Loading...</Typography>
+        <CircularProgress />
       </Box>
     ); //รอโหลดข้อมูล
   }
