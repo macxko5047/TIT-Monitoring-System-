@@ -32,7 +32,6 @@ function QuickSearchToolbar() {
 export default function QuickFilteringCustomizedGrid() {
   const [mounted, setMounted] = useState(false);
   const [data, setdata] = useState<any>([]);
- 
 
   //รีเฟสเฉพาะอันนั้น
   // console.log({ data });

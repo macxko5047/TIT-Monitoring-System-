@@ -52,7 +52,6 @@ export default function tablePeople() {
         (payload) => {
           console.log("Change received! ReloadManpower_record ", payload);
           // ReloadManpower_record();
-
           setDataManpower((data: any) => [...data, payload.new]);
         }
       )

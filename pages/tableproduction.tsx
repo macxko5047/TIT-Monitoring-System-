@@ -92,16 +92,16 @@ function tableproduction() {
   let [timestop, setTimestop] = useState<any>("");
   const [details, setDetails] = useState<any>("");
 
-  // const Open_qty: any = localStorage.getItem("Open_qty");
-  // const Complete_qty: any = localStorage.getItem("Complete_qty");
-  // const NG_qty: any = localStorage.getItem("NG_qty_WO");
   const [dataOK, setOK] = useState(0);
-  // const [dataNg, setNG] = useState(0);
+
   // split string แบ่ง ออกเพื่อส่งไปเก็บใน database
   const menusplit = details.split(":");
 
   const [datamenu, setDatamenu] = useState<any>([]);
   // console.log("menu :", datamenu);
+  const [timeOtCel, setTimeOtCel] = useState<number>(0);
+  const [ot_operations, setOT_operation] = useState<any>("");
+  console.log("ot_operation", ot_operations);
 
   // -------------------------------------
 
@@ -160,7 +160,24 @@ function tableproduction() {
   const handleCloseModal1 = () => {
     setOpenModal1(false);
   };
-
+  const updateDowntimeStatusStart = async () => {
+    const { data, error } = await supabase
+      .from("Production_unit_group")
+      .update({ status_run: "Downtime" })
+      .eq("PD_key", localStorage.getItem("PD_key"));
+    if (!error) {
+      console.log("Downtime Status Success", data);
+    }
+  };
+  const updateDowntimeStatusEND = async () => {
+    const { data, error } = await supabase
+      .from("Production_unit_group")
+      .update({ status_run: "Online" })
+      .eq("PD_key", localStorage.getItem("PD_key"));
+    if (!error) {
+      console.log("Downtime Status Success", data);
+    }
+  };
   const handleSubmitModal = async () => {
     if (!details) {
       return SetText1(<DowntimeError />);
@@ -169,6 +186,7 @@ function tableproduction() {
       if (timepause === "") {
         await setTimepause(times);
         await setTimestamp01(timestamps);
+        await updateDowntimeStatusStart();
         await playOn_Downtime();
       }
       if (timepause === "") {
@@ -276,13 +294,17 @@ function tableproduction() {
   const upProductionUnitGroup = async () => {
     const { data, error } = await supabase
       .from("Production_unit_group")
-      .update({ status_run: "Online", PD_key: localStorage.getItem("PD_key") })
+      .update({
+        status_run: "Online",
+        PD_key: localStorage.getItem("PD_key"),
+        Work_order_id: localStorage.getItem("Work_order_id"),
+      })
       .eq("PD_line", localStorage.getItem("Production_unit"));
   };
   const upProductionUnitGroupOffline = async () => {
     const { data, error } = await supabase
       .from("Production_unit_group")
-      .update({ status_run: "Offline", PD_key: "" })
+      .update({ status_run: "Offline", PD_key: null, Work_order_id: null })
       .eq("PD_line", localStorage.getItem("Production_unit"));
   };
 
@@ -345,6 +367,7 @@ function tableproduction() {
       await setTimePE(times);
       await setTimestamp02(timestamps);
       await setOpenModal1(false);
+      await updateDowntimeStatusEND();
       await playThe_end_downtime();
     }
   };
@@ -503,8 +526,41 @@ function tableproduction() {
     ReloadOK();
   };
 
-  const [showDaynight, setShowDaynight] = useState([]);
+  const [showDaynight, setShowDaynight] = useState<any>([]);
+  //================================================================
+  console.log("showDaynight", showDaynight);
+  console.log("times", times);
+  const Timesplit = times.split(":");
 
+  console.log("timeOtCel", timeOtCel);
+
+  const celculeteOT = async () => {
+    if (showDaynight === "Day") {
+      if (times > "18:30:00") {
+        const hourCelculete = (Timesplit[0] - 13) * 60;
+        const minCelculete = Timesplit[1] - 30;
+        setTimeOtCel(hourCelculete + minCelculete);
+        setOT_operation("Y");
+        console.log("celculeteOT Success OT YES");
+      }
+      if (times < "18:30:00") {
+        setTimeOtCel(0);
+        setOT_operation("N");
+      }
+    }
+    if (showDaynight === "Night") {
+      if (times > "06:30:00") {
+        const hourCelculete = (Timesplit[0] - 10) * 60;
+        const minCelculete = Timesplit[1] - 30;
+        setTimeOtCel(hourCelculete + minCelculete);
+      }
+      if (times < "06:30:00") {
+        setTimeOtCel(0);
+      }
+    }
+  };
+
+  //----------------------------------------------------------------
   useEffect(() => {
     const FetchDataCheck = async () => {
       setLoading(true);
@@ -603,7 +659,7 @@ function tableproduction() {
   };
 
   const ChNgempty = async () => {
-    if (!selectNG || !selectQty) {
+    if (!selectNG || !selectQty || !ngCompunent) {
       return SetText(<NgError />);
     } else {
       SetText("");
@@ -618,6 +674,7 @@ function tableproduction() {
       .select("id, NG_qty")
       .filter("NG_code", "in", "(" + NGsplit[0] + ")")
       .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
+      .in("Part_name", [ngCompunent, textOther])
       .limit(1);
 
     if (!error) {
@@ -632,29 +689,56 @@ function tableproduction() {
   };
   const AddNg = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from("NG_record").insert([
-      {
-        Work_order_id: localStorage.getItem("Work_order_id"),
-        NG_code: NGsplit[0],
-        NG_description: NGsplit[1],
-        NG_qty: selectQty,
-        Production_date: checkdates,
-        Production_unit: localStorage.getItem("Production_unit"),
-        PD_key: localStorage.getItem("PD_key"),
-        Item_number: localStorage.getItem("ItemNumber"),
-      },
-    ]);
-    if (data) {
-      console.log("NG Insert Success :", data);
-    } else {
-      console.log("Insert Error", error);
+    if (textOther === "") {
+      const { data, error } = await supabase.from("NG_record").insert([
+        {
+          Work_order_id: localStorage.getItem("Work_order_id"),
+          NG_code: NGsplit[0],
+          NG_description: NGsplit[1],
+          NG_qty: selectQty,
+          Production_date: checkdates,
+          Production_unit: localStorage.getItem("Production_unit"),
+          PD_key: localStorage.getItem("PD_key"),
+          Item_number: localStorage.getItem("ItemNumber"),
+          Part_name: ngCompunent,
+        },
+      ]);
+      if (data) {
+        console.log("NG Insert Success :", data);
+      } else {
+        console.log("Insert Error", error);
+      }
     }
+    if (ngCompunent === "Other") {
+      const { data, error } = await supabase.from("NG_record").insert([
+        {
+          Work_order_id: localStorage.getItem("Work_order_id"),
+          NG_code: NGsplit[0],
+          NG_description: NGsplit[1],
+          NG_qty: selectQty,
+          Production_date: checkdates,
+          Production_unit: localStorage.getItem("Production_unit"),
+          PD_key: localStorage.getItem("PD_key"),
+          Item_number: localStorage.getItem("ItemNumber"),
+          Part_name: textOther,
+        },
+      ]);
+      if (data) {
+        console.log("NG Insert Success :", data);
+      } else {
+        console.log("Insert Error", error);
+      }
+    }
+
     await FetchDT();
     await setNG("");
     await setQty(1);
     await ReloadNG();
     // await ngProduction();
+    await setNgCompunent("");
+    await setTextOther("");
     await handleCloseNG();
+
     await setLoading(false);
     // console.log(data);
   };
@@ -712,9 +796,10 @@ function tableproduction() {
 
   const handlerSubmitStop = async () => {
     await setTimestampEnd(timestamps);
+    await celculeteOT();
     await upTrigger();
-    await upProductionUnitGroupOffline();
     await upStatusWoStop();
+    await upProductionUnitGroupOffline();
     await upWork_order_id();
   };
   useEffect(() => {
@@ -755,6 +840,8 @@ function tableproduction() {
             OBU_status: "Waiting_transfer",
             Open_qty: calculeteOpen_qty,
             OEE_percent: calculateOEE.toFixed(4),
+            OT_duration: timeOtCel,
+            OT_operation: ot_operations,
           })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("End_time", null);
@@ -785,7 +872,7 @@ function tableproduction() {
   };
   const calculeteComplete_qty: number = dataComplete_qty + dataOK_qty;
   // console.log("calculeteComplete_qty", calculeteComplete_qty);
-  const calculeteOpen_qty = dataOpen_qty - dataOK_qty;
+  const calculeteOpen_qty: number = dataOpen_qty - dataOK_qty;
   // console.log("calculeteOpen_qty", calculeteOpen_qty);
   const calculeteNG_qty = NGdata_qty + dataNG_qty;
   // console.log("calculeteNG_qty", calculeteNG_qty);
@@ -833,8 +920,7 @@ function tableproduction() {
     if (!error) {
       console.log("UpDateWork_order_id Success", data);
       await playStop_complete();
-      await router.push("/draw");
-      localStorage.removeItem("Work_order_id");
+      // localStorage.removeItem("Work_order_id");
       localStorage.removeItem("timeStampStart");
       localStorage.removeItem("Production_unit");
       localStorage.removeItem("PD_key");
@@ -845,25 +931,26 @@ function tableproduction() {
       localStorage.removeItem("Open_qty");
       localStorage.removeItem("Complete_qty");
       localStorage.removeItem("StatusOnline");
+      await router.push("/draw");
     } else {
       console.log("UpDateWork_order_id Error", error);
     }
   };
-  const [cct_standard, setCct_standard] = useState<any>([]);
+  const [cct_standard, setCct_standard] = useState<number>(0);
   console.log("cct_standard", cct_standard);
 
   useEffect(() => {
     const fetchdataBom = async () => {
       let { data, error } = await supabase
-        .from("BOM")
-        .select("cct_standard")
-        .eq("Item_number", localStorage.getItem("ItemNumber"))
-        .eq("Production_unit", localStorage.getItem("Production_unit"));
+        .from("Production_history")
+        .select("Standard_time")
+        .eq("PD_key", localStorage.getItem("PD_key"));
+
       if (data?.length) {
-        setCct_standard(data[0].cct_standard);
-        console.log("fetchdataBom Success", data);
+        setCct_standard(data[0].Standard_time);
+        console.log("fetchdataStandard_time Success", data);
       } else {
-        console.log("fetchdataBom Error", error);
+        console.log("fetchdataStandard_time Error", error);
       }
     };
     fetchdataBom();
@@ -912,7 +999,7 @@ function tableproduction() {
 
   //-----------------
   //============ calculate OEE% ============
-  const calculateOEE = Ap * Qualitypercen * Performance_Percen;
+  const calculateOEE: number = Ap * Qualitypercen * Performance_Percen;
   console.log("calculateOEE", calculateOEE);
 
   //----------------------------------------
@@ -939,7 +1026,6 @@ function tableproduction() {
   //=========== confirm The End ======================
   const handleConfirmEnd = (event: any) => {
     event.preventDefault();
-
     fetchCheckPassEnd();
   };
   const [passConfrimEnd, setPassConfrimEnd] = useState("");
@@ -969,20 +1055,19 @@ function tableproduction() {
   //====================get total - Open_qty ===============================
   const [wo_OpenQty, setWo_OpenQty] = useState<any>("");
   // console.log("wo_OpenQty", wo_OpenQty);
-
-  const WorkOrder = supabase
-    .channel("custom-update-wo-open-qty")
-    .on(
-      "postgres_changes",
-      { event: "UPDATE", schema: "public", table: "Work_order" },
-      (payload) => {
-        console.log("Change received! up date WorkOder ", payload);
-        ReloadfetchWO_OpenQTY();
-        upOnlineAuto();
-        checkAutoupWoStatus();
-      }
-    )
-    .subscribe();
+  useEffect(() => {
+    const WorkOrder = supabase
+      .channel("custom-update-wo-open-qty")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "Work_order" },
+        (payload) => {
+          console.log("Change received! up date WorkOder ", payload);
+          ReloadfetchWO_OpenQTY();
+        }
+      )
+      .subscribe();
+  }, []);
 
   const ReloadfetchWO_OpenQTY = async () => {
     let { data: Work_order, error } = await supabase
@@ -1013,35 +1098,52 @@ function tableproduction() {
     fetdataWO_OpenQTY();
   }, []);
   //-----------------------------------------------------
-  const [checkWO_OnOff, setCheckWO_OnOff] = useState<any>("");
-  console.log("checkWO_OnOff", checkWO_OnOff);
+  //============== select Component part ==============
+  const [bom_ract, setBom_ract] = useState<any>([]);
+  const [itemNumber, setItemNumber] = useState<any>("");
+  console.log("itemNumber", itemNumber);
 
-  const upOnlineAuto = async () => {
-    let { data: Work_order, error } = await supabase
-      .from("Work_order")
-      .select("Status_working")
-      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
-    if (Work_order) {
-      setCheckWO_OnOff(Work_order.map((res1: any) => res1.Status_working));
-    } else {
-      console.log(error);
-    }
-  };
+  const [ngCompunent, setNgCompunent] = useState<any>("");
+  console.log("ngCompunent", ngCompunent);
 
-  const checkAutoupWoStatus = async () => {
-    if (checkWO_OnOff != localStorage.getItem("Work_order_id")) {
-      const { data, error } = await supabase
-        .from("Work_order")
-        .update({ Status_working: "Online" })
-        .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+  console.log("bom_ract", bom_ract);
+
+  useEffect(() => {
+    const fetchdataBOM_ract = async () => {
+      let { data, error } = await supabase
+        .from("BOM_ract")
+        .select("*")
+        .eq("master_part", localStorage.getItem("ItemNumber"));
       if (data) {
-        console.log("up date status WO success");
+        setBom_ract(data);
+        setItemNumber(localStorage.getItem("ItemNumber"));
+        console.log("fetchdataBOM_ract");
       }
       if (error) {
-        console.log(error);
+        console.log("fetchdataBOM_ract", error);
       }
+    };
+    fetchdataBOM_ract();
+  }, []);
+  const [textOther, setTextOther] = useState<any>("");
+  console.log("textOther", textOther);
+
+  const OtheText = () => {
+    if (ngCompunent === "Other") {
+      return (
+        <div>
+          <br />
+          <TextField
+            fullWidth
+            label={"กรุณากรอกข้อมูล"}
+            value={textOther}
+            onChange={(event) => setTextOther(event.target.value)}
+          ></TextField>
+        </div>
+      );
     }
   };
+  //----------------------------------------------------
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
@@ -1668,6 +1770,7 @@ function tableproduction() {
             <Typography variant="h1">NG Product</Typography>
 
             <Typography sx={{ fontSize: 30 }}>NG Code: </Typography>
+
             <Select
               label="Detals"
               fullWidth
@@ -1680,40 +1783,170 @@ function tableproduction() {
                   sx={{ fontSize: 28 }}
                   value={menus.code + ":" + menus.desc + ":"}
                 >
-                  {menus.code} : {menus.desc} : {menus.desc_china}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-around"
+                    alignItems="center"
+                    spacing={12}
+                    sx={{ m: 1, p: 1 }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: 26,
+                        color: "#FF0000",
+                      }}
+                    >
+                      {menus.code}
+                    </Typography>
+                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                      {menus.desc}
+                    </Typography>
+                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                      {menus.desc_china}
+                    </Typography>
+                  </Stack>
                 </MenuItem>
               ))}
             </Select>
+            <Typography sx={{ fontSize: 30 }}>NG Part Component: </Typography>
+            <Select
+              fullWidth
+              value={ngCompunent}
+              onChange={(event) => setNgCompunent(event.target.value)}
+            >
+              <MenuItem sx={{ fontSize: 30 }} value="">
+                <em>NOne</em>
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={"Other"}>
+                <em>Other</em>
+              </MenuItem>
+
+              <MenuItem sx={{ fontSize: 30 }} value={itemNumber}>
+                <Stack
+                  direction="row"
+                  justifyContent="space-around"
+                  alignItems="center"
+                  spacing={12}
+                  sx={{ m: 1, p: 1 }}
+                >
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: 26,
+                      color: "#FF0000",
+                    }}
+                  >
+                    {itemNumber}
+                  </Typography>
+                  <Typography sx={{ fontSize: 24, color: "#00BFFF" }}>
+                    Finish Good
+                  </Typography>
+                </Stack>
+              </MenuItem>
+
+              {bom_ract.map((menus: any) => (
+                <MenuItem key={menus.component} value={menus.component}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-around"
+                    alignItems="center"
+                    spacing={12}
+                    sx={{ m: 1, p: 1 }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: 26,
+                        color: "#FF0000",
+                      }}
+                    >
+                      {menus.component}
+                    </Typography>
+
+                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                      {menus.desc}
+                    </Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+            </Select>
+            {OtheText()}
             <InputLabel id="demo-simple-select-label" sx={{ fontSize: 30 }}>
               NG qty
             </InputLabel>
             <Select
+              sx={{
+                fontSize: 30,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
               fullWidth
               label="Qty"
               value={selectQty}
               autoFocus
               onChange={(event) => setQty(event.target.value as number)}
             >
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-              <MenuItem value={4}>4</MenuItem>
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={6}>6</MenuItem>
-              <MenuItem value={7}>7</MenuItem>
-              <MenuItem value={8}>8</MenuItem>
-              <MenuItem value={9}>9</MenuItem>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={11}>11</MenuItem>
-              <MenuItem value={12}>12</MenuItem>
-              <MenuItem value={13}>13</MenuItem>
-              <MenuItem value={14}>14</MenuItem>
-              <MenuItem value={15}>15</MenuItem>
-              <MenuItem value={16}>16</MenuItem>
-              <MenuItem value={17}>17</MenuItem>
-              <MenuItem value={18}>18</MenuItem>
-              <MenuItem value={19}>19</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={1}>
+                1
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={2}>
+                2
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={3}>
+                3
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={4}>
+                4
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={5}>
+                5
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={6}>
+                6
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={7}>
+                7
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={8}>
+                8
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={9}>
+                9
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={10}>
+                10
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={11}>
+                11
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={12}>
+                12
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={13}>
+                13
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={14}>
+                14
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={15}>
+                15
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={16}>
+                16
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={17}>
+                17
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={18}>
+                18
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={19}>
+                19
+              </MenuItem>
+              <MenuItem sx={{ fontSize: 30 }} value={20}>
+                20
+              </MenuItem>
             </Select>
             <div>
               <br />
@@ -1807,6 +2040,7 @@ function tableproduction() {
         </Box>
       </Modal>
       {/* ------------------- */}
+      <Button onClick={celculeteOT}>dfdfdf</Button>
     </div>
   );
 }

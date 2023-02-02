@@ -75,6 +75,7 @@ export default function QuickFilteringCustomizedGrid() {
   const [selectIdEdit, setIDEdit] = useState<any>("");
   const [detailNG, setDetailNG] = useState<any>("");
   const [CodeShow, setEditCode] = useState<any>("");
+  const [PartShow, setEditPart] = useState<any>("");
   const [dataNG_qty, setDataNG_qty] = useState<any>("");
 
   const dates = new Date();
@@ -89,8 +90,6 @@ export default function QuickFilteringCustomizedGrid() {
   const [NgId, SetNgId] = useState<Number>(0);
   const [SumNgPcs, SetNgPcs] = useState<Number>(0);
   const [ngAll, setNgAll] = useState<Number>(0);
-
- 
 
   const [mounted, setMounted] = useState(false);
   const [dataNg, setdata] = useState<any>([]);
@@ -110,7 +109,8 @@ export default function QuickFilteringCustomizedGrid() {
     /*{ field: "id", headerName: "No" },*/
     { field: "NG_code", headerName: "Code" },
     { field: "NG_description", headerName: "Description" },
-    { field: "NG_qty", headerName: "Q'ty", type: "number" },
+    { field: "Part_name", headerName: "Part component", width: 130 },
+    { field: "NG_qty", headerName: "Q'ty", type: "number", width: 70 },
     {
       field: "action",
       headerName: "Delete",
@@ -228,6 +228,7 @@ export default function QuickFilteringCustomizedGrid() {
   };
   const handleClickEdit = (event: any, cellValues: any) => {
     setEditCode(cellValues.row.NG_code);
+    setEditPart(cellValues.row.Part_name);
     setDataNG_qty(cellValues.row.NG_qty);
     setDetailNG(cellValues.row.NG_description);
     setIDEdit(cellValues.row.id);
@@ -323,11 +324,18 @@ export default function QuickFilteringCustomizedGrid() {
             Edit NG
           </Typography>
           <Stack direction="row" justifyContent="center" spacing={4}>
-            <Typography sx={{ fontSize: 20 }}>NG code : {CodeShow}</Typography>
-            <Typography sx={{ fontSize: 20 }}>Detail : {detailNG}</Typography>
+            <Typography sx={{ fontSize: 20, width: 150 }}>
+              NG code : {CodeShow}
+            </Typography>
+            <Typography sx={{ fontSize: 20, width: 300 }}>
+              Part :{PartShow}{" "}
+            </Typography>
+            <Typography sx={{ fontSize: 20, width: 200 }}>
+              Detail : {detailNG}
+            </Typography>
 
             <TextField
-              sx={{ width: 600 }}
+              sx={{ width: 300 }}
               label="NG_qty"
               id="outlined-size-normal"
               type="number"

@@ -124,13 +124,8 @@ export default function tablework1() {
   const [open, setOpen] = useState(false);
   const [datasec, setdataSec] = useState<any>([]);
   const [datasec01, setdataSec01] = useState<any>("");
+  const [item_number, setItem_number] = useState<any>("");
   const [TextError, SetText] = useState<any>("");
-
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
 
   const [PlayConfirm_Success, soundConfirm_Success] = useSound(
     "/Confirm_Success.mp3"
@@ -142,16 +137,16 @@ export default function tablework1() {
   let year = date.getFullYear();
   const hours = date.getHours();
   //check time day & night
-  const [kokks, setKokks] = useState("");
-  const checkDaynight = () => {
-    if (checkDN === true) {
-      setKokks("Day");
-    }
-    if (checkDN === false) {
-      setKokks("Night");
-    }
-  };
-  let checkDN = hours > 7 && hours < 19;
+  // const [kokks, setKokks] = useState("");
+  // const checkDaynight = () => {
+  //   if (checkDN === true) {
+  //     setKokks("Day");
+  //   }
+  //   if (checkDN === false) {
+  //     setKokks("Night");
+  //   }
+  // };
+  // let checkDN = hours > 7 && hours < 19;
 
   function leftFillNumMonth(numMonth: any, targetLength: any) {
     return numMonth.toString().padStart(targetLength, 0);
@@ -201,6 +196,7 @@ export default function tablework1() {
   //============ เรียก production Unit จาก group ได้ค่ามาจาก CheckdataPD ====
   const [dataUnit_gruop, setDataUnit_gruop] = useState<any>([]);
   const [dataUnit_select, setDataUnit_select] = useState<any>("");
+  const [dataShift, setDataShift] = useState<any>("");
   // console.log("dataUnit_select", dataUnit_select);
   //===============.ใช้เช็คค่าว่าถ้ามี Production_Unit Onilne ให้ไม่สามารถทำงานซ้ำกันในที่เดียวได้
   // const dataSelectUnitCheck = dataUnit_gruop.filter(
@@ -296,10 +292,11 @@ export default function tablework1() {
         Item_number: datasec[0].Item_number,
         Production_unit: dataUnit_select,
         Production_date: currentDate,
-        Shift: kokks,
+        Shift: dataShift,
         Order_qty: datasec[0].Order_qty,
         Open_qty: datasec[0].Open_qty,
         OP_confirm_before: localStorage.getItem("emp_no"),
+        Standard_time: cct_stadrad,
       },
     ]);
 
@@ -318,43 +315,84 @@ export default function tablework1() {
     // if (cellValues.row.Status_working === "Online") {
     //   alert("Already on proceeding in production!");
     // } else {
+
     await setOpen(true);
     await setdataSec([cellValues.row]);
     await setdataSec01(cellValues.row.Production_unit);
+    await setItem_number(cellValues.row.Item_number);
     await fectdataDESC();
-    await checkDaynight();
+    // await checkDaynight();
     await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
     await fetchDataPeople();
+
     // }
   };
 
   const handleClose = () => {
     setOpen(false);
+    setdataSec01("");
+    setItem_number("");
+    setCct_stadrad("");
   };
   //-----------------------
   //================ fetch Production unit มาเช็ค จาก Production unit==================
-  const [dataUnitcheck, setDataUnitcheck] = useState<any>([]);
+  const [dataUnitcheck, setDataUnitcheck] = useState<any>("");
   console.log("dataUnitcheck", dataUnitcheck);
+  const [checkStatusWO, setCheckStatusWO] = useState<any>(false);
+  console.log("checkStatusWO", checkStatusWO);
+
+  const fetchProductionUnit = async () => {
+    let { data, error } = await supabase
+      .from("Production_unit_group")
+      .select("status_run")
+      .in("status_run", ["Downtime", "Online"])
+      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+    if (data) {
+      setDataUnitcheck(
+        data.map(
+          (ress: any) =>
+            ress.status_run === "Online" || ress.status_run === "Downtime"
+        )
+      );
+    }
+    if (error) {
+      console.log("fetchProductionUnit", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchProductionUnit = async () => {
-      let { data: Production_unit_group, error } = await supabase
-        .from("Production_unit_group")
-        .select("*")
-        .filter("status_run", "in", "(Online)");
-      if (Production_unit_group) {
-        setDataUnitcheck(Production_unit_group);
+    const fetchAll = async () => {
+      await fetchProductionUnit();
+    };
+    fetchAll();
+  }, []);
+
+  useEffect(() => {
+    const updateOnlineAuto = async () => {
+      if (dataUnitcheck[0] === true) {
+        const { data, error } = await supabase
+          .from("Work_order")
+          .update({ Status_working: "Online" })
+          .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+        if (data) {
+          console.log("UP Status Online Success");
+        }
       }
     };
-    fetchProductionUnit();
-  }, []);
+    updateOnlineAuto();
+  }, [dataUnitcheck]);
   //---------------------------------------------------------------------
 
   // confrim
   const handleropenConfirm = () => {
     const LocalPD_key = localStorage.getItem("PD_key");
-
+    if (!dataShift) {
+      return SetText(<ProductionUnitError />);
+    }
     if (!dataUnit_select) {
+      return SetText(<ProductionUnitError />);
+    }
+    if (!cct_stadrad) {
       return SetText(<ProductionUnitError />);
     } else {
       SetText("");
@@ -370,14 +408,12 @@ export default function tablework1() {
   };
   const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    await setLoading(true);
+
     await fetchCheckPass();
-    await setLoading(false);
   };
   const [passConfrim, setPassConfrim] = useState("");
 
   const fetchCheckPass = async () => {
-    setLoading(true);
     const { data, error } = await supabase
       .from("userID")
       .select("*")
@@ -397,13 +433,13 @@ export default function tablework1() {
     } else {
       console.log("Password is incorrect", error);
     }
-    setLoading(false);
   };
   // push Agree
   const removeItem = () => {
     localStorage.removeItem("TimeStart");
   };
   const handlerAgree = async () => {
+    setLoading(true);
     await removeItem();
 
     if (CheckdataPD != "") {
@@ -420,6 +456,7 @@ export default function tablework1() {
     await localStorage.setItem("ItemNumber", datasec[0].Item_number);
     await localStorage.setItem("NG_qty_WO", datasec[0].NG_qty);
     await router.push("/draw1");
+    setLoading(false);
   };
   //=================================================================
   // console.log(currentDate); // "DD-MM-YYYY"
@@ -778,8 +815,8 @@ export default function tablework1() {
     });
 
     if (error) console.error(error);
-    else setLoading(false);
-    console.log("Up User Success", data);
+    else console.log("Up User Success", data);
+    setLoading(false);
   };
   //-----------------------------------------------------------------------
   const columnsAddPeople: GridColDef[] = [
@@ -809,12 +846,13 @@ export default function tablework1() {
 
   useEffect(() => {
     const WorkOrder = supabase
-      .channel("custom-all-WorkOrder")
+      .channel("custom-all-WorkOrderasdwqe")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "Work_order" },
         (payload) => {
           console.log("Change received WorkOrder !", payload);
+
           setSData((prev: any) => [...prev, payload.new]);
         }
       )
@@ -822,7 +860,36 @@ export default function tablework1() {
     return () => {
       supabase.removeChannel(WorkOrder);
     };
-  }, []);
+  }, [sData]);
+  const [cct_stadrad, setCct_stadrad] = useState<any>("");
+  console.log("cct_stadrad", cct_stadrad);
+  console.log("item_number", item_number);
+  console.log("datasec01", datasec01);
+
+  useEffect(() => {
+    const fetchCct_stadrad = async () => {
+      if (item_number != "") {
+        let { data, error } = await supabase
+          .from("BOM")
+          .select("cct_standard")
+          .eq("Item_number", item_number)
+          .eq("Production_unit", datasec01);
+        if (data?.length) {
+          if (data[0].cct_standard === 0) {
+            setCct_stadrad("");
+          }
+          if (data[0].cct_standard > 0) {
+            setCct_stadrad(data[0].cct_standard);
+          }
+
+          console.log("fetchdataBom Success", data);
+        } else {
+          console.log("fetchdataBom Error", error);
+        }
+      }
+    };
+    fetchCct_stadrad();
+  }, [item_number]);
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   useEffect(() => {
@@ -965,37 +1032,68 @@ export default function tablework1() {
               ))}
             </TableBody>
           </TableContainer>
-          <Stack
-            sx={{ mt: 1, p: 1 }}
-            direction="row"
-            // justifyContent="space-around"
-            alignItems="center"
-            spacing={2}
-          >
-            <Typography>Production Unit</Typography>
-            <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <Select
-                value={dataUnit_select}
-                onChange={(event) => setDataUnit_select(event.target.value)}
-                fullWidth
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                {dataUnit_gruop.map((fetchdata: any) => (
-                  <MenuItem
-                    key={fetchdata.PD_line}
-                    sx={{ fontSize: 24 }}
-                    value={fetchdata.PD_line}
+          <Box sx={{ flexGrow: 1, p: 1 }}>
+            <Item
+              sx={{
+                height: "100%",
+                lg: 1,
+              }}
+            >
+              <Stack sx={{ mt: 1, p: 1 }} direction="row" alignItems="center">
+                <Typography>Production Unit</Typography>
+                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                  <Select
+                    value={dataUnit_select}
+                    onChange={(event) => setDataUnit_select(event.target.value)}
+                    fullWidth
                   >
-                    {fetchdata.PD_line} : {fetchdata.Group_name}
-                  </MenuItem>
-                ))}
-              </Select>
-              {/* <FormHelperText>With label + helper text</FormHelperText> */}
-            </FormControl>
-            {TextError}
-          </Stack>
+                    <MenuItem sx={{ fontSize: 24 }} value="">
+                      <em>None</em>
+                    </MenuItem>
+                    {dataUnit_gruop.map((fetchdata: any) => (
+                      <MenuItem
+                        key={fetchdata.PD_line}
+                        sx={{ fontSize: 24 }}
+                        value={fetchdata.PD_line}
+                      >
+                        {fetchdata.PD_line} : {fetchdata.Group_name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
+                </FormControl>
+                <Typography>Shift</Typography>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <Select
+                    value={dataShift}
+                    onChange={(event) => setDataShift(event.target.value)}
+                    fullWidth
+                  >
+                    <MenuItem sx={{ fontSize: 24 }} value={"Day"}>
+                      Day
+                    </MenuItem>
+                    <MenuItem sx={{ fontSize: 24 }} value={"Night"}>
+                      Night
+                    </MenuItem>
+                  </Select>
+                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
+                </FormControl>
+                <Typography>C.T.</Typography>
+                <FormControl
+                  sx={{ "& .MuiTextField-root": { m: 1, width: "8ch" } }}
+                >
+                  <TextField
+                    sx={{ textAlign: "center" }}
+                    id="outlined-number"
+                    type="number"
+                    value={cct_stadrad}
+                    onChange={(event) => setCct_stadrad(event.target.value)}
+                  />
+                </FormControl>
+                {TextError}
+              </Stack>
+            </Item>
+          </Box>
           <Box sx={{ flexGrow: 1, p: 1 }}>
             <Grid container>
               <Grid container xs={12} md={12} lg={12}>
