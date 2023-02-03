@@ -174,6 +174,7 @@ export default function tablework1() {
 
   //----เช็คค่า group ออกมา
   useEffect(() => {
+    setLoading(true);
     const FetchDataCheck = async () => {
       const { data, error }: any = await supabase
         .from("Production_unit_group")
@@ -181,8 +182,9 @@ export default function tablework1() {
         .eq("PD_line", datasec01)
         .limit(1); //ใช้แทน single
       if (data.length) {
-        setCheckdataPD(data[0].Digit_group);
-        setCheckdataGroup(data[0].Group_name);
+        await setCheckdataPD(data[0].Digit_group);
+        await setCheckdataGroup(data[0].Group_name);
+        await fetchPDU();
       } else {
         console.log(error);
       }
@@ -190,6 +192,7 @@ export default function tablework1() {
     if (open === true) {
       FetchDataCheck();
     }
+    setLoading(false);
   }, [CheckdataPD, datasec01]);
 
   //-----------------------
@@ -197,6 +200,8 @@ export default function tablework1() {
   const [dataUnit_gruop, setDataUnit_gruop] = useState<any>([]);
   const [dataUnit_select, setDataUnit_select] = useState<any>("");
   const [dataShift, setDataShift] = useState<any>("");
+  const [dataWo, setDataWo] = useState<any>("");
+  const [dataQty, setDataQty] = useState<any>("");
   // console.log("dataUnit_select", dataUnit_select);
   //===============.ใช้เช็คค่าว่าถ้ามี Production_Unit Onilne ให้ไม่สามารถทำงานซ้ำกันในที่เดียวได้
   // const dataSelectUnitCheck = dataUnit_gruop.filter(
@@ -296,7 +301,7 @@ export default function tablework1() {
         Order_qty: datasec[0].Order_qty,
         Open_qty: datasec[0].Open_qty,
         OP_confirm_before: localStorage.getItem("emp_no"),
-        Standard_time: cct_stadrad,
+        Standard_time: run_stadrad,
       },
     ]);
 
@@ -320,7 +325,10 @@ export default function tablework1() {
     await setdataSec([cellValues.row]);
     await setdataSec01(cellValues.row.Production_unit);
     await setItem_number(cellValues.row.Item_number);
+    await setDataWo(cellValues.row.Work_order_id);
+    await setDataQty(cellValues.row.Open_qty);
     await fectdataDESC();
+
     // await checkDaynight();
     await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
     await fetchDataPeople();
@@ -332,7 +340,7 @@ export default function tablework1() {
     setOpen(false);
     setdataSec01("");
     setItem_number("");
-    setCct_stadrad("");
+    setRun_stadrad("");
   };
   //-----------------------
   //================ fetch Production unit มาเช็ค จาก Production unit==================
@@ -392,7 +400,7 @@ export default function tablework1() {
     if (!dataUnit_select) {
       return SetText(<ProductionUnitError />);
     }
-    if (!cct_stadrad) {
+    if (!run_stadrad) {
       return SetText(<ProductionUnitError />);
     } else {
       SetText("");
@@ -408,33 +416,12 @@ export default function tablework1() {
   };
   const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    await fetchCheckPass();
-  };
-  const [passConfrim, setPassConfrim] = useState("");
-
-  const fetchCheckPass = async () => {
-    const { data, error } = await supabase
-      .from("userID")
-      .select("*")
-      .eq("emp_name", localStorage.getItem("userName"))
-      .eq("pass", passConfrim)
-      .limit(1); //ใช้แทน single
-    if (!error) {
-      if (data.length > 0) {
-        console.log("Confirm Success", data);
-        await PlayConfirm_Success();
-        await handlerAgree();
-        await insertManpower();
-      }
-      if (data.length === 0) {
-        alert("Password is incorrect");
-      }
-    } else {
-      console.log("Password is incorrect", error);
-    }
+    await PlayConfirm_Success();
+    await handlerAgree();
+    await insertManpower();
   };
   // push Agree
+
   const removeItem = () => {
     localStorage.removeItem("TimeStart");
   };
@@ -445,6 +432,7 @@ export default function tablework1() {
     if (CheckdataPD != "") {
       await insertDigit();
     }
+    await localStorage.setItem("PDU", PduNum);
     await localStorage.setItem("Work_order_id", datasec[0].Work_order_id);
     await localStorage.setItem("Production_unit", dataUnit_select);
     await localStorage.setItem(
@@ -861,8 +849,8 @@ export default function tablework1() {
       supabase.removeChannel(WorkOrder);
     };
   }, [sData]);
-  const [cct_stadrad, setCct_stadrad] = useState<any>("");
-  console.log("cct_stadrad", cct_stadrad);
+  const [run_stadrad, setRun_stadrad] = useState<any>("");
+  console.log("cct_stadrad", run_stadrad);
   console.log("item_number", item_number);
   console.log("datasec01", datasec01);
 
@@ -871,15 +859,15 @@ export default function tablework1() {
       if (item_number != "") {
         let { data, error } = await supabase
           .from("BOM")
-          .select("cct_standard")
+          .select("run")
           .eq("Item_number", item_number)
           .eq("Production_unit", datasec01);
         if (data?.length) {
-          if (data[0].cct_standard === 0) {
-            setCct_stadrad("");
+          if (data[0].run === 0) {
+            setRun_stadrad("");
           }
-          if (data[0].cct_standard > 0) {
-            setCct_stadrad(data[0].cct_standard);
+          if (data[0].run > 0) {
+            setRun_stadrad(data[0].run);
           }
 
           console.log("fetchdataBom Success", data);
@@ -890,6 +878,24 @@ export default function tablework1() {
     };
     fetchCct_stadrad();
   }, [item_number]);
+
+  const [PduNum, setPduNum] = useState<any>("");
+  console.log("PduNum", PduNum);
+  console.log("CheckdataPD", CheckdataPD);
+
+  const fetchPDU = async () => {
+    let { data: PDU_multiply_manp, error } = await supabase
+      .from("PDU_multiply_manp")
+      .select("Default_manp")
+      .eq("Digit_group", CheckdataPD);
+    if (PDU_multiply_manp) {
+      setPduNum(
+        PDU_multiply_manp.map(
+          (ress: { Default_manp: number }) => ress.Default_manp
+        )
+      );
+    }
+  };
 
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   useEffect(() => {
@@ -1040,7 +1046,7 @@ export default function tablework1() {
               }}
             >
               <Stack sx={{ mt: 1, p: 1 }} direction="row" alignItems="center">
-                <Typography>Production Unit</Typography>
+                <Typography>Production Unit </Typography>
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
                   <Select
                     value={dataUnit_select}
@@ -1078,7 +1084,7 @@ export default function tablework1() {
                   </Select>
                   {/* <FormHelperText>With label + helper text</FormHelperText> */}
                 </FormControl>
-                <Typography>C.T.</Typography>
+                <Typography>RunTime</Typography>
                 <FormControl
                   sx={{ "& .MuiTextField-root": { m: 1, width: "8ch" } }}
                 >
@@ -1086,11 +1092,12 @@ export default function tablework1() {
                     sx={{ textAlign: "center" }}
                     id="outlined-number"
                     type="number"
-                    value={cct_stadrad}
-                    onChange={(event) => setCct_stadrad(event.target.value)}
+                    value={run_stadrad}
+                    onChange={(event) => setRun_stadrad(event.target.value)}
                   />
                 </FormControl>
-                {TextError}
+                <Typography>sec.</Typography>
+                <Box sx={{ p: 1 }}> {TextError}</Box>
               </Stack>
             </Item>
           </Box>
@@ -1247,32 +1254,40 @@ export default function tablework1() {
         aria-describedby="modal-modal-description"
       >
         <Box component="form" onSubmit={handleConfirm} noValidate sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
+          <Typography id="modal-modal-title" variant="h3" component="h2">
             Confirm Select Work Order
           </Typography>
 
           <Typography sx={{ mt: 2 }}>
-            <Stack direction="row" justifyContent="center" spacing={1}>
-              <Typography sx={{ fontSize: 38 }}> Name :</Typography>
-              <Typography sx={{ color: "red", fontSize: 38 }}>
-                {localStorage.getItem("userName")}{" "}
+            <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
+              <Typography sx={{ fontSize: 30 }}>W/O :</Typography>
+              <Typography
+                sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
+              >
+                {dataWo}
               </Typography>
             </Stack>
-            <Stack direction="row" justifyContent="center" spacing={1}>
-              <TextField
-                id="useradd"
-                label="Password"
-                variant="outlined"
-                value={passConfrim}
-                name="useradd"
-                type="password"
-                onChange={(event) => setPassConfrim(event.target.value)}
-                sx={{
-                  width: 210,
-                  height: 50,
-                  m: 1,
-                }}
-              />
+            <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
+              <Typography sx={{ fontSize: 30 }}>Item Number :</Typography>
+              <Typography
+                sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
+              >
+                {item_number}
+              </Typography>
+              <Typography sx={{ fontSize: 30 }}> Qty :</Typography>
+              <Typography
+                sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
+              >
+                {dataQty}
+              </Typography>
+            </Stack>
+            <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
+              <Typography sx={{ fontSize: 30 }}>Production Unit :</Typography>
+              <Typography
+                sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
+              >
+                {dataUnit_select}
+              </Typography>
             </Stack>
             <Stack
               sx={{ mt: 3 }}

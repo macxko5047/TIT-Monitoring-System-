@@ -835,13 +835,14 @@ function tableproduction() {
             Availability_percent: Ap.toFixed(4),
             Quality_percent: Qualitypercen.toFixed(4),
             Status: "Offline",
-            Standard_time: cct_standard,
+            Standard_time: run_standard,
             Performance_percent: Performance_Percen.toFixed(4),
             OBU_status: "Waiting_transfer",
             Open_qty: calculeteOpen_qty,
             OEE_percent: calculateOEE.toFixed(4),
             OT_duration: timeOtCel,
             OT_operation: ot_operations,
+            Performance_permanp: Performance_permanpower.toFixed(4),
           })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("End_time", null);
@@ -936,10 +937,14 @@ function tableproduction() {
       console.log("UpDateWork_order_id Error", error);
     }
   };
-  const [cct_standard, setCct_standard] = useState<number>(0);
-  console.log("cct_standard", cct_standard);
+  const [run_standard, setrun_standard] = useState<number>(0);
+  const [pdu, setPdu] = useState<any>("");
+  console.log("PDU", pdu);
+
+  console.log("cct_standard", run_standard);
 
   useEffect(() => {
+    setPdu(localStorage.getItem("PDU"));
     const fetchdataBom = async () => {
       let { data, error } = await supabase
         .from("Production_history")
@@ -947,7 +952,7 @@ function tableproduction() {
         .eq("PD_key", localStorage.getItem("PD_key"));
 
       if (data?.length) {
-        setCct_standard(data[0].Standard_time);
+        setrun_standard(data[0].Standard_time);
         console.log("fetchdataStandard_time Success", data);
       } else {
         console.log("fetchdataStandard_time Error", error);
@@ -969,32 +974,34 @@ function tableproduction() {
   for (let item of dataduDownTime) {
     sum += item;
   }
-  // console.log("SumDowntime", sum);
+  console.log("SumDowntime", sum);
   //================= คือ Downtime ทั้งหมด + กัน แล้ว - เวลาในการทำงานทั้งหมด(duration time) ====
   const RuntimeData: number = diffsStop - sum;
-  // console.log("RuntimeData", RuntimeData);
+  console.log("RuntimeData", RuntimeData);
   //============================================
 
   //========= count Cycle time ===============
-  const CycleTime = (dataOK + dataNGShow) / RuntimeData;
-  // console.log("CycleTime", CycleTime.toFixed(2));
+  const CycleTime = RuntimeData / (dataOK + dataNGShow);
+  console.log("CycleTime", CycleTime.toFixed(2));
 
   //------------------------------------------------------------
   //================= Availability_percent =======================
   const Ap = RuntimeData / diffsStop;
-  // console.log("Availability_percent", Ap);
+  console.log("Availability_percent", Ap);
   //------------------------------------------------------------
   //=========Quality_percent=====================================
   const Qualitypercen = dataOK / (dataOK + dataNGShow);
-  // console.log("Qualitypercen", Qualitypercen);
+  console.log("Qualitypercen", Qualitypercen);
 
   //------------------------------------------------------------
   //============Performance_Percen=========================
-  const Runtime_M = RuntimeData * 60;
+  const Runtime_sec = RuntimeData * 60;
+  console.log("Runtime_sec", Runtime_sec);
 
-  console.log("Runtime_M", Runtime_M);
+  const Run_man = run_standard * pdu; //PDU คือ จำนวนสแตนดาสคนที่จะเอามาคูณ
+  console.log("Run_man", Run_man);
 
-  const Performance_Percen = (cct_standard * (dataOK + dataNGShow)) / Runtime_M;
+  const Performance_Percen = (Run_man * (dataOK + dataNGShow)) / Runtime_sec;
   console.log("Performance_deff", Performance_Percen);
 
   //-----------------
@@ -1005,10 +1012,15 @@ function tableproduction() {
   //----------------------------------------
   //==== duration Manpower =================
   const [empNO, setEmpNO] = useState<any>([]);
+  console.log("empNO", empNO);
+
   const Manpower: any = empNO.map((ress: { emp_no: number }) => ress.emp_no);
   const Manpowers1: any = [...new Set(Manpower)];
   // console.log(Manpowers1.length);
   // console.log("manpowerNum", Manpowers1);
+
+  const Performance_permanpower =
+    run_standard / (Runtime_sec / (dataOK + dataNGShow) / Manpowers1.length);
 
   const fetchManpower = async () => {
     let { data, error } = await supabase
