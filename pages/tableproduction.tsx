@@ -1020,7 +1020,7 @@ function tableproduction() {
   // console.log("manpowerNum", Manpowers1);
 
   const Performance_permanpower =
-    run_standard / (Runtime_sec / (dataOK + dataNGShow) / Manpowers1.length);
+    run_standard / (Runtime_sec / ((dataOK + dataNGShow) * Manpowers1.length));
 
   const fetchManpower = async () => {
     let { data, error } = await supabase
