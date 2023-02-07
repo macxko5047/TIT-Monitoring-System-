@@ -863,9 +863,6 @@ export default function tablework1() {
       ),
     },
   ];
-  const refreshPage = () => {
-    window.location.reload();
-  };
 
   useEffect(() => {
     const WorkOrder = supabase
@@ -875,7 +872,7 @@ export default function tablework1() {
         { event: "*", schema: "public", table: "Work_order" },
         (payload) => {
           console.log("Change received WorkOrder !", payload);
-          refreshPage();
+
           ReloadFetchData();
         }
       )
