@@ -1491,6 +1491,9 @@ function tableproduction() {
               value={details}
               onChange={(event) => setDetails(event.target.value)}
             >
+              <MenuItem sx={{ fontSize: 28 }} value="">
+                <em>None</em>
+              </MenuItem>
               {datamenu.map((menus: any) => (
                 <MenuItem
                   key={menus.code}
