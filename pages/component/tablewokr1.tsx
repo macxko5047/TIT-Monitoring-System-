@@ -529,12 +529,15 @@ export default function tablework1() {
   const columns: GridColumns = [
     {
       field: "Select Item ",
-      width: 110,
+      minWidth: 110,
+      flex: 1,
+      align: "center",
       headerClassName: "super-app-theme--header",
       renderCell: (cellValues: any) => {
         return (
           <Box>
             <Button
+              sx={{ lg: 1, sm: 1 }}
               variant="contained"
               color="primary"
               onClick={(event) => {
@@ -550,7 +553,8 @@ export default function tablework1() {
     {
       field: "Work_order_id",
       headerName: "Work order id",
-      width: 120,
+      minWidth: 100,
+      flex: 1,
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
         if (params.row.Status_working == null) {
@@ -567,7 +571,8 @@ export default function tablework1() {
     {
       field: "Item_number",
       headerName: "Item number",
-      width: 160,
+      minWidth: 150,
+      flex: 1,
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
         if (params.row.Status_working == null) {
@@ -583,7 +588,8 @@ export default function tablework1() {
     {
       field: "WO_status",
       headerName: "WO status",
-      width: 135,
+      minWidth: 110,
+      flex: 1,
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
         if (params.row.Status_working == null) {
@@ -598,6 +604,8 @@ export default function tablework1() {
     },
     {
       field: "Order_qty",
+      minWidth: 110,
+      flex: 1,
       headerName: "Order qty",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -613,6 +621,8 @@ export default function tablework1() {
     },
     {
       field: "Complete_qty",
+      flex: 1,
+      minWidth: 110,
       headerName: "Complete qty",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -628,6 +638,8 @@ export default function tablework1() {
     },
     {
       field: "Open_qty",
+      flex: 1,
+      minWidth: 110,
       headerName: "Open qty",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -643,6 +655,8 @@ export default function tablework1() {
     },
     {
       field: "Due_over",
+      flex: 1,
+      minWidth: 110,
       headerName: "Due_over",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -658,6 +672,8 @@ export default function tablework1() {
     },
     {
       field: "Due_date_PD",
+      flex: 1,
+      minWidth: 110,
       headerName: "Due date PD",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -673,6 +689,8 @@ export default function tablework1() {
     },
     {
       field: "Release_date",
+      flex: 1,
+      minWidth: 110,
       headerName: "Release date",
       headerClassName: "super-app-theme--header",
       cellClassName: (params: GridCellParams<any>) => {
@@ -704,7 +722,8 @@ export default function tablework1() {
     // },
     {
       field: "Status_working",
-      width: 150,
+      flex: 1,
+      minWidth: 120,
       headerName: "Status_working",
       headerClassName: "super-app-theme--header",
       cellClassName: (Status_working: GridCellParams<any>) => {
@@ -923,6 +942,7 @@ export default function tablework1() {
       sx={{
         height: 650,
         width: "100%",
+
         "& .super-app.negative": {
           backgroundColor: "rgba(157, 255, 118, 0.49)",
           color: "#000000",
