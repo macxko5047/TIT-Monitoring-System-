@@ -561,8 +561,8 @@ function tableproduction() {
 
   //----------------------------------------------------------------
   useEffect(() => {
+    setLoading(true);
     const FetchDataCheck = async () => {
-      setLoading(true);
       const { data, error }: any = await supabase
         .from("Production_history")
         .select("*")
