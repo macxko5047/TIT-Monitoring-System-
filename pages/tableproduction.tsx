@@ -1405,7 +1405,7 @@ function tableproduction() {
             <Grid xs={3} lg={3}>
               <Button
                 sx={{
-                  height: 220,
+                  height: "100%",
                   width: "100%",
                   fontSize: "26px",
                   textTransform: "uppercase",
