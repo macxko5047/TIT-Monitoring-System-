@@ -301,7 +301,7 @@ export default function tablework1() {
         Order_qty: datasec[0].Order_qty,
         Open_qty: datasec[0].Open_qty,
         OP_confirm_before: localStorage.getItem("emp_no"),
-        Standard_time: run_stadrad,
+        Standard_time: RuncalculateManDefault,
       },
     ]);
 
@@ -320,7 +320,7 @@ export default function tablework1() {
     // if (cellValues.row.Status_working === "Online") {
     //   alert("Already on proceeding in production!");
     // } else {
-
+    setLoading(true);
     await setOpen(true);
     await setdataSec([cellValues.row]);
     await setdataSec01(cellValues.row.Production_unit);
@@ -332,7 +332,7 @@ export default function tablework1() {
     // await checkDaynight();
     await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
     await fetchDataPeople();
-
+    setLoading(false);
     // }
   };
 
@@ -720,7 +720,6 @@ export default function tablework1() {
 
   useEffect(() => {
     const FetchData = async () => {
-      setLoading(true);
       console.log("fetchdata"); //ใช้เช็คการทำงานว่าทำกี่ครั้ง
       const { data, error } = await supabasetit
         .from("Work_order")
@@ -734,7 +733,6 @@ export default function tablework1() {
       }
     };
     FetchData();
-    setLoading(false);
   }, []);
 
   // ----------------------------------------
@@ -758,12 +756,12 @@ export default function tablework1() {
 
   useEffect(() => {
     const userSelect = supabase
-      .channel("custom-all-channeluserSelect")
+      .channel("custom-all-channeluserSelectPeople")
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "userSelect" },
         (payload) => {
-          console.log("Change received!", payload);
+          console.log("Change received up people Select!", payload);
           fetchDataPeople();
         }
       )
@@ -797,14 +795,12 @@ export default function tablework1() {
   };
 
   const insertManpower = async () => {
-    setLoading(true);
     let { data, error } = await supabase.rpc("upmanpower", {
       wo: localStorage.getItem("Work_order_id"),
     });
 
     if (error) console.error(error);
     else console.log("Up User Success", data);
-    setLoading(false);
   };
   //-----------------------------------------------------------------------
   const columnsAddPeople: GridColDef[] = [
@@ -851,8 +847,8 @@ export default function tablework1() {
   }, [sData]);
   const [run_stadrad, setRun_stadrad] = useState<any>("");
   console.log("cct_stadrad", run_stadrad);
-  console.log("item_number", item_number);
-  console.log("datasec01", datasec01);
+  // console.log("item_number", item_number);
+  // console.log("datasec01", datasec01);
 
   useEffect(() => {
     const fetchCct_stadrad = async () => {
@@ -860,8 +856,9 @@ export default function tablework1() {
         let { data, error } = await supabase
           .from("BOM")
           .select("run")
-          .eq("Item_number", item_number)
-          .eq("Production_unit", datasec01);
+          .eq("master_part", item_number)
+
+          .eq("description", "BEFORE FINISH GOOD");
         if (data?.length) {
           if (data[0].run === 0) {
             setRun_stadrad("");
@@ -881,7 +878,9 @@ export default function tablework1() {
 
   const [PduNum, setPduNum] = useState<any>("");
   console.log("PduNum", PduNum);
-  console.log("CheckdataPD", CheckdataPD);
+  // console.log("CheckdataPD", CheckdataPD);
+  const RuncalculateManDefault = run_stadrad / PduNum;
+  console.log("RuncalculateManDefault", RuncalculateManDefault);
 
   const fetchPDU = async () => {
     let { data: PDU_multiply_manp, error } = await supabase

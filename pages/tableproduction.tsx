@@ -272,8 +272,6 @@ function tableproduction() {
   let Min = ("0" + date.getMinutes()).slice(-2);
   let sec = ("0" + date.getSeconds()).slice(-2);
   const timestamps = date.getTime();
-  let HoursStamp = "0" + (date.getTime() * 60) / 3600 / 1000;
-  console.log("HoursStamp", HoursStamp);
 
   // console.log(timestamps);
 
@@ -337,7 +335,7 @@ function tableproduction() {
   const upStartTimeManpower = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
-      .update({ start_datetime: times })
+      .update({ start_datetime: times, TimeStamp_start: timestamps })
       .eq("PD_key", localStorage.getItem("PD_key"));
 
     if (data) {
