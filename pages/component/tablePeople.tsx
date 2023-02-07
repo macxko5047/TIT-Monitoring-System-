@@ -51,15 +51,17 @@ export default function tablePeople() {
         { event: "*", schema: "public", table: "Manpower_record" },
         (payload) => {
           console.log("Change received! ReloadManpower_record ", payload);
-          // ReloadManpower_record();
-          setDataManpower((data: any) => [...data, payload.new]);
+          setLoading(true);
+          ReloadManpower_record();
+          setLoading(false);
+          // setDataManpower((data: any) => [...data, payload.new]);
         }
       )
       .subscribe();
     return () => {
       supabase.removeChannel(ManpowerRecord);
     };
-  }, [dataManpower]);
+  }, []);
 
   if (loading) {
     return (
