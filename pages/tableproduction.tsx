@@ -802,8 +802,8 @@ function tableproduction() {
     await upTrigger();
     await upStatusWoStop();
     await upProductionUnitGroupOffline();
-    await upWork_order_id();
     await calculateMan();
+    await upWork_order_id();
   };
   useEffect(() => {
     const UpManpowerAutoduration = async () => {

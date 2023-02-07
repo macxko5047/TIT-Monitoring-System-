@@ -756,6 +756,19 @@ export default function tablework1() {
     FetchData();
   }, []);
 
+  const ReloadFetchData = async () => {
+    console.log("fetchdata"); //ใช้เช็คการทำงานว่าทำกี่ครั้ง
+    const { data, error } = await supabasetit
+      .from("Work_order")
+      .select("*")
+      .filter("WO_status", "in", "(R)"); //983
+    if (data) {
+      setSData(data);
+      console.log(data);
+    } else {
+      console.log(error);
+    }
+  };
   // ----------------------------------------
   // ช่องโชร จำนวนคนทำงาน
 
@@ -850,6 +863,9 @@ export default function tablework1() {
       ),
     },
   ];
+  const refreshPage = () => {
+    window.location.reload();
+  };
 
   useEffect(() => {
     const WorkOrder = supabase
@@ -859,8 +875,8 @@ export default function tablework1() {
         { event: "*", schema: "public", table: "Work_order" },
         (payload) => {
           console.log("Change received WorkOrder !", payload);
-
-          setSData((prev: any) => [...prev, payload.new]);
+          refreshPage();
+          ReloadFetchData();
         }
       )
       .subscribe();
