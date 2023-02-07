@@ -131,11 +131,11 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton>
+            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Admin3" />
+              <ListItemText primary="Dashbord" />
             </ListItemButton>
 
             <ListItemButton href={"./Register"}>
@@ -169,11 +169,11 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton>
+            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Manager" />
+              <ListItemText primary="Dashbord" />
             </ListItemButton>
             <ListItemButton href={"./Register"}>
               <ListItemIcon>
@@ -206,11 +206,11 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton>
+            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Supervisor" />
+              <ListItemText primary="Dashbord" />
             </ListItemButton>
             <ListItemButton href={"./Register"}>
               <ListItemIcon>
