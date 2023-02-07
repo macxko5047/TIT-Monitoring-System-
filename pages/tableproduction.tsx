@@ -218,6 +218,7 @@ function tableproduction() {
       alert("Please press the start button first.");
     }
     if (TimeCheck != null) {
+      fetchdataBreakTime();
       playStop();
       fetchProduction_history();
       fetchManpower();
@@ -777,7 +778,10 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Downtime_record")
       .select("Duration_downtime")
-      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
+      .neq("Downtime_code", "Z01")
+      .neq("Downtime_code", "D01");
+
     if (data) {
       setDataduDownTime(data.map((files) => files.Duration_downtime));
     }
@@ -799,13 +803,14 @@ function tableproduction() {
     await upStatusWoStop();
     await upProductionUnitGroupOffline();
     await upWork_order_id();
+    await calculateMan();
   };
   useEffect(() => {
     const UpManpowerAutoduration = async () => {
       if (timestampEnd != "") {
         const { data, error } = await supabase
           .from("Manpower_record")
-          .update({ end_datetime: times, task_time: diffsStop })
+          .update({ end_datetime: times, TimeStamp_end: timestampEnd })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("end_datetime", null);
         if (data) {
@@ -935,6 +940,27 @@ function tableproduction() {
       console.log("UpDateWork_order_id Error", error);
     }
   };
+  // เวลา พักเที่ยงที่จะเอามาลบ ออก ===================================
+  const [dataBreakTime, setDataBreakTime] = useState<any>("");
+  console.log("dataBreakTime", dataBreakTime);
+
+  const fetchdataBreakTime = async () => {
+    let { data: Downtime_record, error } = await supabase
+      .from("Downtime_record")
+      .select("Duration_downtime")
+      .filter("Downtime_description", "in", "(พักเที่ยง)");
+    if (Downtime_record) {
+      setDataBreakTime(
+        Downtime_record.map((res: any) => res.Duration_downtime)
+      );
+    }
+    if (error) {
+      console.log("Downtime_description ERROR !!", error);
+    }
+  };
+
+  // ----------------------------------------------------------------
+  //=========== run standard , PDU คือจำนวนManpower Defualt
   const [run_standard, setrun_standard] = useState<number>(0);
   const [pdu, setPdu] = useState<any>("");
   console.log("PDU", pdu);
@@ -958,6 +984,15 @@ function tableproduction() {
     };
     fetchdataBom();
   }, []);
+
+  // --------------------------------------------------------------
+  //=======================คำนวนเวลาการทำงานของแต่ละคน===============
+  const calculateMan = async () => {
+    let { data, error } = await supabase.rpc("calculatetimeman");
+    if (error) console.error(error);
+    else console.log(data);
+  };
+  // --------------------------------------------------------------
 
   const diffsStop: any = Math.ceil(
     ((timestampEnd - timeStart_stamp) * 60) / 3600 / 1000

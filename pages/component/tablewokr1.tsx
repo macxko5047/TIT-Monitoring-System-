@@ -416,9 +416,11 @@ export default function tablework1() {
   };
   const handleConfirm = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     await PlayConfirm_Success();
     await handlerAgree();
     await insertManpower();
+    setLoading(false);
   };
   // push Agree
 
@@ -795,12 +797,14 @@ export default function tablework1() {
   };
 
   const insertManpower = async () => {
+    setLoading(true);
     let { data, error } = await supabase.rpc("upmanpower", {
       wo: localStorage.getItem("Work_order_id"),
     });
 
     if (error) console.error(error);
     else console.log("Up User Success", data);
+    setLoading(false);
   };
   //-----------------------------------------------------------------------
   const columnsAddPeople: GridColDef[] = [
@@ -1085,7 +1089,7 @@ export default function tablework1() {
                 </FormControl>
                 <Typography>RunTime</Typography>
                 <FormControl
-                  sx={{ "& .MuiTextField-root": { m: 1, width: "8ch" } }}
+                  sx={{ "& .MuiTextField-root": { m: 1, width: "10ch" } }}
                 >
                   <TextField
                     sx={{ textAlign: "center" }}

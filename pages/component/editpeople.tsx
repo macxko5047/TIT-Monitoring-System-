@@ -56,8 +56,7 @@ const editpeople = (props: Props) => {
   let sec = ("0" + date.getSeconds()).slice(-2);
   const timestamp = date.getTime();
   const times: any = `${Hours}:${Min}:${sec}`;
-  
-  
+
   const [dataManpower, setDataManpower] = useState<any>([]);
 
   useEffect(() => {
@@ -91,7 +90,6 @@ const editpeople = (props: Props) => {
   const handleOpenModal = () => {
     setOpenModal(true);
     fatchTimeStart_stamp();
-
   };
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -110,21 +108,17 @@ const editpeople = (props: Props) => {
     SetID(cellValues.row.id);
   };
 
-  const [timeStart_stamp ,setTimeStart_stamp] = useState<any>("")
+  const [timeStart_stamp, setTimeStart_stamp] = useState<any>("");
   // console.log('timeStart_stamp',timeStart_stamp);
-    const fatchTimeStart_stamp = async () =>{
-        setTimeStart_stamp(localStorage.getItem("timeStampStart"))
-    }
-    
-     
- 
+  const fatchTimeStart_stamp = async () => {
+    setTimeStart_stamp(localStorage.getItem("timeStampStart"));
+  };
 
   const [timestampEnd, setTimestampEnd] = useState<any>("");
 
   const diffs: any = Math.ceil(
     ((timestampEnd - timeStart_stamp) * 60) / 3600 / 1000
   );
-
 
   const durationManpowerTime = async () => {
     const { data, error } = await supabase
@@ -213,6 +207,7 @@ const editpeople = (props: Props) => {
           Work_order_id: localStorage.getItem("Work_order_id"),
           start_datetime: times,
           activate_data: "activated",
+          TimeStamp_start: timestamp,
         },
       ]);
       await setUser1("");

@@ -32,6 +32,7 @@ export default function tablePeople() {
   }, []);
 
   const ReloadManpower_record = async () => {
+    setLoading(true);
     let { data, error } = await supabase
       .from("Manpower_record")
       .select("*")
@@ -41,6 +42,7 @@ export default function tablePeople() {
     } else {
       console.log("fetch ManpowerError", error);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -51,9 +53,9 @@ export default function tablePeople() {
         { event: "*", schema: "public", table: "Manpower_record" },
         (payload) => {
           console.log("Change received! ReloadManpower_record ", payload);
-          setLoading(true);
+
           ReloadManpower_record();
-          setLoading(false);
+
           // setDataManpower((data: any) => [...data, payload.new]);
         }
       )
