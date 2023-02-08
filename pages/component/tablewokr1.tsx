@@ -168,9 +168,9 @@ export default function tablework1() {
 
   // เช็คค่าที่เท้ากับแล้วเซ็ตค่าใส่ ------------------------------
   const [CheckdataPD, setCheckdataPD] = useState<any>("");
-  console.log("CheckdataPD", CheckdataPD);
+  // console.log("CheckdataPD", CheckdataPD);
   const [checkdataGroup, setCheckdataGroup] = useState<any>("");
-  console.log("checkdataGroup", checkdataGroup);
+  // console.log("checkdataGroup", checkdataGroup);
 
   //----เช็คค่า group ออกมา
   useEffect(() => {
@@ -233,7 +233,7 @@ export default function tablework1() {
   //-------------------------------------------------------------------
   //========= check data Work order Online ==========
   const [dataWOcheck, setDataWOcheck] = useState<any>([]);
-  console.log("dataWOcheck", dataWOcheck);
+  // console.log("dataWOcheck", dataWOcheck);
 
   useEffect(() => {
     const fetchWO_onoff = async () => {
@@ -267,10 +267,10 @@ export default function tablework1() {
   }
 
   const num = datecheck1.length;
-  console.log(num);
+  // console.log(num);
 
   const putPDKEY = leftFillNum(num, 4);
-  console.log("PDkey Run+1:", putPDKEY);
+  // console.log("PDkey Run+1:", putPDKEY);
 
   useEffect(() => {
     const ProductionHistory = supabase
@@ -345,9 +345,9 @@ export default function tablework1() {
   //-----------------------
   //================ fetch Production unit มาเช็ค จาก Production unit==================
   const [dataUnitcheck, setDataUnitcheck] = useState<any>("");
-  console.log("dataUnitcheck", dataUnitcheck);
+  // console.log("dataUnitcheck", dataUnitcheck);
   const [checkStatusWO, setCheckStatusWO] = useState<any>(false);
-  console.log("checkStatusWO", checkStatusWO);
+  // console.log("checkStatusWO", checkStatusWO);
 
   const fetchProductionUnit = async () => {
     let { data, error } = await supabase
@@ -456,11 +456,11 @@ export default function tablework1() {
   console.log("dataAll", dataUser);
 
   const [user1, setUser1] = useState<any>("");
-  console.log(user1);
+  // console.log(user1);
 
   const dataName: string =
     dataUser.filter((respon: any) => respon.emp_no == user1)[0]?.emp_name || "";
-  console.log({ dataName });
+  // console.log({ dataName });
 
   //   .map((ShowName: { emp_name: string }) => ShowName.emp_name);
   // console.log("dataName", JSON.stringify(dataName));
@@ -468,7 +468,7 @@ export default function tablework1() {
   const dataDepartment: string =
     dataUser.filter((respon1: any) => respon1.emp_no == user1)[0]?.department ||
     "";
-  console.log("dataDepartment", dataDepartment);
+  // console.log("dataDepartment", dataDepartment);
 
   const [selectId, SetID] = useState("");
   const [TextConfirmName, SetConfirmName] = useState("");
@@ -773,7 +773,7 @@ export default function tablework1() {
   // ช่องโชร จำนวนคนทำงาน
 
   const [dataPeople, setDataPeople] = useState<any>([]);
-  console.log("dataPeople", dataPeople);
+  // console.log("dataPeople", dataPeople);
 
   const fetchDataPeople = async () => {
     let { data: userSelect, error } = await supabase
@@ -882,7 +882,7 @@ export default function tablework1() {
     };
   }, [sData]);
   const [run_stadrad, setRun_stadrad] = useState<any>("");
-  console.log("cct_stadrad", run_stadrad);
+  // console.log("cct_stadrad", run_stadrad);
   // console.log("item_number", item_number);
   // console.log("datasec01", datasec01);
 

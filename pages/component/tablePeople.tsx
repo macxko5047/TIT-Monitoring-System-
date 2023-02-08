@@ -45,25 +45,20 @@ export default function tablePeople() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    const ManpowerRecord = supabase
-      .channel("custom-all-ManpowerRecord2")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "Manpower_record" },
-        (payload) => {
-          console.log("Change received! ReloadManpower_record ", payload);
+  const ManpowerRecord = supabase
+    .channel("custom-all-ManpowerRecord2")
+    .on(
+      "postgres_changes",
+      { event: "*", schema: "public", table: "Manpower_record" },
+      (payload) => {
+        console.log("Change received! ReloadManpower_record ", payload);
 
-          ReloadManpower_record();
+        ReloadManpower_record();
 
-          // setDataManpower((data: any) => [...data, payload.new]);
-        }
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ManpowerRecord);
-    };
-  }, []);
+        // setDataManpower((data: any) => [...data, payload.new]);
+      }
+    )
+    .subscribe();
 
   if (loading) {
     return (

@@ -39,6 +39,8 @@ import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
 import supabase from "../compunentConfig/supabase";
 import DowntimeError from "./component/DowntimeError";
+import { log } from "console";
+import { CLIENT_RENEG_LIMIT } from "tls";
 
 const style = {
   position: "absolute" as "absolute",
@@ -101,7 +103,7 @@ function tableproduction() {
   // console.log("menu :", datamenu);
   const [timeOtCel, setTimeOtCel] = useState<number>(0);
   const [ot_operations, setOT_operation] = useState<any>("");
-  console.log("ot_operation", ot_operations);
+  // console.log("ot_operation", ot_operations);
 
   // -------------------------------------
 
@@ -273,7 +275,7 @@ function tableproduction() {
   let Min = ("0" + date.getMinutes()).slice(-2);
   let sec = ("0" + date.getSeconds()).slice(-2);
   const timestamps = date.getTime();
-
+  // console.log("date", date);
   // console.log(timestamps);
 
   let checkdates = `${year}-${month}-${day}`;
@@ -527,11 +529,11 @@ function tableproduction() {
 
   const [showDaynight, setShowDaynight] = useState<any>([]);
   //================================================================
-  console.log("showDaynight", showDaynight);
-  console.log("times", times);
+  // console.log("showDaynight", showDaynight);
+  // console.log("times", times);
   const Timesplit = times.split(":");
 
-  console.log("timeOtCel", timeOtCel);
+  // console.log("timeOtCel", timeOtCel);
 
   const celculeteOT = async () => {
     if (showDaynight === "Day") {
@@ -797,6 +799,7 @@ function tableproduction() {
   const [timestampEnd, setTimestampEnd] = useState<any>("");
 
   const handlerSubmitStop = async () => {
+    await setLoading1(true);
     await setTimestampEnd(timestamps);
     await celculeteOT();
     await upTrigger();
@@ -804,6 +807,7 @@ function tableproduction() {
     await upProductionUnitGroupOffline();
     await calculateMan();
     await upWork_order_id();
+    await setLoading1(false);
   };
   useEffect(() => {
     const UpManpowerAutoduration = async () => {
@@ -942,7 +946,7 @@ function tableproduction() {
   };
   // เวลา พักเที่ยงที่จะเอามาลบ ออก ===================================
   const [dataBreakTime, setDataBreakTime] = useState<any>("");
-  console.log("dataBreakTime", dataBreakTime);
+  // console.log("dataBreakTime", dataBreakTime);
 
   const fetchdataBreakTime = async () => {
     let { data: Downtime_record, error } = await supabase
@@ -963,9 +967,9 @@ function tableproduction() {
   //=========== run standard , PDU คือจำนวนManpower Defualt
   const [run_standard, setrun_standard] = useState<number>(0);
   const [pdu, setPdu] = useState<any>("");
-  console.log("PDU", pdu);
+  // console.log("PDU", pdu);
 
-  console.log("cct_standard", run_standard);
+  // console.log("cct_standard", run_standard);
 
   useEffect(() => {
     setPdu(localStorage.getItem("PDU"));
@@ -1007,45 +1011,45 @@ function tableproduction() {
   for (let item of dataduDownTime) {
     sum += item;
   }
-  console.log("SumDowntime", sum);
+  // console.log("SumDowntime", sum);
   //================= คือ Downtime ทั้งหมด + กัน แล้ว - เวลาในการทำงานทั้งหมด(duration time) ====
   const RuntimeData: number = diffsStop - sum;
-  console.log("RuntimeData", RuntimeData);
+  // console.log("RuntimeData", RuntimeData);
   //============================================
 
   //========= count Cycle time ===============
   const CycleTime = RuntimeData / (dataOK + dataNGShow);
-  console.log("CycleTime", CycleTime.toFixed(2));
+  // console.log("CycleTime", CycleTime.toFixed(2));
 
   //------------------------------------------------------------
   //================= Availability_percent =======================
   const Ap = RuntimeData / diffsStop;
-  console.log("Availability_percent", Ap);
+  // console.log("Availability_percent", Ap);
   //------------------------------------------------------------
   //=========Quality_percent=====================================
   const Qualitypercen = dataOK / (dataOK + dataNGShow);
-  console.log("Qualitypercen", Qualitypercen);
+  // console.log("Qualitypercen", Qualitypercen);
 
   //------------------------------------------------------------
   //============Performance_Percen=========================
   const Runtime_sec = RuntimeData * 60;
-  console.log("Runtime_sec", Runtime_sec);
+  // console.log("Runtime_sec", Runtime_sec);
 
   const Run_man = run_standard * pdu; //PDU คือ จำนวนสแตนดาสคนที่จะเอามาคูณ
-  console.log("Run_man", Run_man);
+  // console.log("Run_man", Run_man);
 
   const Performance_Percen = (Run_man * (dataOK + dataNGShow)) / Runtime_sec;
-  console.log("Performance_deff", Performance_Percen);
+  // console.log("Performance_deff", Performance_Percen);
 
   //-----------------
   //============ calculate OEE% ============
   const calculateOEE: number = Ap * Qualitypercen * Performance_Percen;
-  console.log("calculateOEE", calculateOEE);
+  // console.log("calculateOEE", calculateOEE);
 
   //----------------------------------------
   //==== duration Manpower =================
   const [empNO, setEmpNO] = useState<any>([]);
-  console.log("empNO", empNO);
+  // console.log("empNO", empNO);
 
   const Manpower: any = empNO.map((ress: { emp_no: number }) => ress.emp_no);
   const Manpowers1: any = [...new Set(Manpower)];
@@ -1146,12 +1150,12 @@ function tableproduction() {
   //============== select Component part ==============
   const [bom_ract, setBom_ract] = useState<any>([]);
   const [itemNumber, setItemNumber] = useState<any>("");
-  console.log("itemNumber", itemNumber);
+  // console.log("itemNumber", itemNumber);
 
   const [ngCompunent, setNgCompunent] = useState<any>("");
-  console.log("ngCompunent", ngCompunent);
+  // console.log("ngCompunent", ngCompunent);
 
-  console.log("bom_ract", bom_ract);
+  // console.log("bom_ract", bom_ract);
 
   useEffect(() => {
     const fetchdataBOM_ract = async () => {
@@ -1171,7 +1175,7 @@ function tableproduction() {
     fetchdataBOM_ract();
   }, []);
   const [textOther, setTextOther] = useState<any>("");
-  console.log("textOther", textOther);
+  // console.log("textOther", textOther);
 
   const OtheText = () => {
     if (ngCompunent === "Other") {
@@ -1190,6 +1194,27 @@ function tableproduction() {
   };
   //----------------------------------------------------
 
+  //======= autoupdate timeStart 2 ========
+  useEffect(() => {
+    const fetchdataTimestart = async () => {
+      const { data, error } = await supabase
+        .from("Manpower_record")
+        .update({
+          start_datetime: localStorage.getItem("TimeStart"),
+          TimeStamp_start: localStorage.getItem("timeStampStart"),
+        })
+        .eq("PD_key", localStorage.getItem("PD_key"))
+        .is("start_datetime", null);
+      if (!error) {
+        console.log("fetchdataTimestart Success", data);
+      } else {
+        console.log("ทำงานปกติไม่อัพเดทเข้าไปซ้ำ", error);
+      }
+    };
+    fetchdataTimestart();
+  }, [timestamp01]);
+
+  //----------------------------------------------------------------
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
 
