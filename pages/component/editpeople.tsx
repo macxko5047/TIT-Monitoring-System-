@@ -324,9 +324,9 @@ const editpeople = (props: Props) => {
                         type="number"
                         onChange={(event) => setUser1(event.target.value)}
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
@@ -338,9 +338,9 @@ const editpeople = (props: Props) => {
                         value={dataName}
                         name="fullname"
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
@@ -352,17 +352,17 @@ const editpeople = (props: Props) => {
                         name="department"
                         variant="filled"
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
                       <Button
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                           color: "#000000",
                           bgcolor: "#7CFC00",
                         }}

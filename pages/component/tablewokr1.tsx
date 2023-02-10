@@ -1157,9 +1157,9 @@ export default function tablework1() {
                         type="number"
                         onChange={(event) => setUser1(event.target.value)}
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
@@ -1171,9 +1171,9 @@ export default function tablework1() {
                         value={dataName}
                         name="fullname"
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
@@ -1185,17 +1185,17 @@ export default function tablework1() {
                         name="department"
                         variant="filled"
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                         }}
                       />
                       <br />
                       <Button
                         sx={{
-                          width: 210,
+                          width: "100%",
                           height: 50,
-                          m: 1,
+                          mt: 2,
                           color: "#000000",
                           bgcolor: "#7CFC00",
                         }}

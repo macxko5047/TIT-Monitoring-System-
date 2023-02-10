@@ -1,7 +1,25 @@
 {
   "/_app": "pages/_app.js",
+  "/Register": "pages/Register.html",
+  "/component/DowntimeError": "pages/component/DowntimeError.html",
+  "/component/NgError": "pages/component/NgError.html",
+  "/api/hello": "pages/api/hello.js",
+  "/component/ProductionUnitError": "pages/component/ProductionUnitError.html",
+  "/component/editpeople": "pages/component/editpeople.html",
+  "/component/loadings": "pages/component/loadings.html",
+  "/component/loadingsNG": "pages/component/loadingsNG.html",
+  "/component/register1": "pages/component/register1.html",
+  "/component/tablePeople": "pages/component/tablePeople.html",
+  "/component/tablework2": "pages/component/tablework2.html",
+  "/component/tablework3": "pages/component/tablework3.html",
+  "/component/tablewokr1": "pages/component/tablewokr1.html",
+  "/draw": "pages/draw.html",
+  "/draw1": "pages/draw1.html",
+  "/": "pages/index.html",
+  "/login": "pages/login.html",
+  "/tableproduction": "pages/tableproduction.html",
+  "/testOT": "pages/testOT.html",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/draw": "pages/draw.js",
-  "/draw1": "pages/draw1.js"
+  "/404": "pages/404.html"
 }

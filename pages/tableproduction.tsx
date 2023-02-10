@@ -814,7 +814,11 @@ function tableproduction() {
       if (timestampEnd != "") {
         const { data, error } = await supabase
           .from("Manpower_record")
-          .update({ end_datetime: times, TimeStamp_end: timestampEnd })
+          .update({
+            end_datetime: times,
+            TimeStamp_end: timestampEnd,
+            eff_date: checkdates,
+          })
           .eq("PD_key", localStorage.getItem("PD_key"))
           .is("end_datetime", null);
         if (data) {
@@ -915,6 +919,11 @@ function tableproduction() {
       console.log("upTrigger error", error);
     }
   };
+  const triggerURL = async () => {
+    await fetch(
+      "https://prod-20.southeastasia.logic.azure.com:443/workflows/46164a65562940cf98566f9eb122b43c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=fECBqDxokAbk5aBK_upsjAbTud9P7xSenDpb50B_O80"
+    );
+  };
 
   const upWork_order_id = async () => {
     const { data, error } = await supabase
@@ -928,6 +937,7 @@ function tableproduction() {
     if (!error) {
       console.log("UpDateWork_order_id Success", data);
       await playStop_complete();
+
       // localStorage.removeItem("Work_order_id");
       localStorage.removeItem("timeStampStart");
       localStorage.removeItem("Production_unit");
@@ -939,6 +949,7 @@ function tableproduction() {
       localStorage.removeItem("Open_qty");
       localStorage.removeItem("Complete_qty");
       localStorage.removeItem("StatusOnline");
+      await triggerURL();
       await router.push("/draw");
     } else {
       console.log("UpDateWork_order_id Error", error);
@@ -2118,3 +2129,6 @@ function tableproduction() {
   );
 }
 export default tableproduction;
+function triggerURL() {
+  throw new Error("Function not implemented.");
+}
