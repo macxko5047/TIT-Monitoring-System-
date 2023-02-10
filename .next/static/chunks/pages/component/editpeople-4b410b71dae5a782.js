@@ -1,1 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[126],{8947:function(n,_,e){(window.__NEXT_P=window.__NEXT_P||[]).push(["/component/editpeople",function(){return e(2090)}])}},function(n){n.O(0,[607,950,963,626,82,941,712,592,370,90,774,888,179],function(){return n(n.s=8947)}),_N_E=n.O()}]);

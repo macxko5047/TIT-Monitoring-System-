@@ -920,9 +920,10 @@ function tableproduction() {
     }
   };
   const triggerURL = async () => {
-    await fetch(
+    fetch(
       "https://prod-20.southeastasia.logic.azure.com:443/workflows/46164a65562940cf98566f9eb122b43c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=fECBqDxokAbk5aBK_upsjAbTud9P7xSenDpb50B_O80"
-    );
+    ),
+      [];
   };
 
   const upWork_order_id = async () => {
@@ -1407,7 +1408,7 @@ function tableproduction() {
               </Button>
             </Grid>
           </Grid>
-          <Grid container xs={3} md={12} lg={12} spacing={2}>
+          <Grid container xs={12} md={12} lg={12} spacing={2}>
             <Grid xs={3}>
               <Item sx={{ height: "100%", width: "100%" }}>
                 <Box
@@ -1492,7 +1493,7 @@ function tableproduction() {
                 Stop <StopCircleIcon fontSize="large" />
               </Button>
             </Grid>
-            <Grid container xs={3} md={12} lg={12} spacing={2}>
+            <Grid container xs={12} md={12} lg={12} spacing={2}>
               <Grid xs={12} md={6} lg={6}>
                 <Item>
                   <Tablework2 />

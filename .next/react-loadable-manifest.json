@@ -1,20 +1,20 @@
 {
   "..\\node_modules\\@supabase\\functions-js\\dist\\module\\helper.js -> cross-fetch": {
-    "id": 4098,
+    "id": "..\\node_modules\\@supabase\\functions-js\\dist\\module\\helper.js -> cross-fetch",
     "files": []
   },
   "..\\node_modules\\@supabase\\gotrue-js\\dist\\module\\lib\\helpers.js -> cross-fetch": {
-    "id": 4098,
+    "id": "..\\node_modules\\@supabase\\gotrue-js\\dist\\module\\lib\\helpers.js -> cross-fetch",
     "files": []
   },
   "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\helpers.js -> cross-fetch": {
-    "id": 4098,
+    "id": "..\\node_modules\\@supabase\\storage-js\\dist\\module\\lib\\helpers.js -> cross-fetch",
     "files": []
   },
   "..\\node_modules\\use-sound\\dist\\use-sound.esm.js -> howler": {
-    "id": 1766,
+    "id": "..\\node_modules\\use-sound\\dist\\use-sound.esm.js -> howler",
     "files": [
-      "static/chunks/766.c7fd485bde2d9e9a.js"
+      "static/chunks/node_modules_howler_dist_howler_js.js"
     ]
   }
 }
