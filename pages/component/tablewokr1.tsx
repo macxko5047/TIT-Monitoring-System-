@@ -289,26 +289,28 @@ export default function tablework1() {
 
   // insert ตอนกด select WO
   const insertDigit = async () => {
-    const PDkey = `${CheckdataPD}${Fulltimeday}${putPDKEY}`;
-    const { data, error } = await supabase.from("Production_history").insert([
-      {
-        PD_key: PDkey,
-        Work_order_id: datasec[0].Work_order_id,
-        Item_number: datasec[0].Item_number,
-        Production_unit: dataUnit_select,
-        Production_date: currentDate,
-        Shift: dataShift,
-        Order_qty: datasec[0].Order_qty,
-        Open_qty: datasec[0].Open_qty,
-        OP_confirm_before: localStorage.getItem("emp_no"),
-        Standard_time: RuncalculateManDefault,
-      },
-    ]);
+    if (PduNum > 0) {
+      const PDkey = `${CheckdataPD}${Fulltimeday}${putPDKEY}`;
+      const { data, error } = await supabase.from("Production_history").insert([
+        {
+          PD_key: PDkey,
+          Work_order_id: datasec[0].Work_order_id,
+          Item_number: datasec[0].Item_number,
+          Production_unit: dataUnit_select,
+          Production_date: currentDate,
+          Shift: dataShift,
+          Order_qty: datasec[0].Order_qty,
+          Open_qty: datasec[0].Open_qty,
+          OP_confirm_before: localStorage.getItem("emp_no"),
+          Standard_time: RuncalculateManDefault,
+        },
+      ]);
 
-    if (data) {
-      console.log(data);
-    } else {
-      console.log(error);
+      if (data) {
+        console.log(data);
+      } else {
+        console.log(error);
+      }
     }
   };
 
@@ -887,6 +889,7 @@ export default function tablework1() {
   // console.log("datasec01", datasec01);
 
   useEffect(() => {
+    setLoading(true);
     const fetchCct_stadrad = async () => {
       if (item_number != "") {
         let { data, error } = await supabase
@@ -910,6 +913,7 @@ export default function tablework1() {
       }
     };
     fetchCct_stadrad();
+    setLoading(false);
   }, [item_number]);
 
   const [PduNum, setPduNum] = useState<any>("");

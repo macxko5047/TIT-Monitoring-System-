@@ -846,7 +846,7 @@ function tableproduction() {
             Availability_percent: Ap.toFixed(4),
             Quality_percent: Qualitypercen.toFixed(4),
             Status: "Offline",
-            Standard_time: run_standard,
+
             Performance_percent: Performance_Percen.toFixed(4),
             OBU_status: "Waiting_transfer",
             Open_qty: calculeteOpen_qty,
