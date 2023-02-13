@@ -168,7 +168,7 @@ export default function tablework1() {
 
   // เช็คค่าที่เท้ากับแล้วเซ็ตค่าใส่ ------------------------------
   const [CheckdataPD, setCheckdataPD] = useState<any>("");
-  // console.log("CheckdataPD", CheckdataPD);
+  console.log("CheckdataPD", CheckdataPD);
   const [checkdataGroup, setCheckdataGroup] = useState<any>("");
   // console.log("checkdataGroup", checkdataGroup);
 
@@ -1079,67 +1079,71 @@ export default function tablework1() {
             </TableBody>
           </TableContainer>
           <Box sx={{ flexGrow: 1, p: 1 }}>
-            <Item
-              sx={{
-                height: "100%",
-                lg: 1,
-              }}
-            >
-              <Stack sx={{ mt: 1, p: 1 }} direction="row" alignItems="center">
-                <Typography>Production Unit </Typography>
-                <FormControl sx={{ m: 1, minWidth: 200 }}>
-                  <Select
-                    value={dataUnit_select}
-                    onChange={(event) => setDataUnit_select(event.target.value)}
-                    fullWidth
-                  >
-                    <MenuItem sx={{ fontSize: 24 }} value="">
-                      <em>None</em>
-                    </MenuItem>
-                    {dataUnit_gruop.map((fetchdata: any) => (
-                      <MenuItem
-                        key={fetchdata.PD_line}
-                        sx={{ fontSize: 24 }}
-                        value={fetchdata.PD_line}
-                      >
-                        {fetchdata.PD_line} : {fetchdata.Group_name}
+            <Grid container xs={12} md={12} lg={12}>
+              <Item
+                sx={{
+                  height: "100%",
+                  lg: 1,
+                }}
+              >
+                <Stack sx={{ mt: 1, p: 1 }} direction="row" alignItems="center">
+                  <Typography>Production Unit </Typography>
+                  <FormControl sx={{ m: 1, minWidth: 200 }}>
+                    <Select
+                      value={dataUnit_select}
+                      onChange={(event) =>
+                        setDataUnit_select(event.target.value)
+                      }
+                      fullWidth
+                    >
+                      <MenuItem sx={{ fontSize: 24 }} value="">
+                        <em>None</em>
                       </MenuItem>
-                    ))}
-                  </Select>
-                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
-                </FormControl>
-                <Typography>Shift</Typography>
-                <FormControl sx={{ m: 1, minWidth: 120 }}>
-                  <Select
-                    value={dataShift}
-                    onChange={(event) => setDataShift(event.target.value)}
-                    fullWidth
+                      {dataUnit_gruop.map((fetchdata: any) => (
+                        <MenuItem
+                          key={fetchdata.PD_line}
+                          sx={{ fontSize: 24 }}
+                          value={fetchdata.PD_line}
+                        >
+                          {fetchdata.PD_line} : {fetchdata.Group_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {/* <FormHelperText>With label + helper text</FormHelperText> */}
+                  </FormControl>
+                  <Typography>Shift</Typography>
+                  <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <Select
+                      value={dataShift}
+                      onChange={(event) => setDataShift(event.target.value)}
+                      fullWidth
+                    >
+                      <MenuItem sx={{ fontSize: 24 }} value={"Day"}>
+                        Day
+                      </MenuItem>
+                      <MenuItem sx={{ fontSize: 24 }} value={"Night"}>
+                        Night
+                      </MenuItem>
+                    </Select>
+                    {/* <FormHelperText>With label + helper text</FormHelperText> */}
+                  </FormControl>
+                  <Typography>RunTime</Typography>
+                  <FormControl
+                    sx={{ "& .MuiTextField-root": { m: 1, width: "10ch" } }}
                   >
-                    <MenuItem sx={{ fontSize: 24 }} value={"Day"}>
-                      Day
-                    </MenuItem>
-                    <MenuItem sx={{ fontSize: 24 }} value={"Night"}>
-                      Night
-                    </MenuItem>
-                  </Select>
-                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
-                </FormControl>
-                <Typography>RunTime</Typography>
-                <FormControl
-                  sx={{ "& .MuiTextField-root": { m: 1, width: "10ch" } }}
-                >
-                  <TextField
-                    sx={{ textAlign: "center" }}
-                    id="outlined-number"
-                    type="number"
-                    value={run_stadrad}
-                    onChange={(event) => setRun_stadrad(event.target.value)}
-                  />
-                </FormControl>
-                <Typography>sec.</Typography>
-                <Box sx={{ p: 1 }}> {TextError}</Box>
-              </Stack>
-            </Item>
+                    <TextField
+                      sx={{ textAlign: "center" }}
+                      id="outlined-number"
+                      type="number"
+                      value={run_stadrad}
+                      onChange={(event) => setRun_stadrad(event.target.value)}
+                    />
+                  </FormControl>
+                  <Typography>sec.</Typography>
+                  <Box sx={{ p: 1 }}> {TextError}</Box>
+                </Stack>
+              </Item>
+            </Grid>
           </Box>
           <Box sx={{ flexGrow: 1, p: 1 }}>
             <Grid container>

@@ -1255,7 +1255,7 @@ function tableproduction() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4}>
           <Grid container xs={12} md={12} lg={12} spacing={2}>
-            <Grid xs={3} lg={3}>
+            <Grid xs={12} md={3} lg={3}>
               <Item>
                 <Box
                   id="category-a"
@@ -1305,7 +1305,7 @@ function tableproduction() {
               </Item>
             </Grid>
 
-            <Grid xs={4.5} lg={4.5}>
+            <Grid xs={12} md={4.5} lg={4.5}>
               <Button
                 sx={{ height: "100%", width: "100%", bgcolor: "#7CFC00" }}
                 onClick={ChOkay}
@@ -1358,7 +1358,7 @@ function tableproduction() {
                 </Typography>
               </Button>
             </Grid>
-            <Grid xs={4.5} lg={4.5}>
+            <Grid xs={12} md={4.5} lg={4.5}>
               <Button
                 variant="contained"
                 color="inherit"
@@ -1409,7 +1409,7 @@ function tableproduction() {
             </Grid>
           </Grid>
           <Grid container xs={12} md={12} lg={12} spacing={2}>
-            <Grid xs={3}>
+            <Grid xs={12} md={3} lg={3}>
               <Item sx={{ height: "100%", width: "100%" }}>
                 <Box
                   id="category-c"
@@ -1439,7 +1439,7 @@ function tableproduction() {
                 PD Key: {localStorage.getItem("PD_key")}
               </Item>
             </Grid>
-            <Grid xs={3} lg={3}>
+            <Grid xs={4} md={3} lg={3}>
               <Button
                 sx={{
                   height: "100%",
@@ -1458,7 +1458,7 @@ function tableproduction() {
                 <PlayCircleOutlineIcon fontSize="large" />
               </Button>
             </Grid>
-            <Grid xs={3} lg={3}>
+            <Grid xs={4} md={3} lg={3}>
               <Button
                 sx={{
                   height: "100%",
@@ -1475,7 +1475,7 @@ function tableproduction() {
                 Pause <PauseCircleOutlineIcon fontSize="large" />
               </Button>
             </Grid>
-            <Grid xs={3} lg={3}>
+            <Grid xs={4} md={3} lg={3}>
               <Button
                 sx={{
                   height: "100%",
