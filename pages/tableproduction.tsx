@@ -108,6 +108,8 @@ function tableproduction() {
   // -------------------------------------
 
   const [dataManuptest, setDataManuptest] = useState<any>("");
+  // console.log("dataManuptest", dataManuptest);
+
   const AutoUpdataPD_keyManpower = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
@@ -116,8 +118,8 @@ function tableproduction() {
         activate_data: "activated",
       })
       .eq("Work_order_id", localStorage.getItem("CheckWo"))
-      .eq("activate_data", "not");
-    if (data) {
+      .is("PD_key", null);
+    if (!error) {
       console.log("Autoup PD_key Manpower_record Success", data);
       setDataManuptest("UpComplete");
     } else {
@@ -227,6 +229,7 @@ function tableproduction() {
       fetchRuntime();
       fetchWO();
       fatchTimeStart_stamp();
+      upStartTimeManpower_Debug();
       setOpenModal3(true);
     }
   };
@@ -339,7 +342,23 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Manpower_record")
       .update({ start_datetime: times, TimeStamp_start: timestamps })
-      .eq("PD_key", localStorage.getItem("PD_key"));
+      .eq("PD_key", localStorage.getItem("PD_key"))
+      .is("start_datetime", null);
+
+    if (data) {
+      console.log(data);
+    } else {
+      console.log(error);
+    }
+  };
+  const upStartTimeManpower_Debug = async () => {
+    const timeStarts = localStorage.getItem("TimeStart");
+    const timestamps = localStorage.getItem("timeStampStart");
+    const { data, error } = await supabase
+      .from("Manpower_record")
+      .update({ start_datetime: timeStarts, TimeStamp_start: timestamps })
+      .eq("PD_key", localStorage.getItem("PD_key"))
+      .is("start_datetime", null);
 
     if (data) {
       console.log(data);
@@ -580,6 +599,7 @@ function tableproduction() {
       }
     };
     FetchDataCheck();
+    AutoUpdataPD_keyManpower();
     setLoading(false);
   }, []);
 

@@ -15,7 +15,6 @@ import {
 } from "@mui/x-data-grid";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import supabasetit from "../../compunentConfig/supabase";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import List from "@mui/material/List";
@@ -168,14 +167,14 @@ export default function tablework1() {
 
   // เช็คค่าที่เท้ากับแล้วเซ็ตค่าใส่ ------------------------------
   const [CheckdataPD, setCheckdataPD] = useState<any>("");
-  console.log("CheckdataPD", CheckdataPD);
+  // console.log("CheckdataPD", CheckdataPD);
   const [checkdataGroup, setCheckdataGroup] = useState<any>("");
   // console.log("checkdataGroup", checkdataGroup);
 
   //----เช็คค่า group ออกมา
   useEffect(() => {
-    setLoading(true);
     const FetchDataCheck = async () => {
+      setLoading(true);
       const { data, error }: any = await supabase
         .from("Production_unit_group")
         .select("*")
@@ -322,7 +321,7 @@ export default function tablework1() {
     // if (cellValues.row.Status_working === "Online") {
     //   alert("Already on proceeding in production!");
     // } else {
-    setLoading(true);
+
     await setOpen(true);
     await setdataSec([cellValues.row]);
     await setdataSec01(cellValues.row.Production_unit);
@@ -330,11 +329,12 @@ export default function tablework1() {
     await setDataWo(cellValues.row.Work_order_id);
     await setDataQty(cellValues.row.Open_qty);
     await fectdataDESC();
-
     // await checkDaynight();
     await localStorage.setItem("CheckWo", cellValues.row.Work_order_id);
     await fetchDataPeople();
-    setLoading(false);
+    await setLoading(true);
+
+    await setLoading(false);
     // }
   };
 
@@ -455,7 +455,7 @@ export default function tablework1() {
 
   // onChang รหัสพนักงาน
   const [dataUser, setDataUser] = useState<any>([]);
-  console.log("dataAll", dataUser);
+  // console.log("dataAll", dataUser);
 
   const [user1, setUser1] = useState<any>("");
   // console.log(user1);
@@ -504,6 +504,7 @@ export default function tablework1() {
 
   useEffect(() => {
     const FetchData = async () => {
+      setLoading(true);
       let headersList = {
         Authorization:
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkdWRsd3FzcnVjb2p4anBxaHZxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY2ODc2MDU2NSwiZXhwIjoxOTg0MzM2NTY1fQ.-Z5955b7zSmDnGV3n2y65qJDElz3zfdyxAVyffJIR7Q",
@@ -518,6 +519,7 @@ export default function tablework1() {
       };
 
       let res = await axios.request(reqOptions);
+      setLoading(false);
       if (res.data) {
         console.log(res.data);
         setDataUser(res.data);
@@ -744,7 +746,7 @@ export default function tablework1() {
   useEffect(() => {
     const FetchData = async () => {
       console.log("fetchdata"); //ใช้เช็คการทำงานว่าทำกี่ครั้ง
-      const { data, error } = await supabasetit
+      const { data, error } = await supabase
         .from("Work_order")
         .select("*")
         .filter("WO_status", "in", "(R)"); //983
@@ -760,7 +762,7 @@ export default function tablework1() {
 
   const ReloadFetchData = async () => {
     console.log("fetchdata"); //ใช้เช็คการทำงานว่าทำกี่ครั้ง
-    const { data, error } = await supabasetit
+    const { data, error } = await supabase
       .from("Work_order")
       .select("*")
       .filter("WO_status", "in", "(R)"); //983
@@ -1219,14 +1221,14 @@ export default function tablework1() {
                 <Grid xs={9} md={9} lg={9}>
                   <Item>
                     <Typography>Table People</Typography>
-                    <div style={{ height: 400, width: "100%" }}>
+                    <Box style={{ height: 400, width: "100%" }}>
                       <DataGrid
                         rows={dataPeople}
                         columns={columnsAddPeople}
                         pageSize={5}
                         rowsPerPageOptions={[5]}
                       />
-                    </div>
+                    </Box>
                   </Item>
                 </Grid>
               </Grid>

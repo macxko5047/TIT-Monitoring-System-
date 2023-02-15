@@ -23,7 +23,7 @@ import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import supabase from "../../compunentConfig/supabase";
 import LogoutIcon from "@mui/icons-material/Logout";
-import handler from "../api/hello";
+import CircularProgress from "@mui/material/CircularProgress";
 
 type Props = {};
 
@@ -59,6 +59,8 @@ const editpeople = (props: Props) => {
 
   const [dataManpower, setDataManpower] = useState<any>([]);
 
+  const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
+
   useEffect(() => {
     const FetchdataManpower_record = async () => {
       let { data, error } = await supabase
@@ -87,12 +89,31 @@ const editpeople = (props: Props) => {
   };
 
   const [openModal, setOpenModal] = useState(false);
-  const handleOpenModal = () => {
-    setOpenModal(true);
-    fatchTimeStart_stamp();
+  const handleOpenModal = async () => {
+    await setOpenModal(true);
+    await fatchTimeStart_stamp();
+    await upStartTimeManpower_Debug();
   };
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const upStartTimeManpower_Debug = async () => {
+    setLoading(true);
+    const timeStarts = localStorage.getItem("TimeStart");
+    const timestamps = localStorage.getItem("timeStampStart");
+    const { data, error } = await supabase
+      .from("Manpower_record")
+      .update({ start_datetime: timeStarts, TimeStamp_start: timestamps })
+      .eq("PD_key", localStorage.getItem("PD_key"))
+      .is("start_datetime", null);
+
+    if (data) {
+      console.log(data);
+    } else {
+      console.log(error);
+    }
+    setLoading(false);
   };
 
   const [openlogoutTime, setOpenlogoutTime] = useState(false);
@@ -265,8 +286,16 @@ const editpeople = (props: Props) => {
     };
   }, [dataManpower]);
 
+  if (loading)
+    return (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Typography sx={{ fontSize: 50 }}>Loading...</Typography>
+        <CircularProgress />
+      </Box>
+    ); //รอโหลดข้อมูล
+
   return (
-    <div>
+    <Box>
       <Stack
         direction="column-reverse"
         justifyContent="flex-start"
@@ -466,7 +495,7 @@ const editpeople = (props: Props) => {
         </Box>
       </Modal>
       {/* ------------------- */}
-    </div>
+    </Box>
   );
 };
 export default editpeople;
