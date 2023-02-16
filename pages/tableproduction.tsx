@@ -1067,10 +1067,11 @@ function tableproduction() {
   const Runtime_sec = RuntimeData * 60;
   // console.log("Runtime_sec", Runtime_sec);
 
-  const Run_man = run_standard * pdu; //PDU คือ จำนวนสแตนดาสคนที่จะเอามาคูณ
+  const Run_man = run_standard / pdu; //PDU คือ จำนวนสแตนดาสคนที่จะเอามาหาร เพื่อหาค่า run ต่อชิ้นต่อคน
   // console.log("Run_man", Run_man);
 
-  const Performance_Percen = (Run_man * (dataOK + dataNGShow)) / Runtime_sec;
+  const Performance_Percen =
+    (run_standard * (dataOK + dataNGShow)) / Runtime_sec;
   // console.log("Performance_deff", Performance_Percen);
 
   //-----------------
@@ -1089,7 +1090,7 @@ function tableproduction() {
   // console.log("manpowerNum", Manpowers1);
 
   const Performance_permanpower =
-    run_standard / (Runtime_sec / ((dataOK + dataNGShow) * Manpowers1.length));
+    Run_man / (Runtime_sec / ((dataOK + dataNGShow) * Manpowers1.length));
 
   const fetchManpower = async () => {
     let { data, error } = await supabase
