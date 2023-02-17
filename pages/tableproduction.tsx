@@ -191,6 +191,7 @@ function tableproduction() {
         await setTimepause(times);
         await setTimestamp01(timestamps);
         await updateDowntimeStatusStart();
+        await localStorage.setItem("TimeStartDownTime", timestamps);
         await playOn_Downtime();
       }
       if (timepause === "") {
@@ -286,10 +287,32 @@ function tableproduction() {
   const times: any = `${Hours}:${Min}:${sec}`;
   const [timestamp01, setTimestamp01] = useState<any>("");
   const [timestamp02, setTimestamp02] = useState<any>("");
-
   // console.log("T1", timestamp01);
   // console.log("T2", timestamp02);
   // console.log("T3", timestamp03);
+  const [TimerDownTime, setTimerDownTime] = useState<any>("");
+  // console.log("TimerDownTime", TimerDownTime);
+
+  useEffect(() => {
+    const TimeStart: any = localStorage.getItem("TimeStartDownTime");
+    let diff = date.getTime() - TimeStart;
+
+    let hh = Math.floor(diff / 1000 / 60 / 60);
+    diff -= hh * 1000 * 60 * 60;
+    let mm = Math.floor(diff / 1000 / 60);
+    diff -= mm * 1000 * 60;
+    let ss = Math.floor(diff / 1000);
+    diff -= ss * 1000;
+
+    let DiffTime =
+      hh.toString().padStart(2, "0") +
+      ":" +
+      mm.toString().padStart(2, "0") +
+      ":" +
+      ss.toString().padStart(2, "0");
+
+    setTimerDownTime(DiffTime);
+  }, [date]);
 
   const diffs: any = Math.ceil(
     ((timestamp02 - timestamp01) * 60) / 3600 / 1000
@@ -388,6 +411,7 @@ function tableproduction() {
       await setTimestamp02(timestamps);
       await setOpenModal1(false);
       await updateDowntimeStatusEND();
+      await setTimerDownTime("");
       await playThe_end_downtime();
     }
   };
@@ -403,7 +427,7 @@ function tableproduction() {
       .is("Duration_downtime", null);
 
     if (data) {
-      console.log("Up End_time: ", data);
+      console.log("Up End_time Success: ", data);
     } else {
       console.log("update ไปแล้วกับ eroor", error);
     }
@@ -428,6 +452,7 @@ function tableproduction() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setRaltime(times);
+      date;
     }, 1000);
     return () => clearInterval(intervalId);
   });
@@ -1248,6 +1273,38 @@ function tableproduction() {
   }, [timestamp01]);
 
   //----------------------------------------------------------------
+  const [DowntimeEndNull, setDowntimeEndNull] = useState<any>(0);
+  // console.log("DowntimeEndNull", DowntimeEndNull);
+
+  useEffect(() => {
+    const fetchdataDowntime = async () => {
+      let { data: Downtime_record, error } = await supabase
+        .from("Downtime_record")
+        .select("Downtime_code")
+        .eq("PD_key", localStorage.getItem("PD_key"))
+        .is("End_time", null);
+
+      if (Downtime_record?.length) {
+        setDowntimeEndNull(Downtime_record.length);
+        setTimestamp01(localStorage.getItem("TimeStartDownTime"));
+      }
+    };
+
+    fetchdataDowntime();
+  }, []);
+
+  useEffect(() => {
+    const OnDowntimeAuto = async () => {
+      if (DowntimeEndNull > 0) {
+        setOpenModal1(true);
+        start();
+      } else {
+        console.log("NOT DOWN TIME");
+      }
+    };
+    OnDowntimeAuto();
+  }, [DowntimeEndNull]);
+
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
 
@@ -1612,13 +1669,8 @@ function tableproduction() {
               <Typography style={{ fontSize: "50px" }}>
                 Timer Downtime
               </Typography>
-              <div style={{ fontSize: "100px" }}>
-                <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:
-                <span>{seconds}</span>
-              </div>
-              <Typography style={{ fontSize: "30px" }}>
-                {isRunning ? "Running" : "Not running"}
-              </Typography>
+              <div style={{ fontSize: "100px" }}>{TimerDownTime}</div>
+              <Typography style={{ fontSize: "30px" }}>Running</Typography>
               <Button
                 sx={{
                   width: 250,
