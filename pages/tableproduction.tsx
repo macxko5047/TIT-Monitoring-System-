@@ -200,7 +200,7 @@ function tableproduction() {
             PD_key: localStorage.getItem("PD_key"),
             Downtime_code: menusplit[0],
             Begin_time: times,
-            Downtime_description: menusplit[1],
+            Downtime_description: menusplit[1] + " : " + menusplit[2],
           },
         ]);
         if (error) {
@@ -715,7 +715,7 @@ function tableproduction() {
         {
           Work_order_id: localStorage.getItem("Work_order_id"),
           NG_code: NGsplit[0],
-          NG_description: NGsplit[1],
+          NG_description: NGsplit[1] + " : " + NGsplit[2],
           NG_qty: selectQty,
           Production_date: checkdates,
           Production_unit: localStorage.getItem("Production_unit"),
@@ -735,7 +735,7 @@ function tableproduction() {
         {
           Work_order_id: localStorage.getItem("Work_order_id"),
           NG_code: NGsplit[0],
-          NG_description: NGsplit[1],
+          NG_description: NGsplit[1] + " : " + NGsplit[2],
           NG_qty: selectQty,
           Production_date: checkdates,
           Production_unit: localStorage.getItem("Production_unit"),
@@ -1556,7 +1556,9 @@ function tableproduction() {
                 <MenuItem
                   key={menus.code}
                   sx={{ fontSize: 28 }}
-                  value={menus.code + ":" + menus.desc_th}
+                  value={
+                    menus.code + ":" + menus.desc_th + ":" + menus.desc_china
+                  }
                 >
                   {menus.code} : {menus.desc_th} : {menus.desc_china}
                 </MenuItem>
@@ -1604,7 +1606,7 @@ function tableproduction() {
               please push start when end of downtime
             </Typography>
             <Typography style={{ fontSize: "30px" }}>
-              Detail : {menusplit[1]}
+              Detail : {menusplit[1] + " : " + menusplit[2]}
             </Typography>
             <div style={{ textAlign: "center" }}>
               <Typography style={{ fontSize: "50px" }}>
@@ -1887,7 +1889,7 @@ function tableproduction() {
                 <MenuItem
                   key={menus.code}
                   sx={{ fontSize: 28 }}
-                  value={menus.code + ":" + menus.desc + ":"}
+                  value={menus.code + ":" + menus.desc + ":" + menus.desc_china}
                 >
                   <Stack
                     direction="row"

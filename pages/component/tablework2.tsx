@@ -42,7 +42,7 @@ export default function QuickFilteringCustomizedGrid() {
     { field: "Begin_time", headerName: "Begin_time" },
     { field: "End_time", headerName: "End_time" },
     { field: "Duration_downtime", headerName: "Duration_downtime" },
-    { field: "Downtime_description", headerName: "Detail", width: 200 },
+    { field: "Downtime_description", headerName: "Detail", width: 300 },
   ];
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   // รีเฟสเฉพาะอันนั้น;
