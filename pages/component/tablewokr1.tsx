@@ -301,14 +301,15 @@ export default function tablework1() {
           Order_qty: datasec[0].Order_qty,
           Open_qty: datasec[0].Open_qty,
           OP_confirm_before: localStorage.getItem("emp_no"),
-          Standard_time: RuncalculateManDefault,
+          Standard_time: runCel,
         },
       ]);
 
       if (data) {
         console.log(data);
-      } else {
-        console.log(error);
+      }
+      if (error) {
+        console.log("insertDigit Error", error);
       }
     }
   };
@@ -356,7 +357,7 @@ export default function tablework1() {
       .from("Production_unit_group")
       .select("status_run")
       .in("status_run", ["Downtime", "Online"])
-      .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+      .eq("Work_order_id", localStorage.getItem("CheckWo"));
     if (data) {
       setDataUnitcheck(
         data.map(
@@ -383,7 +384,7 @@ export default function tablework1() {
         const { data, error } = await supabase
           .from("Work_order")
           .update({ Status_working: "Online" })
-          .eq("Work_order_id", localStorage.getItem("Work_order_id"));
+          .eq("Work_order_id", localStorage.getItem("CheckWo"));
         if (data) {
           console.log("UP Status Online Success");
         }
@@ -434,7 +435,7 @@ export default function tablework1() {
     await removeItem();
 
     if (CheckdataPD != "") {
-      await insertDigit();
+      insertDigit();
     }
     await localStorage.setItem("PDU", PduNum);
     await localStorage.setItem("Work_order_id", datasec[0].Work_order_id);
@@ -479,7 +480,10 @@ export default function tablework1() {
   const DeleteOpen = () => setOpenDel(true);
   const DeleteClose = () => setOpenDel(false);
   const [openConfrim, setOpenConfrim] = React.useState(false);
-  const ConfrimOpen = () => setOpenConfrim(true);
+  const ConfrimOpen = () => {
+    setOpenConfrim(true);
+    FunctionRunCel();
+  };
   const ConfrimClose = () => setOpenConfrim(false);
 
   const handleClick = (event: any, cellValues: any) => {
@@ -921,8 +925,13 @@ export default function tablework1() {
   const [PduNum, setPduNum] = useState<any>("");
   console.log("PduNum", PduNum);
   // console.log("CheckdataPD", CheckdataPD);
-  const RuncalculateManDefault = run_stadrad / PduNum;
-  console.log("RuncalculateManDefault", RuncalculateManDefault);
+  const [runCel, setRunCel] = useState<Number>(0);
+  const FunctionRunCel = () => {
+    const RuncalculateManDefault: number = run_stadrad / PduNum;
+    setRunCel(RuncalculateManDefault);
+  };
+
+  console.log({ runCel });
 
   const fetchPDU = async () => {
     let { data: PDU_multiply_manp, error } = await supabase

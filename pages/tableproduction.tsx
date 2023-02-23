@@ -94,7 +94,7 @@ function tableproduction() {
   let [timestop, setTimestop] = useState<any>("");
   const [details, setDetails] = useState<any>("");
 
-  const [dataOK, setOK] = useState(0);
+  const [dataOK, setOK] = useState<number>(0);
 
   // split string แบ่ง ออกเพื่อส่งไปเก็บใน database
   const menusplit = details.split(":");
@@ -231,6 +231,7 @@ function tableproduction() {
       fetchWO();
       fatchTimeStart_stamp();
       upStartTimeManpower_Debug();
+      celculateQualityPercen();
       setOpenModal3(true);
     }
   };
@@ -243,8 +244,8 @@ function tableproduction() {
   const handleOpenModal4 = () => {
     setOpenModal4(true);
   };
-  const [dataOK_qty, setDataOK_qty] = useState<any>("");
-  const [dataNG_qty, setDataNG_qty] = useState<any>("");
+  const [dataOK_qty, setDataOK_qty] = useState<any>(0);
+  const [dataNG_qty, setDataNG_qty] = useState<any>(0);
 
   const editOK_NG = async () => {
     const { data, error } = await supabase
@@ -449,10 +450,10 @@ function tableproduction() {
 
   // รีเฟสเฉพาะอันนั้น;
   const [raltime, setRaltime] = useState<any>("");
+  const [raltime1, setRaltime1] = useState<any>("");
   useEffect(() => {
     const intervalId = setInterval(() => {
       setRaltime(times);
-      date;
     }, 1000);
     return () => clearInterval(intervalId);
   });
@@ -616,8 +617,8 @@ function tableproduction() {
         .eq("Production_unit", localStorage.getItem("Production_unit"))
         .eq("Production_date", checkdates)
         .limit(1); //ใช้แทน single
-      if (data.length) {
-        setShowDaynight(data[0].Shift);
+      if (data?.length) {
+        setShowDaynight(data[0]?.Shift);
         AutoUpdataPD_keyManpower();
       } else {
         console.log(error);
@@ -842,6 +843,8 @@ function tableproduction() {
     setTimeStart_stamp(localStorage.getItem("timeStampStart"));
   };
   const [timestampEnd, setTimestampEnd] = useState<any>("");
+  const [diffStop, setDiffStop] = useState<number>(0);
+  console.log({ diffStop });
 
   const handlerSubmitStop = async () => {
     await setLoading1(true);
@@ -852,6 +855,7 @@ function tableproduction() {
     await upProductionUnitGroupOffline();
     await calculateMan();
     await upWork_order_id();
+
     await setLoading1(false);
   };
   useEffect(() => {
@@ -871,25 +875,35 @@ function tableproduction() {
         } else {
           console.log("UpManpowerAutoduration Error", error);
         }
+        const funDiffStop = () => {
+          const diffsStop01: number = Math.ceil(
+            ((timestampEnd - timeStart_stamp) * 60) / 3600 / 1000
+          );
+          setDiffStop(diffsStop01);
+        };
+        funDiffStop();
       }
     };
     UpManpowerAutoduration();
   }, [timestampEnd]);
-
+  const [cctime, setCCtime] = useState<number>(0);
+  const [quality, setQuality] = useState<number>(0);
+  console.log({ quality });
   useEffect(() => {
     const UpProductionAutoduration = async () => {
-      if (diffsStop > 0) {
+      await celculateCycleTime();
+      if (diffStop > 0) {
         const { data, error } = await supabase
           .from("Production_history")
           .update({
             End_time: times,
-            Duration_time: diffsStop,
+            Duration_time: diffStop,
             OP_confirm_after: localStorage.getItem("emp_no"),
             Manpower_number: Manpowers1.length,
             Runtime: RuntimeData,
-            Cycle_time: CycleTime.toFixed(4),
+            Cycle_time: cctime.toFixed(4),
             Availability_percent: Ap.toFixed(4),
-            Quality_percent: Qualitypercen.toFixed(4),
+            Quality_percent: quality.toFixed(4),
             Status: "Offline",
 
             Performance_percent: Performance_Percen.toFixed(4),
@@ -911,7 +925,7 @@ function tableproduction() {
       }
     };
     UpProductionAutoduration();
-  }, [timestampEnd]);
+  }, [timestampEnd, cctime, diffStop]);
 
   const [dataComplete_qty, setDataComplete_qty] = useState<number>(0);
   const [dataOpen_qty, setDataOpen_qty] = useState<number>(0);
@@ -984,11 +998,11 @@ function tableproduction() {
       console.log("UpDateWork_order_id Success", data);
       await playStop_complete();
 
-      // localStorage.removeItem("Work_order_id");
+      localStorage.removeItem("Work_order_id");
       localStorage.removeItem("timeStampStart");
       localStorage.removeItem("Production_unit");
       localStorage.removeItem("PD_key");
-      localStorage.removeItem("CheckWo");
+      // localStorage.removeItem("CheckWo");
       localStorage.removeItem("NG_qty_WO");
       localStorage.removeItem("TimeStart");
       localStorage.removeItem("ItemNumber");
@@ -1075,16 +1089,38 @@ function tableproduction() {
   //============================================
 
   //========= count Cycle time ===============
-  const CycleTime = RuntimeData / (dataOK + dataNGShow);
-  // console.log("CycleTime", CycleTime.toFixed(2));
+
+  let CycleTime: number = RuntimeData / (dataOK_qty + dataNG_qty);
+
+  const celculateCycleTime = async () => {
+    if (CycleTime != Infinity) {
+      setCCtime(CycleTime);
+    }
+    if (CycleTime === Infinity) {
+      setCCtime(0);
+    }
+  };
+  const Qualitypercen: number = dataOK_qty
+    ? dataOK_qty
+    : 0 / (dataOK_qty ? dataOK_qty : 0 + dataNG_qty ? dataNG_qty : 0);
+  const celculateQualityPercen = async () => {
+    if (dataOK_qty == 0 && dataNG_qty == 0) {
+      setQuality(0);
+    }
+    if (dataOK_qty > 0 || dataNG_qty > 0) {
+      setQuality(Qualitypercen);
+    }
+  };
+  // console.log({ CycleTime });
+  // console.log({ cctime });
 
   //------------------------------------------------------------
   //================= Availability_percent =======================
-  const Ap = RuntimeData / diffsStop;
-  // console.log("Availability_percent", Ap);
+  const Ap = (RuntimeData ? RuntimeData : 0) / diffStop;
+  console.log("Availability_percent", Ap);
   //------------------------------------------------------------
   //=========Quality_percent=====================================
-  const Qualitypercen = dataOK / (dataOK + dataNGShow);
+
   // console.log("Qualitypercen", Qualitypercen);
 
   //------------------------------------------------------------
@@ -1096,13 +1132,14 @@ function tableproduction() {
   // console.log("Run_man", Run_man);
 
   const Performance_Percen =
-    (run_standard * (dataOK + dataNGShow)) / Runtime_sec;
+    (run_standard * (dataOK_qty + dataNG_qty)) / Runtime_sec;
   // console.log("Performance_deff", Performance_Percen);
 
   //-----------------
   //============ calculate OEE% ============
-  const calculateOEE: number = Ap * Qualitypercen * Performance_Percen;
-  // console.log("calculateOEE", calculateOEE);
+  const calculateOEE: any =
+    Ap * Qualitypercen * Performance_Percen ? Performance_Percen : 0;
+  console.log("calculateOEE", calculateOEE);
 
   //----------------------------------------
   //==== duration Manpower =================
@@ -1329,7 +1366,7 @@ function tableproduction() {
     ); //รอโหลดข้อมูล
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   return (
-    <div>
+    <Box>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={4}>
           <Grid container xs={12} md={12} lg={12} spacing={2}>
@@ -1840,9 +1877,10 @@ function tableproduction() {
           aria-describedby="child-modal-description"
         >
           <Box sx={{ ...style, width: "auto" }} component="form">
-            <h2 text-align="center" id="child-modal-title">
+            <Typography variant="h3" gutterBottom>
               Edit OK_qty
-            </h2>
+            </Typography>
+
             <Typography>Time Edit : {times}</Typography>
             <br />
             {/* <InputLabel>OK_qty</InputLabel> */}
@@ -2201,7 +2239,7 @@ function tableproduction() {
       </Modal>
       {/* ------------------- */}
       {/* <Button onClick={celculeteOT}>dfdfdf</Button> */}
-    </div>
+    </Box>
   );
 }
 export default tableproduction;

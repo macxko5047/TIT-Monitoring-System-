@@ -317,7 +317,7 @@ const editpeople = (props: Props) => {
         aria-labelledby="child-modal-title"
         aria-describedby="child-modal-description"
       >
-        <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
+        <Box sx={{ ...style, width: 1080, height: 780 }}>
           <Typography
             sx={{
               display: "flex",

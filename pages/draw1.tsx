@@ -148,7 +148,7 @@ function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -186,7 +186,7 @@ function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -223,7 +223,7 @@ function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -260,11 +260,11 @@ function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton>
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Leader" />
+              <ListItemText primary="Dashbord" />
             </ListItemButton>
           </List>
         </div>

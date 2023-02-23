@@ -22,6 +22,8 @@ import Menu from "@mui/material/Menu";
 import { useRouter } from "next/router";
 import Tablework1 from "./component/tablewokr1";
 import AppContext from "../src/context/Appcontext";
+import Dashbord_Unit from "./Dashbord_Unit";
+import Register from "./Register";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -110,6 +112,17 @@ export default function PersistentDrawerLeft() {
       alert("Please push STOP button before proceed  Logout !");
     }
   };
+  //set หน้าแรก จากปุ่มกด
+  const [dataShowPage, setDataShowPage] = useState<any>(<Tablework1 />);
+  useEffect(() => {
+    const level = localStorage.getItem("level");
+    if (level === "Admin") {
+      setDataShowPage(<Tablework1 />);
+    }
+    if (level === "Manager") {
+      setDataShowPage(<Dashbord_Unit />);
+    }
+  }, []);
 
   const menuShowAdmin = () => {
     const datalevel = localStorage.Level;
@@ -117,7 +130,7 @@ export default function PersistentDrawerLeft() {
       return (
         <div>
           <List>
-            <ListItemButton href={"/draw"}>
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -131,14 +144,14 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary="Dashbord" />
             </ListItemButton>
 
-            <ListItemButton href={"./Register"}>
+            <ListItemButton onClick={(e) => setDataShowPage(<Register />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -169,7 +182,7 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -206,7 +219,7 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton href="https://dashbord-ahpb-01.vercel.app/">
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -243,11 +256,11 @@ export default function PersistentDrawerLeft() {
               <ListItemText primary="Item Run" />
             </ListItemButton>
             <Divider />
-            <ListItemButton>
+            <ListItemButton href="https://dashboard-tit.vercel.app/">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Leader" />
+              <ListItemText primary="Dashbord" />
             </ListItemButton>
           </List>
         </div>
@@ -393,9 +406,7 @@ export default function PersistentDrawerLeft() {
           </Drawer>
           <Main open={open}>
             <DrawerHeader />
-            <Typography>
-              <Tablework1 />
-            </Typography>
+            <Box>{dataShowPage}</Box>
           </Main>
         </Box>
       </ThemeProvider>

@@ -33,6 +33,7 @@
     "react-circular-progressbar": "^2.1.0",
     "react-dom": "18.2.0",
     "react-draggable": "^4.4.5",
+    "react-iframe": "^1.8.5",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.4.4",
     "react-select-search": "^4.1.6",
