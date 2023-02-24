@@ -223,7 +223,7 @@ function tableproduction() {
       alert("Please press the start button first.");
     }
     if (TimeCheck != null) {
-      fetchdataBreakTime();
+      // fetchdataBreakTime();
       playStop();
       fetchProduction_history();
       fetchManpower();
@@ -828,7 +828,8 @@ function tableproduction() {
       .select("Duration_downtime")
       .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
       .neq("Downtime_code", "Z01")
-      .neq("Downtime_code", "D01");
+      .neq("Downtime_code", "D01")
+      .neq("Downtime_code", "C");
 
     if (data) {
       setDataduDownTime(data.map((files) => files.Duration_downtime));
@@ -1016,23 +1017,23 @@ function tableproduction() {
     }
   };
   // เวลา พักเที่ยงที่จะเอามาลบ ออก ===================================
-  const [dataBreakTime, setDataBreakTime] = useState<any>("");
-  // console.log("dataBreakTime", dataBreakTime);
+  // const [dataBreakTime, setDataBreakTime] = useState<any>("");
+  // // console.log("dataBreakTime", dataBreakTime);
 
-  const fetchdataBreakTime = async () => {
-    let { data: Downtime_record, error } = await supabase
-      .from("Downtime_record")
-      .select("Duration_downtime")
-      .filter("Downtime_description", "in", "(พักเที่ยง)");
-    if (Downtime_record) {
-      setDataBreakTime(
-        Downtime_record.map((res: any) => res.Duration_downtime)
-      );
-    }
-    if (error) {
-      console.log("Downtime_description ERROR !!", error);
-    }
-  };
+  // const fetchdataBreakTime = async () => {
+  //   let { data: Downtime_record, error } = await supabase
+  //     .from("Downtime_record")
+  //     .select("Duration_downtime")
+  //     .filter("Downtime_description", "in", "(พักเที่ยง)");
+  //   if (Downtime_record) {
+  //     setDataBreakTime(
+  //       Downtime_record.map((res: any) => res.Duration_downtime)
+  //     );
+  //   }
+  //   if (error) {
+  //     console.log("Downtime_description ERROR !!", error);
+  //   }
+  // };
 
   // ----------------------------------------------------------------
   //=========== run standard , PDU คือจำนวนManpower Defualt
