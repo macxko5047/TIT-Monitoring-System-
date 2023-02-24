@@ -1100,9 +1100,9 @@ function tableproduction() {
       setCCtime(0);
     }
   };
-  const Qualitypercen: number = dataOK_qty
-    ? dataOK_qty
-    : 0 / (dataOK_qty ? dataOK_qty : 0 + dataNG_qty ? dataNG_qty : 0);
+  const Qualitypercen: number =
+    (dataOK_qty ? dataOK_qty : 0) /
+    ((dataOK_qty ? dataOK_qty : 0) + (dataNG_qty ? dataNG_qty : 0));
   const celculateQualityPercen = async () => {
     if (dataOK_qty == 0 && dataNG_qty == 0) {
       setQuality(0);
