@@ -1138,7 +1138,9 @@ function tableproduction() {
   //-----------------
   //============ calculate OEE% ============
   const calculateOEE: any =
-    Ap * Qualitypercen * Performance_Percen ? Performance_Percen : 0;
+    (Ap ? Ap : 0) *
+    (Qualitypercen ? Qualitypercen : 0) *
+    (Performance_Percen ? Performance_Percen : 0);
   console.log("calculateOEE", calculateOEE);
 
   //----------------------------------------
