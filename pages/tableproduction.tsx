@@ -217,22 +217,25 @@ function tableproduction() {
   };
   //เปิด - ปิด modal v.3
   const [openModal3, setOpenModal3] = useState(false);
-  const handleOpenModal3 = () => {
+  const handleOpenModal3 = async () => {
     const TimeCheck = localStorage.getItem("TimeStart");
     if (TimeCheck === null) {
       alert("Please press the start button first.");
     }
     if (TimeCheck != null) {
       // fetchdataBreakTime();
-      playStop();
-      fetchProduction_history();
-      fetchManpower();
-      fetchRuntime();
-      fetchWO();
-      fatchTimeStart_stamp();
-      upStartTimeManpower_Debug();
-      celculateQualityPercen();
-      setOpenModal3(true);
+      await Promise.all([
+        playStop(),
+        fetchProduction_history(),
+        fetchManpower(),
+        fetchRuntime(),
+        fetchRuntimeBreak(),
+        fetchWO(),
+        fatchTimeStart_stamp(),
+        upStartTimeManpower_Debug(),
+        celculateQualityPercen(),
+        setOpenModal3(true),
+      ]);
     }
   };
   const handleCloseModal3 = () => {
@@ -835,6 +838,17 @@ function tableproduction() {
       setDataduDownTime(data.map((files) => files.Duration_downtime));
     }
   };
+  const fetchRuntimeBreak = async () => {
+    const { data, error } = await supabase
+      .from("Downtime_record")
+      .select("Duration_downtime")
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
+      .in("Downtime_code", ["Z01", "D01", "C"]);
+
+    if (data) {
+      setDataBraekDowntime(data.map((resst) => resst.Duration_downtime));
+    }
+  };
   //========================================
 
   // กด submit Stop ครั้งสุดท้าย
@@ -1078,12 +1092,21 @@ function tableproduction() {
   //=======================RunTime ============
   //========= count fetchRuntime =============
   const [dataduDownTime, setDataduDownTime] = useState<any>([]);
+  const [dataBraekDowntime, setDataBraekDowntime] = useState<any>([]);
+  console.log({ dataBraekDowntime });
+
   // console.log("DurationDownTime", dataduDownTime);
   let sum: number = 0;
   for (let item of dataduDownTime) {
     sum += item;
   }
   // console.log("SumDowntime", sum);
+  let sumbraektime: number = 0;
+  for (let braektime of dataBraekDowntime) {
+    sumbraektime += braektime;
+  }
+  console.log("sumbraektime", sumbraektime);
+
   //================= คือ Downtime ทั้งหมด + กัน แล้ว - เวลาในการทำงานทั้งหมด(duration time) ====
   const RuntimeData: number = diffsStop - sum;
   // console.log("RuntimeData", RuntimeData);
@@ -1117,7 +1140,7 @@ function tableproduction() {
 
   //------------------------------------------------------------
   //================= Availability_percent =======================
-  const Ap = (RuntimeData ? RuntimeData : 0) / diffStop;
+  const Ap = (RuntimeData ? RuntimeData : 0) / (diffStop - dataBraekDowntime);
   console.log("Availability_percent", Ap);
   //------------------------------------------------------------
   //=========Quality_percent=====================================
