@@ -829,10 +829,10 @@ function tableproduction() {
     const { data, error } = await supabase
       .from("Downtime_record")
       .select("Duration_downtime")
-      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")")
-      .neq("Downtime_code", "Z01")
-      .neq("Downtime_code", "D01")
-      .neq("Downtime_code", "C");
+      .filter("PD_key", "in", "(" + localStorage.getItem("PD_key") + ")");
+    // .neq("Downtime_code", "Z01")
+    // .neq("Downtime_code", "D01")
+    // .neq("Downtime_code", "C");
 
     if (data) {
       setDataduDownTime(data.map((files) => files.Duration_downtime));
@@ -1140,7 +1140,7 @@ function tableproduction() {
 
   //------------------------------------------------------------
   //================= Availability_percent =======================
-  const Ap = (RuntimeData ? RuntimeData : 0) / (diffStop - dataBraekDowntime);
+  const Ap = RuntimeData / (diffStop - dataBraekDowntime);
   console.log("Availability_percent", Ap);
   //------------------------------------------------------------
   //=========Quality_percent=====================================
