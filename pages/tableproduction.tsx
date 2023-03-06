@@ -904,9 +904,11 @@ function tableproduction() {
   const [cctime, setCCtime] = useState<number>(0);
   const [quality, setQuality] = useState<number>(0);
   console.log({ quality });
+  const [availbailityPercent, setAvailbailityPercent] = useState<number>(0);
   useEffect(() => {
     const UpProductionAutoduration = async () => {
-      await celculateCycleTime();
+      await Promise.all([celculateCycleTime(), celculateAP()]);
+
       if (diffStop > 0) {
         const { data, error } = await supabase
           .from("Production_history")
@@ -1141,7 +1143,19 @@ function tableproduction() {
   //------------------------------------------------------------
   //================= Availability_percent =======================
   const Ap = RuntimeData / (diffStop - dataBraekDowntime);
-  console.log("Availability_percent", Ap);
+  const celculateAP = async () => {
+    if (diffStop > 0) {
+      setAvailbailityPercent(Ap);
+    }
+  };
+
+  console.log(
+    "Availability_percent ทั้งหมด",
+    Ap,
+    RuntimeData,
+    diffStop,
+    dataBraekDowntime
+  );
   //------------------------------------------------------------
   //=========Quality_percent=====================================
 
