@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import React from "react";
-import "./i18n";
+import "./component/i18n";
 
 function MyApp({ Component, pageProps }: any) {
   const router = useRouter();
