@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import NgError from "./NgError";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import TextField from "@mui/material/TextField";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute" as "absolute",
@@ -37,6 +38,7 @@ const style = {
 };
 
 function QuickSearchToolbar() {
+  const { t, i18n } = useTranslation(); //language
   return (
     <>
       <Box
@@ -45,7 +47,7 @@ function QuickSearchToolbar() {
           pb: 0,
         }}
       >
-        <Typography sx={{ fontSize: 28 }}>NG Product</Typography>
+        <Typography sx={{ fontSize: 28 }}>{t("NGProduct")}</Typography>
         <GridToolbarQuickFilter
           quickFilterParser={(searchInput: string) =>
             searchInput
@@ -60,6 +62,7 @@ function QuickSearchToolbar() {
 }
 
 export default function QuickFilteringCustomizedGrid() {
+  const { t, i18n } = useTranslation(); //language
   const [openAdd, setOpenAdd] = useState(false);
   const handleOpen = () => setOpenAdd(true);
   const handleClose = () => setOpenAdd(false);
@@ -223,7 +226,7 @@ export default function QuickFilteringCustomizedGrid() {
   }));
 
   const handleClick = (event: any, cellValues: any) => {
-    SetConfirm(cellValues.row.NG_code + " " + cellValues.row.NG_qty + " Pcs ");
+    SetConfirm(cellValues.row.NG_code + " : " + cellValues.row.NG_qty);
     SetID(cellValues.row.id);
   };
   const handleClickEdit = (event: any, cellValues: any) => {
@@ -288,19 +291,19 @@ export default function QuickFilteringCustomizedGrid() {
       >
         <Box component="form" onSubmit={DelNG} noValidate sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Confirm delete
+            {t("ConfirmDelete")}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Do you want to delete NG code : {TextConfirm} ?
+            {t("detailConfirmDelete")}: {TextConfirm} {t("Pcs")} ?
             <div>
               <br />
             </div>
             <Stack direction="row" justifyContent="center" spacing={2}>
               <Button type="submit" variant="contained">
-                Yes
+                {t("SUBMIT")}
               </Button>
               <Button onClick={DeleteClose} variant="outlined" color="error">
-                No
+                {t("CLOSE")}
               </Button>
             </Stack>
           </Typography>
@@ -321,22 +324,22 @@ export default function QuickFilteringCustomizedGrid() {
           sx={{ ...style, width: 1000 }}
         >
           <Typography id="modal-modal-title" variant="h3" p={3}>
-            Edit NG
+            {t("EditNgQty")}
           </Typography>
           <Stack direction="row" justifyContent="center" spacing={4}>
-            <Typography sx={{ fontSize: 20, width: 150 }}>
-              NG code : {CodeShow}
+            <Typography sx={{ fontSize: 20, width: 200 }}>
+              {t("NgCode")} : {CodeShow}
             </Typography>
             <Typography sx={{ fontSize: 20, width: 300 }}>
-              Part :{PartShow}{" "}
+              {t("Part")} :{PartShow}{" "}
             </Typography>
-            <Typography sx={{ fontSize: 20, width: 200 }}>
-              Detail : {detailNG}
+            <Typography sx={{ fontSize: 20, width: 300 }}>
+              {t("Detail")} : {detailNG}
             </Typography>
 
             <TextField
-              sx={{ width: 300 }}
-              label="NG_qty"
+              sx={{ width: 100 }}
+              label={t("NgQty")}
               id="outlined-size-normal"
               type="number"
               InputLabelProps={{
@@ -349,10 +352,10 @@ export default function QuickFilteringCustomizedGrid() {
 
           <Stack direction="row" justifyContent="center" spacing={2} p={2}>
             <Button type="submit" variant="contained">
-              Submit
+              {t("SUBMIT")}
             </Button>
             <Button onClick={EditClose} variant="outlined" color="error">
-              Close
+              {t("CLOSE")}
             </Button>
           </Stack>
         </Box>

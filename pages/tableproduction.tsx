@@ -39,8 +39,8 @@ import FormControl from "@mui/material/FormControl";
 import { useRouter } from "next/router";
 import supabase from "../compunentConfig/supabase";
 import DowntimeError from "./component/DowntimeError";
-import { log } from "console";
-import { CLIENT_RENEG_LIMIT } from "tls";
+
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute" as "absolute",
@@ -84,6 +84,7 @@ const Item = styled(Paper)(({ theme }) => ({
 // This arrangement can be altered based on how we want the date's format to appear.
 
 function tableproduction() {
+  const { t, i18n } = useTranslation(); //language
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   const [loading1, setLoading1] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   //ระบุเวลา กด start pause stop
@@ -1428,9 +1429,9 @@ function tableproduction() {
                     aria-labelledby="category-a"
                     sx={{ height: 40, pl: 0 }}
                   >
-                    Date : {currentDate} <br /> Name station :{" "}
-                    {localStorage.getItem("Production_unit")} <br /> Shift :
-                    {showDaynight}
+                    {t("Date")} : {currentDate} <br /> {t("Name")}{" "}
+                    {t("station")} : {localStorage.getItem("Production_unit")}{" "}
+                    <br /> {t("Shift")} : {showDaynight}
                   </Box>
                 </Item>
                 <Item>
@@ -1442,7 +1443,7 @@ function tableproduction() {
                       color: "info.main",
                     }}
                   >
-                    Time Start
+                    {t("TIMESTART")}
                   </Box>
                   <Box
                     component="ul"
@@ -1451,7 +1452,7 @@ function tableproduction() {
                   >
                     <Typography>{times}</Typography>
                     <Typography>
-                      TimeStart : {localStorage.getItem("TimeStart")}
+                      {t("TIMESTART")} : {localStorage.getItem("TimeStart")}
                     </Typography>
                     {/* <Typography>TimePause : {timepause}</Typography>
                   <Typography>TimePasue-End : {timePE}</Typography> */}
@@ -1610,7 +1611,7 @@ function tableproduction() {
                   variant="outlined"
                   onClick={handlerClickStart}
                 >
-                  Start
+                  {t("START")}
                   <PlayCircleOutlineIcon fontSize="large" />
                 </Button>
               </Grid>
@@ -1628,7 +1629,7 @@ function tableproduction() {
                   variant="outlined"
                   onClick={handleOpenModal}
                 >
-                  Pause <PauseCircleOutlineIcon fontSize="large" />
+                  {t("pause")} <PauseCircleOutlineIcon fontSize="large" />
                 </Button>
               </Grid>
               <Grid xs={4} md={3} lg={3}>
@@ -1646,7 +1647,7 @@ function tableproduction() {
                   variant="outlined"
                   onClick={handleOpenModal3}
                 >
-                  Stop <StopCircleIcon fontSize="large" />
+                  {t("stop")} <StopCircleIcon fontSize="large" />
                 </Button>
               </Grid>
               <Grid container xs={12} md={12} lg={12} spacing={2}>
@@ -1674,14 +1675,13 @@ function tableproduction() {
             aria-describedby="child-modal-description"
           >
             <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-              <Typography variant="h1">Down Time</Typography>
+              <Typography variant="h1">{t("DownTime")}</Typography>
 
               <Typography sx={{ fontSize: 30 }}>
-                Time pause : {times}
+                {t("Time")} {t("pause")} : {times}
               </Typography>
-              <InputLabel sx={{ fontSize: 30 }}>Detail</InputLabel>
+              <InputLabel sx={{ fontSize: 30 }}>{t("Detail")}</InputLabel>
               <Select
-                label="Detals"
                 fullWidth
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
@@ -1717,13 +1717,13 @@ function tableproduction() {
                   sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
                   onClick={handleSubmitModal}
                 >
-                  <Typography onClick={start}>SUBMIT</Typography>
+                  <Typography onClick={start}>{t("SUBMIT")}</Typography>
                 </Item>
                 <Item
                   sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
                   onClick={handleCloseModal}
                 >
-                  <Typography>CLOSE</Typography>
+                  <Typography>{t("CLOSE")}</Typography>
                 </Item>
               </Stack>
             </Box>
@@ -1737,20 +1737,24 @@ function tableproduction() {
             aria-describedby="child-modal-description"
           >
             <Box sx={{ ...style1, width: 1080, height: 780 }} component="form">
-              <Typography style={{ fontSize: "80px" }}>Down Time</Typography>
+              <Typography style={{ fontSize: "80px" }}>
+                {t("DownTime")}
+              </Typography>
 
               <Typography style={{ fontSize: "30px" }}>
-                please push start when end of downtime
+                {t("Donwtimetell")}
               </Typography>
               <Typography style={{ fontSize: "30px" }}>
-                Detail : {menusplit[1] + " : " + menusplit[2]}
+                {t("Detail")} : {menusplit[1] + " : " + menusplit[2]}
               </Typography>
               <div style={{ textAlign: "center" }}>
                 <Typography style={{ fontSize: "50px" }}>
-                  Timer Downtime
+                  {t("TimerDowntime")}
                 </Typography>
                 <div style={{ fontSize: "100px" }}>{TimerDownTime}</div>
-                <Typography style={{ fontSize: "30px" }}>Running</Typography>
+                <Typography style={{ fontSize: "30px" }}>
+                  {t("Running")}
+                </Typography>
                 <Button
                   sx={{
                     width: 250,
@@ -1772,7 +1776,7 @@ function tableproduction() {
                       lineHeight: 2,
                     }}
                   >
-                    Continue
+                    {t("Continue")}
                   </Typography>
                 </Button>
               </div>
@@ -1787,9 +1791,13 @@ function tableproduction() {
             aria-describedby="child-modal-description"
           >
             <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-              <Typography sx={{ fontSize: 50 }}>Stop</Typography>
+              <Typography sx={{ fontSize: 50 }} fontSize="large">
+                {t("stop")}
+              </Typography>
 
-              <Typography sx={{ fontSize: 26 }}>Time Stop : {times}</Typography>
+              <Typography sx={{ fontSize: 26 }}>
+                {t("Time")} {t("stop")} : {times}
+              </Typography>
 
               <Box
                 component="span"
@@ -1803,7 +1811,7 @@ function tableproduction() {
                   variant="contained"
                   color="inherit"
                 >
-                  Edit OK_qty
+                  {t("EditOkQty")}
                 </Button>
                 <Button
                   sx={{ p: 1, m: 1, bgcolor: "red", color: "#000000" }}
@@ -1811,7 +1819,7 @@ function tableproduction() {
                   variant="contained"
                   color="inherit"
                 >
-                  Edit NG_qty
+                  {t("EditNgQty")}
                 </Button>
               </Box>
               <div>
@@ -1905,13 +1913,13 @@ function tableproduction() {
                   onClick={ConfrimEndOpen}
                   //
                 >
-                  SUBMIT
+                  {t("SUBMIT")}
                 </Item>
                 <Item
                   sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
                   onClick={handleCloseModal3}
                 >
-                  CLOSE
+                  {t("CLOSE")}
                 </Item>
               </Stack>
             </Box>
@@ -1927,10 +1935,12 @@ function tableproduction() {
           >
             <Box sx={{ ...style, width: "auto" }} component="form">
               <Typography variant="h3" gutterBottom>
-                Edit OK_qty
+                {t("EditOkQty")}
               </Typography>
 
-              <Typography>Time Edit : {times}</Typography>
+              <Typography>
+                {t("Time")} {t("Edit")} : {times}
+              </Typography>
               <br />
               {/* <InputLabel>OK_qty</InputLabel> */}
 
@@ -1959,13 +1969,13 @@ function tableproduction() {
                   sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
                   onClick={editOK_NG}
                 >
-                  <Typography>SUBMIT</Typography>
+                  <Typography>{t("SUBMIT")}</Typography>
                 </Item>
                 <Item
                   sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
                   onClick={handleCloseModal4}
                 >
-                  <Typography>CLOSE</Typography>
+                  <Typography>{t("CLOSE")}</Typography>
                 </Item>
               </Stack>
             </Box>
@@ -1981,7 +1991,7 @@ function tableproduction() {
             aria-describedby="child-modal-description"
           >
             <Box sx={{ ...style, height: 580, width: 1000 }} component="form">
-              <Typography variant="h4"> Edit NG_qty</Typography>
+              <Typography variant="h4"> {t("EditNgQty")}</Typography>
 
               {/* <InputLabel>OK_qty</InputLabel> */}
               <Box
@@ -1996,7 +2006,7 @@ function tableproduction() {
                   color="inherit"
                   onClick={handleCloseModal5}
                 >
-                  CLOSE
+                  {t("CLOSE")}
                 </Button>
               </Box>
               <Box>
@@ -2014,9 +2024,9 @@ function tableproduction() {
             aria-describedby="child-modal-description"
           >
             <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-              <Typography variant="h1">NG Product</Typography>
+              <Typography variant="h1">{t("NGProduct")}</Typography>
 
-              <Typography sx={{ fontSize: 30 }}>NG Code: </Typography>
+              <Typography sx={{ fontSize: 30 }}>{t("NgCode")}: </Typography>
 
               <Select
                 label="Detals"
@@ -2058,7 +2068,9 @@ function tableproduction() {
                   </MenuItem>
                 ))}
               </Select>
-              <Typography sx={{ fontSize: 30 }}>NG Part Component: </Typography>
+              <Typography sx={{ fontSize: 30 }}>
+                {t("NGPartComponent")}:{" "}
+              </Typography>
               <Select
                 fullWidth
                 value={ngCompunent}
@@ -2122,7 +2134,7 @@ function tableproduction() {
               </Select>
               {OtheText()}
               <InputLabel id="demo-simple-select-label" sx={{ fontSize: 30 }}>
-                NG qty
+                {t("NgQty")}
               </InputLabel>
               <Select
                 sx={{

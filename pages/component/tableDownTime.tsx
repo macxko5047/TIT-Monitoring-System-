@@ -5,8 +5,10 @@ import { DataGrid, GridToolbarQuickFilter } from "@mui/x-data-grid";
 import { Typography } from "@mui/material";
 import supabase from "../../compunentConfig/supabase";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTranslation } from "react-i18next";
 
 function QuickSearchToolbar() {
+  const { t, i18n } = useTranslation(); //language
   return (
     <>
       <Box
@@ -15,7 +17,7 @@ function QuickSearchToolbar() {
           pb: 0,
         }}
       >
-        <Typography sx={{ fontSize: 28 }}>Down time</Typography>
+        <Typography sx={{ fontSize: 28 }}>{t("DownTime")}</Typography>
         <GridToolbarQuickFilter
           quickFilterParser={(searchInput: string) =>
             searchInput

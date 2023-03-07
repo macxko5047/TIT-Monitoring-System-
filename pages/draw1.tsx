@@ -24,6 +24,9 @@ import Tableproduction from "./tableproduction";
 import Modal from "@mui/material/Modal";
 import Grid from "@mui/material/Grid";
 import Alert from "@mui/joy/Alert";
+import LanguageSharpIcon from "@mui/icons-material/LanguageSharp";
+import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
 
 const style = {
   position: "absolute" as "absolute",
@@ -90,6 +93,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 function PersistentDrawerLeft() {
   const theme = useTheme();
   const router = useRouter();
+  const [lenguages, setLanguages] = useState<string>("");
   // ตัวเช็คหน้า workOder ถ้าไม่มี WorkOder ใน localstorage
   // ให้กลับไปหน้าเลือก workoder ก่อน
   useEffect(() => {
@@ -111,6 +115,10 @@ function PersistentDrawerLeft() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const [language, setLanguage] = useState<null | HTMLElement>(null);
+  const handleMenulanguage = (event: React.MouseEvent<HTMLElement>) => {
+    setLanguage(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -303,12 +311,22 @@ function PersistentDrawerLeft() {
     }
   };
 
+  //=============================set lenguage ========================
+
+  // i18n.changeLanguage("en", (err, t) => {
+  //   if (err) return console.log("something went wrong loading", err);
+  //   t("key"); // -> same as i18next.t
+  // });
+
+  //------------------------------------------------------------------
+
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
   if (!mounted) return null;
+
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   return (
     <div>
@@ -334,7 +352,7 @@ function PersistentDrawerLeft() {
               >
                 Production monitoring
               </Typography>
-
+              {localStorage.getItem("userName")}
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -343,7 +361,7 @@ function PersistentDrawerLeft() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                <AccountCircle /> &nbsp; {localStorage.getItem("userName")}
+                <AccountCircle />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -365,6 +383,44 @@ function PersistentDrawerLeft() {
                   {localStorage.getItem("Level")}
                 </MenuItem>
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenulanguage}
+                color="inherit"
+              >
+                <LanguageSharpIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={language}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(language)}
+                onClose={(e) => setLanguage(null)}
+              >
+                <MenuItem onClick={(e) => i18n.changeLanguage("th")}>
+                  TH
+                </MenuItem>
+                <MenuItem onClick={(e) => i18n.changeLanguage("en")}>
+                  EN
+                </MenuItem>
+                <MenuItem onClick={(e) => i18n.changeLanguage("chi")}>
+                  CHI
+                </MenuItem>
+                <MenuItem onClick={(e) => i18n.changeLanguage("vn")}>
+                  VN
+                </MenuItem>
               </Menu>
             </Toolbar>
           </AppBar>
