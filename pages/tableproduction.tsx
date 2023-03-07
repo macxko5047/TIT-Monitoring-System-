@@ -8,8 +8,8 @@ import Grid from "@mui/material/Unstable_Grid2";
 // import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Loadings from "./component/loadings";
-import Tablework2 from "./component/tablework2";
-import Tablework3 from "./component/tablework3";
+import Tablework2 from "./component/tableDownTime";
+import Tablework3 from "./component/tableNG";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
@@ -1406,685 +1406,672 @@ function tableproduction() {
     ); //รอโหลดข้อมูล
   //ทำเช็ค useEffect ทำงานระหว่าง cliant กับ server **ต้องทำความเข้าใจ useEffect เพิ่มเติม
   return (
-    <Box>
-      <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={4}>
-          <Grid container xs={12} md={12} lg={12} spacing={2}>
-            <Grid xs={12} md={3} lg={3}>
-              <Item>
-                <Box
-                  id="category-a"
-                  sx={{
-                    fontSize: "20px",
-                    textTransform: "uppercase",
-                    color: "info.main",
-                  }}
-                >
-                  TIT.company
-                </Box>
-                <Box
-                  component="ul"
-                  aria-labelledby="category-a"
-                  sx={{ height: 40, pl: 0 }}
-                >
-                  Date : {currentDate} <br /> Name station :{" "}
-                  {localStorage.getItem("Production_unit")} <br /> Shift :
-                  {showDaynight}
-                </Box>
-              </Item>
-              <Item>
-                <Box
-                  id="category-a"
-                  sx={{
-                    fontSize: "20px",
-                    textTransform: "uppercase",
-                    color: "info.main",
-                  }}
-                >
-                  Time Start
-                </Box>
-                <Box
-                  component="ul"
-                  aria-labelledby="category-a"
-                  sx={{ height: 55, pl: 0 }}
-                >
-                  <Typography>{times}</Typography>
-                  <Typography>
-                    TimeStart : {localStorage.getItem("TimeStart")}
-                  </Typography>
-                  {/* <Typography>TimePause : {timepause}</Typography>
+    <div>
+      <Box>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={4}>
+            <Grid container xs={12} md={12} lg={12} spacing={2}>
+              <Grid xs={12} md={3} lg={3}>
+                <Item>
+                  <Box
+                    id="category-a"
+                    sx={{
+                      fontSize: "20px",
+                      textTransform: "uppercase",
+                      color: "info.main",
+                    }}
+                  >
+                    TIT.company
+                  </Box>
+                  <Box
+                    component="ul"
+                    aria-labelledby="category-a"
+                    sx={{ height: 40, pl: 0 }}
+                  >
+                    Date : {currentDate} <br /> Name station :{" "}
+                    {localStorage.getItem("Production_unit")} <br /> Shift :
+                    {showDaynight}
+                  </Box>
+                </Item>
+                <Item>
+                  <Box
+                    id="category-a"
+                    sx={{
+                      fontSize: "20px",
+                      textTransform: "uppercase",
+                      color: "info.main",
+                    }}
+                  >
+                    Time Start
+                  </Box>
+                  <Box
+                    component="ul"
+                    aria-labelledby="category-a"
+                    sx={{ height: 55, pl: 0 }}
+                  >
+                    <Typography>{times}</Typography>
+                    <Typography>
+                      TimeStart : {localStorage.getItem("TimeStart")}
+                    </Typography>
+                    {/* <Typography>TimePause : {timepause}</Typography>
                   <Typography>TimePasue-End : {timePE}</Typography> */}
-                  <Typography>Timestop : {timestop}</Typography>
-                  {/* <Typography>DownTime : {diffs}m.</Typography> */}
-                </Box>
-              </Item>
-            </Grid>
+                    {/* <Typography>Timestop : {timestop}</Typography> */}
+                    {/* <Typography>DownTime : {diffs}m.</Typography> */}
+                  </Box>
+                </Item>
+              </Grid>
 
-            <Grid xs={12} md={4.5} lg={4.5}>
-              <Button
-                sx={{ height: "100%", width: "100%", bgcolor: "#7CFC00" }}
-                onClick={ChOkay}
-                variant="contained"
-                color="inherit"
-              >
-                {/* <Arcade /> */}
-                <Typography
-                  // onClick={testClick}
-                  sx={{ p: 1, fontSize: "60px", color: "#000000" }}
+              <Grid xs={12} md={4.5} lg={4.5}>
+                <Button
+                  sx={{ height: "100%", width: "100%", bgcolor: "#7CFC00" }}
+                  onClick={ChOkay}
+                  variant="contained"
+                  color="inherit"
                 >
-                  OK
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
+                  {/* <Arcade /> */}
+                  <Typography
+                    // onClick={testClick}
+                    sx={{ p: 1, fontSize: "60px", color: "#000000" }}
+                  >
+                    OK
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
 
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    {dataOK}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    /
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    {wo_OpenQty}
+                  </Typography>
+                  <Typography sx={{ p: 1 }}>
+                    <Loadings />
+                  </Typography>
+                </Button>
+              </Grid>
+              <Grid xs={12} md={4.5} lg={4.5}>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  sx={{ height: "100%", width: "100%", bgcolor: "#FF0000" }}
+                  onClick={handleOpenNG}
                 >
-                  {dataOK}
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
-                >
-                  /
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
-                >
-                  {wo_OpenQty}
-                </Typography>
-                <Typography sx={{ p: 1 }}>
-                  <Loadings />
-                </Typography>
-              </Button>
-            </Grid>
-            <Grid xs={12} md={4.5} lg={4.5}>
-              <Button
-                variant="contained"
-                color="inherit"
-                sx={{ height: "100%", width: "100%", bgcolor: "#FF0000" }}
-                onClick={handleOpenNG}
-              >
-                <Typography sx={{ p: 1, fontSize: "60px", color: "#000000" }}>
-                  NG
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
+                  <Typography sx={{ p: 1, fontSize: "60px", color: "#000000" }}>
+                    NG
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
 
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
-                >
-                  {dataNGShow}
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
-                >
-                  /
-                </Typography>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    color: "#000000",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                  variant="h4"
-                >
-                  {wo_OpenQty}
-                </Typography>
-                <Typography sx={{ p: 1 }}>
-                  <LoadingsNG />
-                </Typography>
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid container xs={12} md={12} lg={12} spacing={2}>
-            <Grid xs={12} md={3} lg={3}>
-              <Item sx={{ height: "100%", width: "100%" }}>
-                <Box
-                  id="category-c"
-                  sx={{
-                    fontSize: "28px",
-                    textTransform: "uppercase",
-                    color: "error.main",
-                    p: 1,
-                  }}
-                >
-                  Item Oder
-                </Box>
-                <Typography
-                  sx={{
-                    fontSize: "18px",
-                  }}
-                >
-                  WorkOder ID : {localStorage.getItem("Work_order_id")}
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "18px",
-                  }}
-                >
-                  Item : {localStorage.getItem("ItemNumber")}
-                </Typography>
-                PD Key: {localStorage.getItem("PD_key")}
-              </Item>
-            </Grid>
-            <Grid xs={4} md={3} lg={3}>
-              <Button
-                sx={{
-                  height: "100%",
-                  width: "100%",
-                  fontSize: "26px",
-                  textTransform: "uppercase",
-                  color: "#000000",
-                  lineHeight: 5,
-                  bgcolor: "#98FB98",
-                  p: 1,
-                }}
-                variant="outlined"
-                onClick={handlerClickStart}
-              >
-                Start
-                <PlayCircleOutlineIcon fontSize="large" />
-              </Button>
-            </Grid>
-            <Grid xs={4} md={3} lg={3}>
-              <Button
-                sx={{
-                  height: "100%",
-                  width: "100%",
-                  fontSize: "26px",
-                  textTransform: "uppercase",
-                  color: "#000000",
-                  lineHeight: 5,
-                  bgcolor: "#FFD700",
-                }}
-                variant="outlined"
-                onClick={handleOpenModal}
-              >
-                Pause <PauseCircleOutlineIcon fontSize="large" />
-              </Button>
-            </Grid>
-            <Grid xs={4} md={3} lg={3}>
-              <Button
-                sx={{
-                  height: "100%",
-                  width: "100%",
-                  fontSize: "26px",
-                  textTransform: "uppercase",
-                  color: "#000000",
-                  textAlign: "center",
-                  lineHeight: 5,
-                  bgcolor: "#FA8072",
-                }}
-                variant="outlined"
-                onClick={handleOpenModal3}
-              >
-                Stop <StopCircleIcon fontSize="large" />
-              </Button>
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    {dataNGShow}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    /
+                  </Typography>
+                  <Typography
+                    sx={{
+                      display: "flex",
+                      color: "#000000",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                    variant="h4"
+                  >
+                    {wo_OpenQty}
+                  </Typography>
+                  <Typography sx={{ p: 1 }}>
+                    <LoadingsNG />
+                  </Typography>
+                </Button>
+              </Grid>
             </Grid>
             <Grid container xs={12} md={12} lg={12} spacing={2}>
-              <Grid xs={12} md={6} lg={6}>
-                <Item>
-                  <Tablework2 />
+              <Grid xs={12} md={3} lg={3}>
+                <Item sx={{ height: "100%", width: "100%" }}>
+                  <Box
+                    id="category-c"
+                    sx={{
+                      fontSize: "28px",
+                      textTransform: "uppercase",
+                      color: "error.main",
+                      p: 1,
+                    }}
+                  >
+                    Item Oder
+                  </Box>
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                    }}
+                  >
+                    WorkOder ID : {localStorage.getItem("Work_order_id")}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                    }}
+                  >
+                    Item : {localStorage.getItem("ItemNumber")}
+                  </Typography>
+                  PD Key: {localStorage.getItem("PD_key")}
                 </Item>
               </Grid>
-              <Grid xs={12} md={6} lg={6}>
-                <Item>
-                  <Tablework3 />
-                </Item>
+              <Grid xs={4} md={3} lg={3}>
+                <Button
+                  sx={{
+                    height: "100%",
+                    width: "100%",
+                    fontSize: "26px",
+                    textTransform: "uppercase",
+                    color: "#000000",
+                    lineHeight: 5,
+                    bgcolor: "#98FB98",
+                    p: 1,
+                  }}
+                  variant="outlined"
+                  onClick={handlerClickStart}
+                >
+                  Start
+                  <PlayCircleOutlineIcon fontSize="large" />
+                </Button>
+              </Grid>
+              <Grid xs={4} md={3} lg={3}>
+                <Button
+                  sx={{
+                    height: "100%",
+                    width: "100%",
+                    fontSize: "26px",
+                    textTransform: "uppercase",
+                    color: "#000000",
+                    lineHeight: 5,
+                    bgcolor: "#FFD700",
+                  }}
+                  variant="outlined"
+                  onClick={handleOpenModal}
+                >
+                  Pause <PauseCircleOutlineIcon fontSize="large" />
+                </Button>
+              </Grid>
+              <Grid xs={4} md={3} lg={3}>
+                <Button
+                  sx={{
+                    height: "100%",
+                    width: "100%",
+                    fontSize: "26px",
+                    textTransform: "uppercase",
+                    color: "#000000",
+                    textAlign: "center",
+                    lineHeight: 5,
+                    bgcolor: "#FA8072",
+                  }}
+                  variant="outlined"
+                  onClick={handleOpenModal3}
+                >
+                  Stop <StopCircleIcon fontSize="large" />
+                </Button>
+              </Grid>
+              <Grid container xs={12} md={12} lg={12} spacing={2}>
+                <Grid xs={12} md={6} lg={6}>
+                  <Item>
+                    <Tablework2 />
+                  </Item>
+                </Grid>
+                <Grid xs={12} md={6} lg={6}>
+                  <Item>
+                    <Tablework3 />
+                  </Item>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
 
-        <Editpeople />
-        {/* modal Pause Downtime */}
-        <Modal
-          hideBackdrop
-          open={openModal}
-          onClose={handleCloseModal}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-            <Typography variant="h1">Down Time</Typography>
+          <Editpeople />
+          {/* modal Pause Downtime */}
+          <Modal
+            hideBackdrop
+            open={openModal}
+            onClose={handleCloseModal}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
+              <Typography variant="h1">Down Time</Typography>
 
-            <Typography sx={{ fontSize: 30 }}>Time pause : {times}</Typography>
-            <InputLabel sx={{ fontSize: 30 }}>Detail</InputLabel>
-            <Select
-              label="Detals"
-              fullWidth
-              value={details}
-              onChange={(event) => setDetails(event.target.value)}
-            >
-              <MenuItem sx={{ fontSize: 28 }} value="">
-                <em>None</em>
-              </MenuItem>
-              {datamenu.map((menus: any) => (
-                <MenuItem
-                  key={menus.code}
-                  sx={{ fontSize: 28 }}
-                  value={
-                    menus.code + ":" + menus.desc_th + ":" + menus.desc_china
-                  }
-                >
-                  {menus.code} : {menus.desc_th} : {menus.desc_china}
-                </MenuItem>
-              ))}
-            </Select>
-            <div>
-              <br />
-            </div>
-            {TextError1}
-
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={12}
-              sx={{ m: 1, p: 5 }}
-            >
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
-                onClick={handleSubmitModal}
-              >
-                <Typography onClick={start}>SUBMIT</Typography>
-              </Item>
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
-                onClick={handleCloseModal}
-              >
-                <Typography>CLOSE</Typography>
-              </Item>
-            </Stack>
-          </Box>
-        </Modal>
-        {/* modal รอกดปุ่ม start */}
-        <Modal
-          hideBackdrop
-          open={openModal1}
-          onClose={handleCloseModal1}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style1, width: 1080, height: 780 }} component="form">
-            <Typography style={{ fontSize: "80px" }}>Down Time</Typography>
-
-            <Typography style={{ fontSize: "30px" }}>
-              please push start when end of downtime
-            </Typography>
-            <Typography style={{ fontSize: "30px" }}>
-              Detail : {menusplit[1] + " : " + menusplit[2]}
-            </Typography>
-            <div style={{ textAlign: "center" }}>
-              <Typography style={{ fontSize: "50px" }}>
-                Timer Downtime
+              <Typography sx={{ fontSize: 30 }}>
+                Time pause : {times}
               </Typography>
-              <div style={{ fontSize: "100px" }}>{TimerDownTime}</div>
-              <Typography style={{ fontSize: "30px" }}>Running</Typography>
-              <Button
-                sx={{
-                  width: 250,
-                  height: 150,
-                  p: 2.5,
-                  color: "#000000",
-                  bgcolor: "#7CFC00",
-                  m: 5,
-                }}
-                variant="contained"
-                color="inherit"
-                onClick={handlerContinue}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "30px",
-                    textAlign: "center",
-                    textTransform: "uppercase",
-                    lineHeight: 2,
-                  }}
-                >
-                  Continue
-                </Typography>
-              </Button>
-            </div>
-          </Box>
-        </Modal>
-        {/* Modal stop push confirm */}
-        <Modal
-          hideBackdrop
-          open={openModal3}
-          onClose={handleCloseModal3}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-            <Typography sx={{ fontSize: 50 }}>Stop</Typography>
-
-            <Typography sx={{ fontSize: 26 }}>Time Stop : {times}</Typography>
-
-            <Box
-              component="span"
-              display="flex"
-              justifyContent="right"
-              alignItems="center"
-            >
-              <Button
-                sx={{ p: 1, m: 1, bgcolor: "#7CFC00", color: "#000000" }}
-                onClick={handleOpenModal4}
-                variant="contained"
-                color="inherit"
-              >
-                Edit OK_qty
-              </Button>
-              <Button
-                sx={{ p: 1, m: 1, bgcolor: "red", color: "#000000" }}
-                onClick={handleOpenModal5}
-                variant="contained"
-                color="inherit"
-              >
-                Edit NG_qty
-              </Button>
-            </Box>
-            <div>
-              <Grid xs={12} lg={12} container spacing={2}>
-                <Grid xs={12} lg={12}>
-                  <TableContainer component={Paper}>
-                    <Table
-                      style={{ width: "auto", tableLayout: "auto" }}
-                      aria-label="simple table"
-                    >
-                      <TableHead>
-                        <TableRow>
-                          <TableCell align="right">PD_key</TableCell>
-                          <TableCell align="right">Work_order_id</TableCell>
-                          <TableCell align="right">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Item_number&nbsp;&nbsp;&nbsp;&nbsp;
-                          </TableCell>
-                          <TableCell align="right">Production_unit</TableCell>
-                          <TableCell align="right">Production_date</TableCell>
-                          <TableCell align="right">OK_qty</TableCell>
-                          <TableCell align="right">NG_qty</TableCell>
-                          <TableCell align="right">Open_qty</TableCell>
-                          <TableCell align="right">Shift</TableCell>
-                          <TableCell align="right">Order_qty</TableCell>
-                          <TableCell align="right">Begin_time</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {dataProduction_history.map((rowss: any) => (
-                          <TableRow
-                            key={rowss.PD_key}
-                            sx={{
-                              "&:last-child td, &:last-child th": {
-                                border: 0,
-                              },
-                            }}
-                          >
-                            <TableCell align="right">{rowss.PD_key}</TableCell>
-                            <TableCell align="right">
-                              {rowss.Work_order_id}
-                            </TableCell>
-                            <TableCell align="right" style={{ width: 250 }}>
-                              {rowss.Item_number}
-                            </TableCell>
-                            <TableCell align="right">
-                              {rowss.Production_unit}
-                            </TableCell>
-                            <TableCell align="right">
-                              {rowss.Production_date}
-                            </TableCell>
-                            <TableCell align="right">{rowss.OK_qty}</TableCell>
-                            <TableCell align="right">{rowss.NG_qty}</TableCell>
-                            <TableCell align="right">
-                              {rowss.Open_qty}
-                            </TableCell>
-                            <TableCell align="right">{rowss.Shift}</TableCell>
-                            <TableCell align="right">
-                              {rowss.Order_qty}
-                            </TableCell>
-                            <TableCell align="right">
-                              {rowss.Begin_time}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </Grid>
-
-                <Grid xs={12} lg={12}>
-                  <TablePeople />
-                </Grid>
-              </Grid>
-            </div>
-
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={12}
-              sx={{ m: 2 }}
-            >
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
-                onClick={ConfrimEndOpen}
-                //
-              >
-                SUBMIT
-              </Item>
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
-                onClick={handleCloseModal3}
-              >
-                CLOSE
-              </Item>
-            </Stack>
-          </Box>
-        </Modal>
-
-        {/* Modal Edit OK_qty Time Stop */}
-        <Modal
-          hideBackdrop
-          open={openModal4}
-          onClose={handleCloseModal4}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, width: "auto" }} component="form">
-            <Typography variant="h3" gutterBottom>
-              Edit OK_qty
-            </Typography>
-
-            <Typography>Time Edit : {times}</Typography>
-            <br />
-            {/* <InputLabel>OK_qty</InputLabel> */}
-
-            <Box>
-              <TextField
-                label="OK_qty"
-                id="outlined-size-normal"
-                type="number"
+              <InputLabel sx={{ fontSize: 30 }}>Detail</InputLabel>
+              <Select
+                label="Detals"
                 fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={dataOK_qty}
-                onChange={(event) => setDataOK_qty(event.target.value)}
-              />
-            </Box>
-
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={12}
-              sx={{ m: 1, p: 5 }}
-            >
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
-                onClick={editOK_NG}
+                value={details}
+                onChange={(event) => setDetails(event.target.value)}
               >
-                <Typography>SUBMIT</Typography>
-              </Item>
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
-                onClick={handleCloseModal4}
-              >
-                <Typography>CLOSE</Typography>
-              </Item>
-            </Stack>
-          </Box>
-        </Modal>
-        {/* ------------------- */}
-
-        {/* Modal Edit NG_qty Time Stop */}
-        <Modal
-          hideBackdrop
-          open={openModal5}
-          onClose={handleCloseModal5}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, height: 580, width: 1000 }} component="form">
-            <Typography variant="h4"> Edit NG_qty</Typography>
-
-            {/* <InputLabel>OK_qty</InputLabel> */}
-            <Box
-              component="span"
-              display="flex"
-              justifyContent="right"
-              alignItems="center"
-            >
-              <Button
-                sx={{ p: 1, m: 1, bgcolor: "#FF0000", color: "#000000" }}
-                variant="contained"
-                color="inherit"
-                onClick={handleCloseModal5}
-              >
-                CLOSE
-              </Button>
-            </Box>
-            <Box>
-              <Tablework3 />
-            </Box>
-          </Box>
-        </Modal>
-
-        {/* Modal NG */}
-        <Modal
-          hideBackdrop
-          open={openAdd}
-          onClose={handleCloseNG}
-          aria-labelledby="child-modal-title"
-          aria-describedby="child-modal-description"
-        >
-          <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
-            <Typography variant="h1">NG Product</Typography>
-
-            <Typography sx={{ fontSize: 30 }}>NG Code: </Typography>
-
-            <Select
-              label="Detals"
-              fullWidth
-              value={selectNG}
-              onChange={(event) => setNG(event.target.value)}
-            >
-              {ShowCodeNG.map((menus: any) => (
-                <MenuItem
-                  key={menus.code}
-                  sx={{ fontSize: 28 }}
-                  value={menus.code + ":" + menus.desc + ":" + menus.desc_china}
-                >
-                  <Stack
-                    direction="row"
-                    justifyContent="space-around"
-                    alignItems="center"
-                    spacing={12}
-                    sx={{ m: 1, p: 1 }}
-                  >
-                    <Typography
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: 26,
-                        color: "#FF0000",
-                      }}
-                    >
-                      {menus.code}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                      {menus.desc}
-                    </Typography>
-                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                      {menus.desc_china}
-                    </Typography>
-                  </Stack>
+                <MenuItem sx={{ fontSize: 28 }} value="">
+                  <em>None</em>
                 </MenuItem>
-              ))}
-            </Select>
-            <Typography sx={{ fontSize: 30 }}>NG Part Component: </Typography>
-            <Select
-              fullWidth
-              value={ngCompunent}
-              onChange={(event) => setNgCompunent(event.target.value)}
-            >
-              <MenuItem sx={{ fontSize: 30 }} value="">
-                <em>NOne</em>
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={"Other"}>
-                <em>Other</em>
-              </MenuItem>
+                {datamenu.map((menus: any) => (
+                  <MenuItem
+                    key={menus.code}
+                    sx={{ fontSize: 28 }}
+                    value={
+                      menus.code + ":" + menus.desc_th + ":" + menus.desc_china
+                    }
+                  >
+                    {menus.code} : {menus.desc_th} : {menus.desc_china}
+                  </MenuItem>
+                ))}
+              </Select>
+              <div>
+                <br />
+              </div>
+              {TextError1}
 
-              <MenuItem sx={{ fontSize: 30 }} value={itemNumber}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-around"
-                  alignItems="center"
-                  spacing={12}
-                  sx={{ m: 1, p: 1 }}
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 5 }}
+              >
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
+                  onClick={handleSubmitModal}
+                >
+                  <Typography onClick={start}>SUBMIT</Typography>
+                </Item>
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
+                  onClick={handleCloseModal}
+                >
+                  <Typography>CLOSE</Typography>
+                </Item>
+              </Stack>
+            </Box>
+          </Modal>
+          {/* modal รอกดปุ่ม start */}
+          <Modal
+            hideBackdrop
+            open={openModal1}
+            onClose={handleCloseModal1}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style1, width: 1080, height: 780 }} component="form">
+              <Typography style={{ fontSize: "80px" }}>Down Time</Typography>
+
+              <Typography style={{ fontSize: "30px" }}>
+                please push start when end of downtime
+              </Typography>
+              <Typography style={{ fontSize: "30px" }}>
+                Detail : {menusplit[1] + " : " + menusplit[2]}
+              </Typography>
+              <div style={{ textAlign: "center" }}>
+                <Typography style={{ fontSize: "50px" }}>
+                  Timer Downtime
+                </Typography>
+                <div style={{ fontSize: "100px" }}>{TimerDownTime}</div>
+                <Typography style={{ fontSize: "30px" }}>Running</Typography>
+                <Button
+                  sx={{
+                    width: 250,
+                    height: 150,
+                    p: 2.5,
+                    color: "#000000",
+                    bgcolor: "#7CFC00",
+                    m: 5,
+                  }}
+                  variant="contained"
+                  color="inherit"
+                  onClick={handlerContinue}
                 >
                   <Typography
                     sx={{
-                      fontWeight: "bold",
-                      fontSize: 26,
-                      color: "#FF0000",
+                      fontSize: "30px",
+                      textAlign: "center",
+                      textTransform: "uppercase",
+                      lineHeight: 2,
                     }}
                   >
-                    {itemNumber}
+                    Continue
                   </Typography>
-                  <Typography sx={{ fontSize: 24, color: "#00BFFF" }}>
-                    Finish Good
-                  </Typography>
-                </Stack>
-              </MenuItem>
+                </Button>
+              </div>
+            </Box>
+          </Modal>
+          {/* Modal stop push confirm */}
+          <Modal
+            hideBackdrop
+            open={openModal3}
+            onClose={handleCloseModal3}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
+              <Typography sx={{ fontSize: 50 }}>Stop</Typography>
 
-              {bom_ract.map((menus: any) => (
-                <MenuItem key={menus.component} value={menus.component}>
+              <Typography sx={{ fontSize: 26 }}>Time Stop : {times}</Typography>
+
+              <Box
+                component="span"
+                display="flex"
+                justifyContent="right"
+                alignItems="center"
+              >
+                <Button
+                  sx={{ p: 1, m: 1, bgcolor: "#7CFC00", color: "#000000" }}
+                  onClick={handleOpenModal4}
+                  variant="contained"
+                  color="inherit"
+                >
+                  Edit OK_qty
+                </Button>
+                <Button
+                  sx={{ p: 1, m: 1, bgcolor: "red", color: "#000000" }}
+                  onClick={handleOpenModal5}
+                  variant="contained"
+                  color="inherit"
+                >
+                  Edit NG_qty
+                </Button>
+              </Box>
+              <div>
+                <Grid xs={12} lg={12} container spacing={2}>
+                  <Grid xs={12} lg={12}>
+                    <TableContainer component={Paper}>
+                      <Table
+                        style={{ width: "auto", tableLayout: "auto" }}
+                        aria-label="simple table"
+                      >
+                        <TableHead>
+                          <TableRow>
+                            <TableCell align="right">PD_key</TableCell>
+                            <TableCell align="right">Work_order_id</TableCell>
+                            <TableCell align="right">
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Item_number&nbsp;&nbsp;&nbsp;&nbsp;
+                            </TableCell>
+                            <TableCell align="right">Production_unit</TableCell>
+                            <TableCell align="right">Production_date</TableCell>
+                            <TableCell align="right">OK_qty</TableCell>
+                            <TableCell align="right">NG_qty</TableCell>
+                            <TableCell align="right">Open_qty</TableCell>
+                            <TableCell align="right">Shift</TableCell>
+                            <TableCell align="right">Order_qty</TableCell>
+                            <TableCell align="right">Begin_time</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {dataProduction_history.map((rowss: any) => (
+                            <TableRow
+                              key={rowss.PD_key}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                              }}
+                            >
+                              <TableCell align="right">
+                                {rowss.PD_key}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.Work_order_id}
+                              </TableCell>
+                              <TableCell align="right" style={{ width: 250 }}>
+                                {rowss.Item_number}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.Production_unit}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.Production_date}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.OK_qty}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.NG_qty}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.Open_qty}
+                              </TableCell>
+                              <TableCell align="right">{rowss.Shift}</TableCell>
+                              <TableCell align="right">
+                                {rowss.Order_qty}
+                              </TableCell>
+                              <TableCell align="right">
+                                {rowss.Begin_time}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
+
+                  <Grid xs={12} lg={12}>
+                    <TablePeople />
+                  </Grid>
+                </Grid>
+              </div>
+
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 2 }}
+              >
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
+                  onClick={ConfrimEndOpen}
+                  //
+                >
+                  SUBMIT
+                </Item>
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
+                  onClick={handleCloseModal3}
+                >
+                  CLOSE
+                </Item>
+              </Stack>
+            </Box>
+          </Modal>
+
+          {/* Modal Edit OK_qty Time Stop */}
+          <Modal
+            hideBackdrop
+            open={openModal4}
+            onClose={handleCloseModal4}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style, width: "auto" }} component="form">
+              <Typography variant="h3" gutterBottom>
+                Edit OK_qty
+              </Typography>
+
+              <Typography>Time Edit : {times}</Typography>
+              <br />
+              {/* <InputLabel>OK_qty</InputLabel> */}
+
+              <Box>
+                <TextField
+                  label="OK_qty"
+                  id="outlined-size-normal"
+                  type="number"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  value={dataOK_qty}
+                  onChange={(event) => setDataOK_qty(event.target.value)}
+                />
+              </Box>
+
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 5 }}
+              >
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
+                  onClick={editOK_NG}
+                >
+                  <Typography>SUBMIT</Typography>
+                </Item>
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
+                  onClick={handleCloseModal4}
+                >
+                  <Typography>CLOSE</Typography>
+                </Item>
+              </Stack>
+            </Box>
+          </Modal>
+          {/* ------------------- */}
+
+          {/* Modal Edit NG_qty Time Stop */}
+          <Modal
+            hideBackdrop
+            open={openModal5}
+            onClose={handleCloseModal5}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style, height: 580, width: 1000 }} component="form">
+              <Typography variant="h4"> Edit NG_qty</Typography>
+
+              {/* <InputLabel>OK_qty</InputLabel> */}
+              <Box
+                component="span"
+                display="flex"
+                justifyContent="right"
+                alignItems="center"
+              >
+                <Button
+                  sx={{ p: 1, m: 1, bgcolor: "#FF0000", color: "#000000" }}
+                  variant="contained"
+                  color="inherit"
+                  onClick={handleCloseModal5}
+                >
+                  CLOSE
+                </Button>
+              </Box>
+              <Box>
+                <Tablework3 />
+              </Box>
+            </Box>
+          </Modal>
+
+          {/* Modal NG */}
+          <Modal
+            hideBackdrop
+            open={openAdd}
+            onClose={handleCloseNG}
+            aria-labelledby="child-modal-title"
+            aria-describedby="child-modal-description"
+          >
+            <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
+              <Typography variant="h1">NG Product</Typography>
+
+              <Typography sx={{ fontSize: 30 }}>NG Code: </Typography>
+
+              <Select
+                label="Detals"
+                fullWidth
+                value={selectNG}
+                onChange={(event) => setNG(event.target.value)}
+              >
+                {ShowCodeNG.map((menus: any) => (
+                  <MenuItem
+                    key={menus.code}
+                    sx={{ fontSize: 28 }}
+                    value={
+                      menus.code + ":" + menus.desc + ":" + menus.desc_china
+                    }
+                  >
+                    <Stack
+                      direction="row"
+                      justifyContent="space-around"
+                      alignItems="center"
+                      spacing={12}
+                      sx={{ m: 1, p: 1 }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: 26,
+                          color: "#FF0000",
+                        }}
+                      >
+                        {menus.code}
+                      </Typography>
+                      <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                        {menus.desc}
+                      </Typography>
+                      <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                        {menus.desc_china}
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                ))}
+              </Select>
+              <Typography sx={{ fontSize: 30 }}>NG Part Component: </Typography>
+              <Select
+                fullWidth
+                value={ngCompunent}
+                onChange={(event) => setNgCompunent(event.target.value)}
+              >
+                <MenuItem sx={{ fontSize: 30 }} value="">
+                  <em>NOne</em>
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={"Other"}>
+                  <em>Other</em>
+                </MenuItem>
+
+                <MenuItem sx={{ fontSize: 30 }} value={itemNumber}>
                   <Stack
                     direction="row"
                     justifyContent="space-around"
@@ -2099,187 +2086,217 @@ function tableproduction() {
                         color: "#FF0000",
                       }}
                     >
-                      {menus.component}
+                      {itemNumber}
                     </Typography>
-
-                    <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                      {menus.desc}
+                    <Typography sx={{ fontSize: 24, color: "#00BFFF" }}>
+                      Finish Good
                     </Typography>
                   </Stack>
                 </MenuItem>
-              ))}
-            </Select>
-            {OtheText()}
-            <InputLabel id="demo-simple-select-label" sx={{ fontSize: 30 }}>
-              NG qty
-            </InputLabel>
-            <Select
-              sx={{
-                fontSize: 30,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-              fullWidth
-              label="Qty"
-              value={selectQty}
-              autoFocus
-              onChange={(event) => setQty(event.target.value as number)}
-            >
-              <MenuItem sx={{ fontSize: 30 }} value={1}>
-                1
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={2}>
-                2
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={3}>
-                3
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={4}>
-                4
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={5}>
-                5
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={6}>
-                6
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={7}>
-                7
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={8}>
-                8
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={9}>
-                9
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={10}>
-                10
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={11}>
-                11
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={12}>
-                12
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={13}>
-                13
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={14}>
-                14
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={15}>
-                15
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={16}>
-                16
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={17}>
-                17
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={18}>
-                18
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={19}>
-                19
-              </MenuItem>
-              <MenuItem sx={{ fontSize: 30 }} value={20}>
-                20
-              </MenuItem>
-            </Select>
-            <div>
-              <br />
-            </div>
-            {TextError}
-            <Stack
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={12}
-              sx={{ m: 1, p: 5 }}
-            >
-              <Item
-                sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
-                onClick={ChNgempty}
+
+                {bom_ract.map((menus: any) => (
+                  <MenuItem key={menus.component} value={menus.component}>
+                    <Stack
+                      direction="row"
+                      justifyContent="space-around"
+                      alignItems="center"
+                      spacing={12}
+                      sx={{ m: 1, p: 1 }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          fontSize: 26,
+                          color: "#FF0000",
+                        }}
+                      >
+                        {menus.component}
+                      </Typography>
+
+                      <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                        {menus.desc}
+                      </Typography>
+                    </Stack>
+                  </MenuItem>
+                ))}
+              </Select>
+              {OtheText()}
+              <InputLabel id="demo-simple-select-label" sx={{ fontSize: 30 }}>
+                NG qty
+              </InputLabel>
+              <Select
+                sx={{
+                  fontSize: 30,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                fullWidth
+                label="Qty"
+                value={selectQty}
+                autoFocus
+                onChange={(event) => setQty(event.target.value as number)}
               >
-                <Typography>SAVE</Typography>
-              </Item>
-              <Item sx={{ width: 150, height: 60, p: 2.5, color: "red" }}>
-                <Typography onClick={handleCloseNG}>CLOSE</Typography>
-              </Item>
-            </Stack>
+                <MenuItem sx={{ fontSize: 30 }} value={1}>
+                  1
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={2}>
+                  2
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={3}>
+                  3
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={4}>
+                  4
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={5}>
+                  5
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={6}>
+                  6
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={7}>
+                  7
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={8}>
+                  8
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={9}>
+                  9
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={10}>
+                  10
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={11}>
+                  11
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={12}>
+                  12
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={13}>
+                  13
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={14}>
+                  14
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={15}>
+                  15
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={16}>
+                  16
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={17}>
+                  17
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={18}>
+                  18
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={19}>
+                  19
+                </MenuItem>
+                <MenuItem sx={{ fontSize: 30 }} value={20}>
+                  20
+                </MenuItem>
+              </Select>
+
+              <br />
+
+              {TextError}
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 5 }}
+              >
+                <Item
+                  sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
+                  onClick={ChNgempty}
+                >
+                  <Typography>SAVE</Typography>
+                </Item>
+                <Item sx={{ width: 150, height: 60, p: 2.5, color: "red" }}>
+                  <Typography onClick={handleCloseNG}>CLOSE</Typography>
+                </Item>
+              </Stack>
+            </Box>
+          </Modal>
+        </Box>
+        {/* Confirm Agree */}
+        <Modal
+          open={openConfrimEnd}
+          onClose={ConfrimEndClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box
+            component="form"
+            onSubmit={handleConfirmEnd}
+            noValidate
+            sx={style}
+          >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Confirm Stop Working ?
+            </Typography>
+
+            <Typography sx={{ mt: 2 }}>
+              <Stack direction="row" justifyContent="center" spacing={1}>
+                <Typography sx={{ fontSize: 38 }}> Name :</Typography>
+                <Typography sx={{ color: "red", fontSize: 38 }}>
+                  {localStorage.getItem("userName")}{" "}
+                </Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="center" spacing={1}>
+                <TextField
+                  id="useradd"
+                  label="Password"
+                  variant="outlined"
+                  value={passConfrimEnd}
+                  name="useradd"
+                  type="password"
+                  onChange={(event) => setPassConfrimEnd(event.target.value)}
+                  sx={{
+                    width: 210,
+                    height: 50,
+                    m: 1,
+                  }}
+                />
+              </Stack>
+              <Stack
+                sx={{ mt: 3 }}
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={2}
+              >
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 150, height: 60, p: 2.5 }}
+                >
+                  Confirm
+                </Button>
+                <Button
+                  onClick={ConfrimEndClose}
+                  variant="outlined"
+                  color="error"
+                  sx={{
+                    width: 150,
+                    height: 60,
+                    p: 2.5,
+                    bgcolor: "red",
+                    color: "white",
+                  }}
+                >
+                  CLOSE
+                </Button>
+              </Stack>
+            </Typography>
           </Box>
         </Modal>
+        {/* ------------------- */}
+        {/* <Button onClick={celculeteOT}>dfdfdf</Button> */}
       </Box>
-      {/* Confirm Agree */}
-      <Modal
-        open={openConfrimEnd}
-        onClose={ConfrimEndClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box component="form" onSubmit={handleConfirmEnd} noValidate sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Confirm Stop Working ?
-          </Typography>
-
-          <Typography sx={{ mt: 2 }}>
-            <Stack direction="row" justifyContent="center" spacing={1}>
-              <Typography sx={{ fontSize: 38 }}> Name :</Typography>
-              <Typography sx={{ color: "red", fontSize: 38 }}>
-                {localStorage.getItem("userName")}{" "}
-              </Typography>
-            </Stack>
-            <Stack direction="row" justifyContent="center" spacing={1}>
-              <TextField
-                id="useradd"
-                label="Password"
-                variant="outlined"
-                value={passConfrimEnd}
-                name="useradd"
-                type="password"
-                onChange={(event) => setPassConfrimEnd(event.target.value)}
-                sx={{
-                  width: 210,
-                  height: 50,
-                  m: 1,
-                }}
-              />
-            </Stack>
-            <Stack
-              sx={{ mt: 3 }}
-              direction="row"
-              justifyContent="space-around"
-              alignItems="center"
-              spacing={2}
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ width: 150, height: 60, p: 2.5 }}
-              >
-                Confirm
-              </Button>
-              <Button
-                onClick={ConfrimEndClose}
-                variant="outlined"
-                color="error"
-                sx={{
-                  width: 150,
-                  height: 60,
-                  p: 2.5,
-                  bgcolor: "red",
-                  color: "white",
-                }}
-              >
-                CLOSE
-              </Button>
-            </Stack>
-          </Typography>
-        </Box>
-      </Modal>
-      {/* ------------------- */}
-      {/* <Button onClick={celculeteOT}>dfdfdf</Button> */}
-    </Box>
+    </div>
   );
 }
 export default tableproduction;
