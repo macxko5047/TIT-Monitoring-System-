@@ -454,16 +454,16 @@ const editpeople = (props: Props) => {
       >
         <Box component="form" noValidate sx={style}>
           <Typography id="modal-modal-title" variant="h4" component="h2">
-            Confirm LogOut Time : {times}
+            {t("ConfirmLogOutTime")} : {times}
           </Typography>
 
           <Typography sx={{ mt: 2 }}>
             <Stack direction="row" justifyContent="center" spacing={5}>
-              <Typography sx={{ p: 1 }}>Do you want to LogOut NO :</Typography>
+              <Typography sx={{ p: 1 }}>{t("detailConfirmLogOut")}:</Typography>
               <Typography sx={{ fontSize: 28, color: "red" }}>
                 {TextConfirmEmp_no}
               </Typography>
-              <Typography sx={{ p: 1 }}> Name :</Typography>
+              <Typography sx={{ p: 1 }}> {t("Name")} :</Typography>
               <Typography sx={{ fontSize: 28, color: "red" }}>
                 {TextConfirmName}
               </Typography>
@@ -481,11 +481,11 @@ const editpeople = (props: Props) => {
                 sx={{ width: 150, height: 60, p: 2.5 }}
                 onClick={handlerLogoutTime}
               >
-                Logout
+                {t("Logout")}
               </Button>
               <Button
                 onClick={logoutTimeClose}
-                variant="outlined"
+                variant="contained"
                 color="error"
                 sx={{
                   width: 150,
@@ -495,7 +495,7 @@ const editpeople = (props: Props) => {
                   color: "white",
                 }}
               >
-                Close
+                {t("CLOSE")}
               </Button>
             </Stack>
           </Typography>

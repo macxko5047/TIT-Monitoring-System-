@@ -59,6 +59,8 @@ const resources = {
       TIME: "เวลา",
       Level: "ระดับ",
       Logout: "ออกจากระบบ",
+      detailConfirmLogOut: "คุณต้องการที่จะออกจากระบบของ รหัสพนักงาน",
+      ConfirmLogOutTime: "ยืนยันการออกจากระบบ เวลา",
     },
   },
   en: {
@@ -79,6 +81,8 @@ const resources = {
       WorkOder: "Work Oder",
       DeletePeopleDetail: "Do you want to delete Name",
       ItemOder: "Item Order",
+      detailConfirmLogOut: "Do you want to LogOut NO ",
+      ConfirmLogOutTime: "Confirm LogOut Time",
     },
   },
   cn: {

@@ -94,6 +94,12 @@ function PersistentDrawerLeft() {
   const { t, i18n } = useTranslation(); //language
   const theme = useTheme();
   const router = useRouter();
+  //=========================== refresh language ==================
+  useEffect(() => {
+    const datacheckLanguage: any = localStorage.getItem("Language");
+    i18n.changeLanguage(datacheckLanguage);
+  }, []);
+  //----------------------------------------------------------------
 
   // ตัวเช็คหน้า workOder ถ้าไม่มี WorkOder ใน localstorage
   // ให้กลับไปหน้าเลือก workoder ก่อน
@@ -414,6 +420,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("th");
                     localStorage.setItem("Language", "th");
+                    setLanguage(null);
                   }}
                 >
                   TH
@@ -422,6 +429,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("en");
                     localStorage.setItem("Language", "en");
+                    setLanguage(null);
                   }}
                 >
                   EN
@@ -430,6 +438,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("cn");
                     localStorage.setItem("Language", "cn");
+                    setLanguage(null);
                   }}
                 >
                   CN
@@ -438,6 +447,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("vn");
                     localStorage.setItem("Language", "vn");
+                    setLanguage(null);
                   }}
                 >
                   VN

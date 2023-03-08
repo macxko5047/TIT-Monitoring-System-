@@ -18,10 +18,24 @@ import AppContext from "../src/context/Appcontext";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import EngineeringIcon from "@mui/icons-material/Engineering";
+import LanguageSharpIcon from "@mui/icons-material/LanguageSharp";
+import MenuItem from "@mui/material/MenuItem";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import { useTranslation } from "react-i18next";
 
 const theme = createTheme();
 
 export default function Login() {
+  //========= language =====================================
+  const { t, i18n } = useTranslation(); //language
+  const [languagesUP, setLanguagesUP] = useState<any>("en");
+  const [language, setLanguage] = useState<null | HTMLElement>(null);
+  const handleMenulanguage = (event: React.MouseEvent<HTMLElement>) => {
+    setLanguage(event.currentTarget);
+  };
+  //---------------------------------------------------------
+
   const jwt = require("jsonwebtoken");
   const secret = "marko-login-tit";
   const [username, setUsername] = useState("");
@@ -55,7 +69,7 @@ export default function Login() {
           },
           secret
         );
-
+        localStorage.setItem("Language", languagesUP);
         localStorage.setItem("token", token);
         localStorage.setItem("userName", data[0].emp_name);
         localStorage.setItem("Level", data[0].level);
@@ -90,11 +104,76 @@ export default function Login() {
 
   return (
     <ThemeProvider theme={theme}>
+      <Typography sx={{ textAlign: "right" }}>
+        {languagesUP.toUpperCase()}
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="menu-appbar"
+          aria-haspopup="true"
+          onClick={handleMenulanguage}
+          color="inherit"
+        >
+          <LanguageSharpIcon />
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={language}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={Boolean(language)}
+          onClose={(e) => setLanguage(null)}
+        >
+          <MenuItem
+            onClick={(e) => {
+              i18n.changeLanguage("th");
+              setLanguagesUP("th");
+              setLanguage(null);
+            }}
+          >
+            TH
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              i18n.changeLanguage("en");
+              setLanguagesUP("en");
+              setLanguage(null);
+            }}
+          >
+            EN
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              i18n.changeLanguage("cn");
+              setLanguagesUP("cn");
+              setLanguage(null);
+            }}
+          >
+            CN
+          </MenuItem>
+          <MenuItem
+            onClick={(e) => {
+              i18n.changeLanguage("vn");
+              setLanguagesUP("vn");
+              setLanguage(null);
+            }}
+          >
+            VN
+          </MenuItem>
+        </Menu>
+      </Typography>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 2,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",

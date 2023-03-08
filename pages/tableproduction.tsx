@@ -96,21 +96,154 @@ function tableproduction() {
   const [details, setDetails] = useState<any>("");
 
   const [dataOK, setOK] = useState<number>(0);
+  const [languages, setLanguage] = useState<any>("");
+  console.log({ languages });
 
   // split string แบ่ง ออกเพื่อส่งไปเก็บใน database
   const menusplit = details.split(":");
 
   const [datamenu, setDatamenu] = useState<any>([]);
-  // console.log("menu :", datamenu);
+  console.log("menu :", datamenu);
   const [timeOtCel, setTimeOtCel] = useState<number>(0);
   const [ot_operations, setOT_operation] = useState<any>("");
   // console.log("ot_operation", ot_operations);
-
   // -------------------------------------
 
+  const testDowntime = () => {
+    const datalanguage = localStorage.getItem("Language");
+    if (datalanguage == "th") {
+      return (
+        <div>
+          <Select
+            fullWidth
+            value={details}
+            onChange={(event) => setDetails(event.target.value)}
+          >
+            <MenuItem sx={{ fontSize: 28 }} value="">
+              <em>None</em>
+            </MenuItem>
+            {datamenu.map((menus: any) => (
+              <MenuItem
+                key={menus.code}
+                sx={{ fontSize: 28 }}
+                value={
+                  menus.code +
+                  ":" +
+                  menus.desc_th +
+                  ":" +
+                  menus.desc_china +
+                  ":" +
+                  menus.desc_eng
+                }
+              >
+                {menus.code} : {menus.desc_th}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      );
+    }
+    if (datalanguage == "en") {
+      return (
+        <div>
+          <Select
+            fullWidth
+            value={details}
+            onChange={(event) => setDetails(event.target.value)}
+          >
+            <MenuItem sx={{ fontSize: 28 }} value="">
+              <em>None</em>
+            </MenuItem>
+            {datamenu.map((menus: any) => (
+              <MenuItem
+                key={menus.code}
+                sx={{ fontSize: 28 }}
+                value={
+                  menus.code +
+                  ":" +
+                  menus.desc_th +
+                  ":" +
+                  menus.desc_china +
+                  ":" +
+                  menus.desc_eng
+                }
+              >
+                {menus.code} : {menus.desc_eng}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      );
+    }
+    if (datalanguage == "cn") {
+      return (
+        <div>
+          <Select
+            fullWidth
+            value={details}
+            onChange={(event) => setDetails(event.target.value)}
+          >
+            <MenuItem sx={{ fontSize: 28 }} value="">
+              <em>None</em>
+            </MenuItem>
+            {datamenu.map((menus: any) => (
+              <MenuItem
+                key={menus.code}
+                sx={{ fontSize: 28 }}
+                value={
+                  menus.code +
+                  ":" +
+                  menus.desc_th +
+                  ":" +
+                  menus.desc_china +
+                  ":" +
+                  menus.desc_eng
+                }
+              >
+                {menus.code} : {menus.desc_china}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      );
+    }
+    if (datalanguage == "vn") {
+      return (
+        <div>
+          <Select
+            fullWidth
+            value={details}
+            onChange={(event) => setDetails(event.target.value)}
+          >
+            <MenuItem sx={{ fontSize: 28 }} value="">
+              <em>None</em>
+            </MenuItem>
+            {datamenu.map((menus: any) => (
+              <MenuItem
+                key={menus.code}
+                sx={{ fontSize: 28 }}
+                value={
+                  menus.code +
+                  ":" +
+                  menus.desc_th +
+                  ":" +
+                  menus.desc_china +
+                  ":" +
+                  menus.desc_eng
+                }
+              >
+                {menus.code} : {menus.desc_vn}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+      );
+    }
+  };
+
+  //==============================================================
   const [dataManuptest, setDataManuptest] = useState<any>("");
   // console.log("dataManuptest", dataManuptest);
-
   const AutoUpdataPD_keyManpower = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
@@ -127,6 +260,7 @@ function tableproduction() {
       console.log("Autoup PD_key Manpower_record Error", error);
     }
   };
+  //---------------------------------------------------------------
 
   useEffect(() => {
     const FetchData = async () => {
@@ -138,6 +272,7 @@ function tableproduction() {
       console.log(data);
     };
     FetchData();
+    setLanguage(localStorage.getItem("Language"));
   }, []);
   //เปิด - ปิด modal v.1
   const [openModal, setOpenModal] = useState(false);
@@ -1681,7 +1816,9 @@ function tableproduction() {
                 {t("Time")} {t("pause")} : {times}
               </Typography>
               <InputLabel sx={{ fontSize: 30 }}>{t("Detail")}</InputLabel>
-              <Select
+              {testDowntime()}
+
+              {/* <Select
                 fullWidth
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
@@ -1689,18 +1826,26 @@ function tableproduction() {
                 <MenuItem sx={{ fontSize: 28 }} value="">
                   <em>None</em>
                 </MenuItem>
+
                 {datamenu.map((menus: any) => (
                   <MenuItem
                     key={menus.code}
                     sx={{ fontSize: 28 }}
                     value={
-                      menus.code + ":" + menus.desc_th + ":" + menus.desc_china
+                      menus.code +
+                      ":" +
+                      menus.desc_th +
+                      ":" +
+                      menus.desc_china +
+                      ":" +
+                      menus.desc_eng
                     }
                   >
-                    {menus.code} : {menus.desc_th} : {menus.desc_china}
+                    {menus.code} : {menus.desc_th} : {menus.desc_china} :
+                    {menus.desc_eng}
                   </MenuItem>
                 ))}
-              </Select>
+              </Select> */}
               <div>
                 <br />
               </div>
@@ -1728,7 +1873,7 @@ function tableproduction() {
               </Stack>
             </Box>
           </Modal>
-          {/* modal รอกดปุ่ม start */}
+          {/* modal downtime  รอกดปุ่ม continue */}
           <Modal
             hideBackdrop
             open={openModal1}
