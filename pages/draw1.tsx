@@ -26,7 +26,7 @@ import Grid from "@mui/material/Grid";
 import Alert from "@mui/joy/Alert";
 import LanguageSharpIcon from "@mui/icons-material/LanguageSharp";
 import { useTranslation } from "react-i18next";
-import i18n from "./component/i18n";
+import { i18n } from "../i18n";
 
 const style = {
   position: "absolute" as "absolute",

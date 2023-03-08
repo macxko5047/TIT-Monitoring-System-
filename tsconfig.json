@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "compunentConfig/supabaseUser.js", "pages/locales/index.js", "pages/component/i18n.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "compunentConfig/supabaseUser.js", "pages/locales/index.js", "i18n.tsx"],
   "exclude": ["node_modules"]
 }
