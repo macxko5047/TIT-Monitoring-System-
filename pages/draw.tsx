@@ -79,6 +79,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function PersistentDrawerLeft() {
+  const { t, i18n } = useTranslation(); //language
   const theme = useTheme();
   const router = useRouter();
 
@@ -365,10 +366,10 @@ export default function PersistentDrawerLeft() {
                 onClose={handleClose}
               >
                 <MenuItem>
-                  Name : {localStorage.getItem("userName")} &nbsp; Level :{" "}
-                  {localStorage.getItem("Level")}
+                  {t("Name")} : {localStorage.getItem("userName")} &nbsp;{" "}
+                  {t("Level")}: {localStorage.getItem("Level")}
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleLogout}>{t("Logout")}</MenuItem>
               </Menu>
               <IconButton
                 size="large"

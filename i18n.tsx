@@ -56,6 +56,9 @@ const resources = {
       WorkOrder: "เลขใบสั่งงาน",
       Item: "ชิ้นงาน",
       ItemOder: "รายการสั่งผลิต",
+      TIME: "เวลา",
+      Level: "ระดับ",
+      Logout: "ออกจากระบบ",
     },
   },
   en: {

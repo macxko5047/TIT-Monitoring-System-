@@ -1443,7 +1443,7 @@ function tableproduction() {
                       color: "info.main",
                     }}
                   >
-                    {t("TIMESTART")}
+                    {t("TIME")}
                   </Box>
                   <Box
                     component="ul"
