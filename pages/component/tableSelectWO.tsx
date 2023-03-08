@@ -50,6 +50,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import ProductionUnitError from "./ProductionUnitError";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute" as "absolute",
@@ -118,6 +119,7 @@ function CustomToolbar() {
 }
 
 export default function tablework1() {
+  const { t, i18n } = useTranslation(); //language
   const [mounted, setMounted] = useState(false);
   const [sData, setSData] = useState<any>([]);
   const [open, setOpen] = useState(false);
@@ -552,7 +554,7 @@ export default function tablework1() {
                 handleClickOpen(event, cellValues);
               }}
             >
-              Select
+              {t("SELECT")}
             </Button>
           </Box>
         );
@@ -1036,11 +1038,11 @@ export default function tablework1() {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Work Oder
+              {t("WorkOder")}
             </Typography>
 
             <Button autoFocus color="inherit" onClick={handleropenConfirm}>
-              Agree
+              {t("Agree")}
             </Button>
           </Toolbar>
         </AppBar>
@@ -1098,7 +1100,7 @@ export default function tablework1() {
                 }}
               >
                 <Stack sx={{ mt: 1, p: 1 }} direction="row" alignItems="center">
-                  <Typography>Production Unit </Typography>
+                  <Typography>{t("ProductionUnit")}</Typography>
                   <FormControl sx={{ m: 1, minWidth: 200 }}>
                     <Select
                       value={dataUnit_select}
@@ -1122,7 +1124,7 @@ export default function tablework1() {
                     </Select>
                     {/* <FormHelperText>With label + helper text</FormHelperText> */}
                   </FormControl>
-                  <Typography>Shift</Typography>
+                  <Typography>{t("Shift")}</Typography>
                   <FormControl sx={{ m: 1, minWidth: 120 }}>
                     <Select
                       value={dataShift}
@@ -1130,10 +1132,10 @@ export default function tablework1() {
                       fullWidth
                     >
                       <MenuItem sx={{ fontSize: 24 }} value={"Day"}>
-                        Day
+                        {t("Day")}
                       </MenuItem>
                       <MenuItem sx={{ fontSize: 24 }} value={"Night"}>
-                        Night
+                        {t("Night")}
                       </MenuItem>
                     </Select>
                     {/* <FormHelperText>With label + helper text</FormHelperText> */}
@@ -1166,6 +1168,9 @@ export default function tablework1() {
                       lg: 1,
                     }}
                   >
+                    <Typography textAlign={"center"}>
+                      {t("Add")} {t("People")}{" "}
+                    </Typography>
                     <Box component="form">
                       <TextField
                         id="useradd"
@@ -1222,14 +1227,16 @@ export default function tablework1() {
                         color="inherit"
                         onClick={handlerSubmitPeople}
                       >
-                        Submit
+                        {t("SUBMIT")}
                       </Button>
                     </Box>
                   </Item>
                 </Grid>
                 <Grid xs={9} md={9} lg={9}>
                   <Item>
-                    <Typography>Table People</Typography>
+                    <Typography>
+                      {t("Table")} {t("People")}
+                    </Typography>
                     <Box style={{ height: 400, width: "100%" }}>
                       <DataGrid
                         rows={dataPeople}
@@ -1254,14 +1261,14 @@ export default function tablework1() {
       >
         <Box component="form" onSubmit={DelNG} noValidate sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Confirm delete
+            {t("ConfirmDelete")}
           </Typography>
 
           <Typography sx={{ mt: 2 }}>
             <Stack direction="row" justifyContent="center" spacing={4}>
-              <Typography>Do you want to delete Name :</Typography>
+              <Typography>{t("DeletePeopleDetail")} :</Typography>
               <Typography sx={{ color: "red" }}>{TextConfirmName} </Typography>
-              <Typography>Department :</Typography>
+              <Typography>{t("Department")} :</Typography>
               <Typography sx={{ color: "red" }}>
                 {TextConfirmDepartment}
               </Typography>
@@ -1280,7 +1287,7 @@ export default function tablework1() {
                 sx={{ width: 150, height: 60, p: 2.5 }}
                 type="submit"
               >
-                Yes
+                {t("CONFIRM")}
               </Button>
               <Button
                 onClick={DeleteClose}
@@ -1294,7 +1301,7 @@ export default function tablework1() {
                   color: "white",
                 }}
               >
-                No
+                {t("CLOSE")}
               </Button>
             </Stack>
           </Typography>
@@ -1310,12 +1317,12 @@ export default function tablework1() {
       >
         <Box component="form" onSubmit={handleConfirm} noValidate sx={style}>
           <Typography id="modal-modal-title" variant="h3" component="h2">
-            Confirm Select Work Order
+            {t("detailConfirmSelectWorkOrder")}
           </Typography>
 
           <Typography sx={{ mt: 2 }}>
             <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
-              <Typography sx={{ fontSize: 30 }}>W/O :</Typography>
+              <Typography sx={{ fontSize: 30 }}>{t("WorkOrder")} :</Typography>
               <Typography
                 sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
               >
@@ -1323,13 +1330,13 @@ export default function tablework1() {
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
-              <Typography sx={{ fontSize: 30 }}>Item Number :</Typography>
+              <Typography sx={{ fontSize: 30 }}>{t("ItemNumber")} :</Typography>
               <Typography
                 sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
               >
                 {item_number}
               </Typography>
-              <Typography sx={{ fontSize: 30 }}> Qty :</Typography>
+              <Typography sx={{ fontSize: 30 }}> {t("Qty")} :</Typography>
               <Typography
                 sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
               >
@@ -1337,7 +1344,9 @@ export default function tablework1() {
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ m: 1, p: 1 }} spacing={1}>
-              <Typography sx={{ fontSize: 30 }}>Production Unit :</Typography>
+              <Typography sx={{ fontSize: 30 }}>
+                {t("ProductionUnit")} :
+              </Typography>
               <Typography
                 sx={{ fontSize: 30, fontWeight: "bold", color: "red" }}
               >
@@ -1356,7 +1365,7 @@ export default function tablework1() {
                 variant="contained"
                 sx={{ width: 150, height: 60, p: 2.5 }}
               >
-                Confirm
+                {t("CONFIRM")}
               </Button>
               <Button
                 onClick={ConfrimClose}
@@ -1370,7 +1379,7 @@ export default function tablework1() {
                   color: "white",
                 }}
               >
-                CLOSE
+                {t("CLOSE")}
               </Button>
             </Stack>
           </Typography>

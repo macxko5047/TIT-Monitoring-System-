@@ -46,6 +46,7 @@ function QuickSearchToolbar() {
           p: 0.5,
           pb: 0,
         }}
+        textAlign={"center"}
       >
         <Typography sx={{ fontSize: 28 }}>{t("NGProduct")}</Typography>
         <GridToolbarQuickFilter

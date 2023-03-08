@@ -1577,21 +1577,21 @@ function tableproduction() {
                       p: 1,
                     }}
                   >
-                    Item Oder
+                    {t("ItemOder")}
                   </Box>
                   <Typography
                     sx={{
                       fontSize: "18px",
                     }}
                   >
-                    WorkOder ID : {localStorage.getItem("Work_order_id")}
+                    {t("WorkOder")} : {localStorage.getItem("Work_order_id")}
                   </Typography>
                   <Typography
                     sx={{
                       fontSize: "18px",
                     }}
                   >
-                    Item : {localStorage.getItem("ItemNumber")}
+                    {t("Item")} : {localStorage.getItem("ItemNumber")}
                   </Typography>
                   PD Key: {localStorage.getItem("PD_key")}
                 </Item>
@@ -2224,10 +2224,10 @@ function tableproduction() {
                   sx={{ width: 150, height: 60, p: 2.5, color: "success.main" }}
                   onClick={ChNgempty}
                 >
-                  <Typography>SAVE</Typography>
+                  <Typography>{t("SUBMIT")}</Typography>
                 </Item>
                 <Item sx={{ width: 150, height: 60, p: 2.5, color: "red" }}>
-                  <Typography onClick={handleCloseNG}>CLOSE</Typography>
+                  <Typography onClick={handleCloseNG}>{t("CLOSE")}</Typography>
                 </Item>
               </Stack>
             </Box>
@@ -2247,12 +2247,12 @@ function tableproduction() {
             sx={style}
           >
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Confirm Stop Working ?
+              {t("ConfirmStopWorkingTell")} ?
             </Typography>
 
             <Typography sx={{ mt: 2 }}>
               <Stack direction="row" justifyContent="center" spacing={1}>
-                <Typography sx={{ fontSize: 38 }}> Name :</Typography>
+                <Typography sx={{ fontSize: 38 }}> {t("Name")} :</Typography>
                 <Typography sx={{ color: "red", fontSize: 38 }}>
                   {localStorage.getItem("userName")}{" "}
                 </Typography>
@@ -2285,7 +2285,7 @@ function tableproduction() {
                   variant="contained"
                   sx={{ width: 150, height: 60, p: 2.5 }}
                 >
-                  Confirm
+                  {t("CONFIRM")}
                 </Button>
                 <Button
                   onClick={ConfrimEndClose}
@@ -2299,7 +2299,7 @@ function tableproduction() {
                     color: "white",
                   }}
                 >
-                  CLOSE
+                  {t("CLOSE")}
                 </Button>
               </Stack>
             </Typography>

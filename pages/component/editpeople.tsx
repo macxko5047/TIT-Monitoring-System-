@@ -24,6 +24,7 @@ import axios from "axios";
 import supabase from "../../compunentConfig/supabase";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTranslation } from "react-i18next";
 
 type Props = {};
 
@@ -50,6 +51,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const editpeople = (props: Props) => {
+  const { t, i18n } = useTranslation(); //language
   const date: any = new Date();
   let Hours = ("0" + date.getHours()).slice(-2);
   let Min = ("0" + date.getMinutes()).slice(-2);
@@ -305,7 +307,7 @@ const editpeople = (props: Props) => {
       >
         <Item>
           <Button onClick={handleOpenModal} variant="contained">
-            Edit People
+            {t("Edit")} {t("People")}
           </Button>
         </Item>
       </Stack>
@@ -327,9 +329,9 @@ const editpeople = (props: Props) => {
             }}
             variant="h3"
           >
-            Edit People
+            {t("Edit")} {t("People")}
           </Typography>
-          <Typography>Edit People </Typography>
+
           <br />
           {/* <InputLabel>OK_qty</InputLabel> */}
 
@@ -343,6 +345,9 @@ const editpeople = (props: Props) => {
                       lg: 1,
                     }}
                   >
+                    <Typography textAlign={"center"}>
+                      {t("Add")} {t("People")}{" "}
+                    </Typography>
                     <Box component="form">
                       <TextField
                         id="useradd"
@@ -399,14 +404,16 @@ const editpeople = (props: Props) => {
                         color="inherit"
                         onClick={handlerUpPeople}
                       >
-                        Submit
+                        {t("SUBMIT")}
                       </Button>
                     </Box>
                   </Item>
                 </Grid>
                 <Grid xs={9} md={9} lg={9}>
                   <Item>
-                    <Typography>Table People</Typography>
+                    <Typography>
+                      {t("Table")} {t("People")}
+                    </Typography>
                     <div style={{ height: 400, width: "100%" }}>
                       <DataGrid
                         rows={dataManpower}
@@ -432,7 +439,7 @@ const editpeople = (props: Props) => {
               sx={{ width: 150, height: 60, p: 2.5, color: "red" }}
               onClick={handleCloseModal}
             >
-              <Typography>CLOSE</Typography>
+              <Typography>{t("CLOSE")}</Typography>
             </Item>
           </Stack>
         </Box>

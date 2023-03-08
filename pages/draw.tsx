@@ -25,6 +25,8 @@ import AppContext from "../src/context/Appcontext";
 import Dashbord_Unit from "./Dashbord_Unit";
 import Register from "./Register";
 import LanguageSharpIcon from "@mui/icons-material/LanguageSharp";
+import { useTranslation } from "react-i18next";
+import { i18n } from "../i18n";
 
 const drawerWidth = 240;
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
@@ -98,6 +100,11 @@ export default function PersistentDrawerLeft() {
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const [language, setLanguage] = useState<null | HTMLElement>(null);
+  const handleMenulanguage = (event: React.MouseEvent<HTMLElement>) => {
+    setLanguage(event.currentTarget);
   };
 
   const handleClose = () => {
@@ -331,7 +338,7 @@ export default function PersistentDrawerLeft() {
               >
                 Production monitoring
               </Typography>
-
+              {localStorage.getItem("userName")}
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -341,11 +348,7 @@ export default function PersistentDrawerLeft() {
                 color="inherit"
               >
                 <AccountCircle />
-                <Typography>
-                  &nbsp;{localStorage.getItem("userName")}
-                </Typography>
               </IconButton>
-
               <Menu
                 id="menu-appbar"
                 anchorEl={anchorEl}
@@ -362,16 +365,67 @@ export default function PersistentDrawerLeft() {
                 onClose={handleClose}
               >
                 <MenuItem>
-                  <Typography variant="h5">
-                    Name : {localStorage.getItem("userName")}&nbsp;{" "}
-                  </Typography>
-                  <Typography variant="h5">
-                    {" "}
-                    Level : {localStorage.getItem("Level")}{" "}
-                  </Typography>
+                  Name : {localStorage.getItem("userName")} &nbsp; Level :{" "}
+                  {localStorage.getItem("Level")}
                 </MenuItem>
-                <MenuItem onClick={handleLogout}>
-                  <Typography variant="h5">Logout</Typography>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenulanguage}
+                color="inherit"
+              >
+                <LanguageSharpIcon />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={language}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(language)}
+                onClose={(e) => setLanguage(null)}
+              >
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("th");
+                    localStorage.setItem("Language", "th");
+                  }}
+                >
+                  TH
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("en");
+                    localStorage.setItem("Language", "en");
+                  }}
+                >
+                  EN
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("cn");
+                    localStorage.setItem("Language", "cn");
+                  }}
+                >
+                  CN
+                </MenuItem>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("vn");
+                    localStorage.setItem("Language", "vn");
+                  }}
+                >
+                  VN
                 </MenuItem>
               </Menu>
             </Toolbar>

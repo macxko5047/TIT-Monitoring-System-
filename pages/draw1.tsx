@@ -93,7 +93,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 function PersistentDrawerLeft() {
   const theme = useTheme();
   const router = useRouter();
-  const [lenguages, setLanguages] = useState<string>("");
+
   // ตัวเช็คหน้า workOder ถ้าไม่มี WorkOder ใน localstorage
   // ให้กลับไปหน้าเลือก workoder ก่อน
   useEffect(() => {
@@ -409,16 +409,36 @@ function PersistentDrawerLeft() {
                 open={Boolean(language)}
                 onClose={(e) => setLanguage(null)}
               >
-                <MenuItem onClick={(e) => i18n.changeLanguage("th")}>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("th");
+                    localStorage.setItem("Language", "th");
+                  }}
+                >
                   TH
                 </MenuItem>
-                <MenuItem onClick={(e) => i18n.changeLanguage("en")}>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("en");
+                    localStorage.setItem("Language", "en");
+                  }}
+                >
                   EN
                 </MenuItem>
-                <MenuItem onClick={(e) => i18n.changeLanguage("chi")}>
-                  CHI
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("cn");
+                    localStorage.setItem("Language", "cn");
+                  }}
+                >
+                  CN
                 </MenuItem>
-                <MenuItem onClick={(e) => i18n.changeLanguage("vn")}>
+                <MenuItem
+                  onClick={(e) => {
+                    i18n.changeLanguage("vn");
+                    localStorage.setItem("Language", "vn");
+                  }}
+                >
                   VN
                 </MenuItem>
               </Menu>
