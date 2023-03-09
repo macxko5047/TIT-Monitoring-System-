@@ -201,27 +201,22 @@ function PersistentDrawerLeft() {
       return (
         <div>
           <List>
-            <ListItemButton href="/draw">
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
-
-            <ListItemButton href="/draw1">
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={t("ItemRun")} />
-            </ListItemButton>
+            {buttonItemRun()}
             <Divider />
-            <ListItemButton href="https://dashboard-tit.vercel.app/">
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashbord" />
+              <ListItemText primary={t("Dashboard")} />
             </ListItemButton>
-            <ListItemButton href={"./Register"}>
+
+            <ListItemButton onClick={(e) => setDataShowPage(<Register />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -238,27 +233,22 @@ function PersistentDrawerLeft() {
       return (
         <div>
           <List>
-            <ListItemButton href="/draw">
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
-
-            <ListItemButton href="/draw1">
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={t("ItemRun")} />
-            </ListItemButton>
+            {buttonItemRun()}
             <Divider />
-            <ListItemButton href="https://dashboard-tit.vercel.app/">
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashbord" />
+              <ListItemText primary={t("Dashboard")} />
             </ListItemButton>
-            <ListItemButton href={"./Register"}>
+
+            <ListItemButton onClick={(e) => setDataShowPage(<Register />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
@@ -275,25 +265,19 @@ function PersistentDrawerLeft() {
       return (
         <div>
           <List>
-            <ListItemButton href="/draw">
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
-
-            <ListItemButton href="/draw1">
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={t("ItemRun")} />
-            </ListItemButton>
+            {buttonItemRun()}
             <Divider />
-            <ListItemButton href="https://dashboard-tit.vercel.app/">
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashbord" />
+              <ListItemText primary={t("Dashboard")} />
             </ListItemButton>
           </List>
         </div>
@@ -306,25 +290,19 @@ function PersistentDrawerLeft() {
       return (
         <div>
           <List>
-            <ListItemButton href="/draw">
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
               <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
-
-            <ListItemButton href="/draw1">
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={t("ItemRun")} />
-            </ListItemButton>
+            {buttonItemRun()}
             <Divider />
-            <ListItemButton>
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="โชว์ปุ่ม Foreman" />
+              <ListItemText primary={t("Dashboard")} />
             </ListItemButton>
           </List>
         </div>
