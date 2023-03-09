@@ -103,7 +103,7 @@ function tableproduction() {
   const menusplit = details.split(":");
 
   const [datamenu, setDatamenu] = useState<any>([]);
-  console.log("menu :", datamenu);
+  // console.log("menu :", datamenu);
   const [timeOtCel, setTimeOtCel] = useState<number>(0);
   const [ot_operations, setOT_operation] = useState<any>("");
   // console.log("ot_operation", ot_operations);
@@ -244,6 +244,8 @@ function tableproduction() {
   //==============================================================
   const [dataManuptest, setDataManuptest] = useState<any>("");
   // console.log("dataManuptest", dataManuptest);
+
+  //=========== up PD_key to Production_history =================
   const AutoUpdataPD_keyManpower = async () => {
     const { data, error } = await supabase
       .from("Manpower_record")
@@ -2184,7 +2186,13 @@ function tableproduction() {
                     key={menus.code}
                     sx={{ fontSize: 28 }}
                     value={
-                      menus.code + ":" + menus.desc + ":" + menus.desc_china
+                      menus.code +
+                      ":" +
+                      menus.desc +
+                      ":" +
+                      menus.desc_china +
+                      ":" +
+                      menus.desc_eng
                     }
                   >
                     <Stack

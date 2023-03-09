@@ -27,6 +27,9 @@ import Alert from "@mui/joy/Alert";
 import LanguageSharpIcon from "@mui/icons-material/LanguageSharp";
 import { useTranslation } from "react-i18next";
 import { i18n } from "../i18n";
+import Tablework1 from "./component/tableSelectWO";
+import Dashbord_Unit from "./Dashbord_Unit";
+import Register from "./Register";
 
 const style = {
   position: "absolute" as "absolute",
@@ -105,10 +108,13 @@ function PersistentDrawerLeft() {
   // ให้กลับไปหน้าเลือก workoder ก่อน
   useEffect(() => {
     const ItemSelect = localStorage.getItem("Work_order_id");
-    if (!ItemSelect) {
-      router.push("/draw");
-      alert("Do not have selected production !");
-    }
+    const checkWOWorking = async () => {
+      if (!ItemSelect) {
+        await alert("Do not have selected production !");
+        await router.push("/draw");
+      }
+    };
+    checkWOWorking();
   }, []);
 
   const [open, setOpen] = useState(false);
@@ -142,39 +148,47 @@ function PersistentDrawerLeft() {
     }
   };
 
+  const [dataShowPage, setDataShowPage] = useState<any>(<Tableproduction />);
+
+  const buttonItemRun = () => {
+    const dataWorkOrder = localStorage.getItem("Work_order_id");
+    if (dataWorkOrder != null) {
+      return (
+        <ListItemButton href={"/draw1"}>
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary={t("ItemRun")} />
+        </ListItemButton>
+      );
+    }
+  };
   const menuShowAdmin = () => {
     const datalevel = localStorage.Level;
-
     if (datalevel === "Admin") {
       return (
         <div>
           <List>
-            <ListItemButton href={"/draw"}>
+            <ListItemButton onClick={(e) => setDataShowPage(<Tablework1 />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Select WorkOder" />
+              <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
-
-            <ListItemButton href={"/draw1"}>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary="Item Run" />
-            </ListItemButton>
+            {buttonItemRun()}
             <Divider />
-            <ListItemButton href="https://dashboard-tit.vercel.app/">
+            <ListItemButton onClick={(e) => setDataShowPage(<Dashbord_Unit />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashbord" />
+              <ListItemText primary={t("Dashboard")} />
             </ListItemButton>
 
-            <ListItemButton href={"./Register"}>
+            <ListItemButton onClick={(e) => setDataShowPage(<Register />)}>
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Register User" />
+              <ListItemText primary={t("RegisterUser")} />
             </ListItemButton>
           </List>
         </div>
@@ -191,14 +205,14 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Select WorkOder" />
+              <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
 
             <ListItemButton href="/draw1">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Item Run" />
+              <ListItemText primary={t("ItemRun")} />
             </ListItemButton>
             <Divider />
             <ListItemButton href="https://dashboard-tit.vercel.app/">
@@ -211,7 +225,7 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Register User" />
+              <ListItemText primary={t("RegisterUser")} />
             </ListItemButton>
           </List>
         </div>
@@ -228,14 +242,14 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Select WorkOder" />
+              <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
 
             <ListItemButton href="/draw1">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Item Run" />
+              <ListItemText primary={t("ItemRun")} />
             </ListItemButton>
             <Divider />
             <ListItemButton href="https://dashboard-tit.vercel.app/">
@@ -248,7 +262,7 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Register User" />
+              <ListItemText primary={t("RegisterUser")} />
             </ListItemButton>
           </List>
         </div>
@@ -265,14 +279,14 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Select WorkOder" />
+              <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
 
             <ListItemButton href="/draw1">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Item Run" />
+              <ListItemText primary={t("ItemRun")} />
             </ListItemButton>
             <Divider />
             <ListItemButton href="https://dashboard-tit.vercel.app/">
@@ -296,14 +310,14 @@ function PersistentDrawerLeft() {
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Select WorkOder" />
+              <ListItemText primary={t("SelectWorkOrder")} />
             </ListItemButton>
 
             <ListItemButton href="/draw1">
               <ListItemIcon>
                 <InboxIcon />
               </ListItemIcon>
-              <ListItemText primary="Item Run" />
+              <ListItemText primary={t("ItemRun")} />
             </ListItemButton>
             <Divider />
             <ListItemButton>
@@ -490,7 +504,7 @@ function PersistentDrawerLeft() {
             <Typography>
               {/* System Control */}
               {/* <Tablework1 /> */}
-              <Tableproduction />
+              {dataShowPage}
               {/* <Dashboard /> */}
             </Typography>
           </Main>

@@ -61,6 +61,11 @@ const resources = {
       Logout: "ออกจากระบบ",
       detailConfirmLogOut: "คุณต้องการที่จะออกจากระบบของ รหัสพนักงาน",
       ConfirmLogOutTime: "ยืนยันการออกจากระบบ เวลา",
+      SignIn: "เข้าสู่ระบบ",
+      ItemRun: "ชิ้นงานที่กำลังผลิต",
+      Dashboard: "แผงควบคุม",
+      RegisterUser: "สมัครสมาชิกพนักงาน",
+      SelectWorkOrder: "เลือกใบสั่งงาน",
     },
   },
   en: {
@@ -83,6 +88,10 @@ const resources = {
       ItemOder: "Item Order",
       detailConfirmLogOut: "Do you want to LogOut NO ",
       ConfirmLogOutTime: "Confirm LogOut Time",
+      SignIn: "Sign In",
+      ItemRun: "Item Run",
+      RegisterUser: "Register User",
+      SelectWorkOrder: "Select Work Order",
     },
   },
   cn: {

@@ -224,7 +224,7 @@ export default function Login() {
               sx={{ mt: 3, mb: 2 }}
               disabled={username.length < 1 && pass.length < 1}
             >
-              Sign In
+              {t("SignIn")}
             </Button>
           </Box>
         </Box>
