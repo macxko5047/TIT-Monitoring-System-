@@ -108,8 +108,8 @@ function tableproduction() {
   const [ot_operations, setOT_operation] = useState<any>("");
   // console.log("ot_operation", ot_operations);
   // -------------------------------------
-
-  const testDowntime = () => {
+  //===================Show Code Downtime language ================================
+  const ShowCodeDowntime = () => {
     const datalanguage = localStorage.getItem("Language");
     if (datalanguage == "th") {
       return (
@@ -240,6 +240,196 @@ function tableproduction() {
       );
     }
   };
+  //----------------------------------------------------------
+  //=============NG Code Show language ====================================
+  const showNgCodeLangues = () => {
+    const datalanguage = localStorage.getItem("Language");
+    if (datalanguage == "th") {
+      return (
+        <Select
+          fullWidth
+          value={selectNG}
+          onChange={(event) => setNG(event.target.value)}
+        >
+          {ShowCodeNG.map((menus: any) => (
+            <MenuItem
+              key={menus.code}
+              sx={{ fontSize: 28 }}
+              value={
+                menus.code +
+                ":" +
+                menus.desc +
+                ":" +
+                menus.desc_china +
+                ":" +
+                menus.desc_eng
+              }
+            >
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 1 }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 26,
+                    color: "#FF0000",
+                  }}
+                >
+                  {menus.code}
+                </Typography>
+                <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                  {menus.desc}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+    if (datalanguage == "en") {
+      return (
+        <Select
+          fullWidth
+          value={selectNG}
+          onChange={(event) => setNG(event.target.value)}
+        >
+          {ShowCodeNG.map((menus: any) => (
+            <MenuItem
+              key={menus.code}
+              sx={{ fontSize: 28 }}
+              value={
+                menus.code +
+                ":" +
+                menus.desc +
+                ":" +
+                menus.desc_china +
+                ":" +
+                menus.desc_eng
+              }
+            >
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 1 }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 26,
+                    color: "#FF0000",
+                  }}
+                >
+                  {menus.code}
+                </Typography>
+                <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                  {menus.desc_eng}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+    if (datalanguage == "cn") {
+      return (
+        <Select
+          fullWidth
+          value={selectNG}
+          onChange={(event) => setNG(event.target.value)}
+        >
+          {ShowCodeNG.map((menus: any) => (
+            <MenuItem
+              key={menus.code}
+              sx={{ fontSize: 28 }}
+              value={
+                menus.code +
+                ":" +
+                menus.desc +
+                ":" +
+                menus.desc_china +
+                ":" +
+                menus.desc_eng
+              }
+            >
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 1 }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 26,
+                    color: "#FF0000",
+                  }}
+                >
+                  {menus.code}
+                </Typography>
+                <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                  {menus.desc_china}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+    if (datalanguage == "vn") {
+      return (
+        <Select
+          fullWidth
+          value={selectNG}
+          onChange={(event) => setNG(event.target.value)}
+        >
+          {ShowCodeNG.map((menus: any) => (
+            <MenuItem
+              key={menus.code}
+              sx={{ fontSize: 28 }}
+              value={
+                menus.code +
+                ":" +
+                menus.desc +
+                ":" +
+                menus.desc_china +
+                ":" +
+                menus.desc_eng
+              }
+            >
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={12}
+                sx={{ m: 1, p: 1 }}
+              >
+                <Typography
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 26,
+                    color: "#FF0000",
+                  }}
+                >
+                  {menus.code}
+                </Typography>
+                <Typography sx={{ fontSize: 24, color: "#000000" }}>
+                  {menus.desc_vn}
+                </Typography>
+              </Stack>
+            </MenuItem>
+          ))}
+        </Select>
+      );
+    }
+  };
+  //-----------------------------------------------------------------------
 
   //==============================================================
   const [dataManuptest, setDataManuptest] = useState<any>("");
@@ -1813,46 +2003,15 @@ function tableproduction() {
           >
             <Box sx={{ ...style, width: 1080, height: 780 }} component="form">
               <Typography variant="h1">{t("DownTime")}</Typography>
-
               <Typography sx={{ fontSize: 30 }}>
                 {t("Time")} {t("pause")} : {times}
               </Typography>
               <InputLabel sx={{ fontSize: 30 }}>{t("Detail")}</InputLabel>
-              {testDowntime()}
-
-              {/* <Select
-                fullWidth
-                value={details}
-                onChange={(event) => setDetails(event.target.value)}
-              >
-                <MenuItem sx={{ fontSize: 28 }} value="">
-                  <em>None</em>
-                </MenuItem>
-
-                {datamenu.map((menus: any) => (
-                  <MenuItem
-                    key={menus.code}
-                    sx={{ fontSize: 28 }}
-                    value={
-                      menus.code +
-                      ":" +
-                      menus.desc_th +
-                      ":" +
-                      menus.desc_china +
-                      ":" +
-                      menus.desc_eng
-                    }
-                  >
-                    {menus.code} : {menus.desc_th} : {menus.desc_china} :
-                    {menus.desc_eng}
-                  </MenuItem>
-                ))}
-              </Select> */}
+              ShowCode {ShowCodeDowntime()}
               <div>
                 <br />
               </div>
               {TextError1}
-
               <Stack
                 direction="row"
                 justifyContent="space-around"
@@ -2174,53 +2333,7 @@ function tableproduction() {
               <Typography variant="h1">{t("NGProduct")}</Typography>
 
               <Typography sx={{ fontSize: 30 }}>{t("NgCode")}: </Typography>
-
-              <Select
-                label="Detals"
-                fullWidth
-                value={selectNG}
-                onChange={(event) => setNG(event.target.value)}
-              >
-                {ShowCodeNG.map((menus: any) => (
-                  <MenuItem
-                    key={menus.code}
-                    sx={{ fontSize: 28 }}
-                    value={
-                      menus.code +
-                      ":" +
-                      menus.desc +
-                      ":" +
-                      menus.desc_china +
-                      ":" +
-                      menus.desc_eng
-                    }
-                  >
-                    <Stack
-                      direction="row"
-                      justifyContent="space-around"
-                      alignItems="center"
-                      spacing={12}
-                      sx={{ m: 1, p: 1 }}
-                    >
-                      <Typography
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: 26,
-                          color: "#FF0000",
-                        }}
-                      >
-                        {menus.code}
-                      </Typography>
-                      <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                        {menus.desc}
-                      </Typography>
-                      <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                        {menus.desc_china}
-                      </Typography>
-                    </Stack>
-                  </MenuItem>
-                ))}
-              </Select>
+              {showNgCodeLangues()}
               <Typography sx={{ fontSize: 30 }}>
                 {t("NGPartComponent")}:{" "}
               </Typography>
