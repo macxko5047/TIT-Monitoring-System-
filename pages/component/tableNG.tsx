@@ -101,23 +101,47 @@ export default function QuickFilteringCustomizedGrid() {
   const [TextError, SetText] = useState<any>("");
 
   const NGsplit = selectNG.split(":");
-  // document.addEventListener("keydown", function (event) {
-  //   if (event.ctrlKey && event.altKey && event.key === "5") {
-  //     handleOpen();
-  //   }
-  //   //console.log(event.key);
-  // });
 
-  // Otherwise filter will be applied on fields such as the hidden column id
+  const [languageShow, setLanguageShow] = useState<any>("");
+  const [fieldDescription, setFieldDescription] =
+    useState<any>("NG_description_en");
+
+  useEffect(() => {
+    const RefetchLanguage = () => {
+      const languageLocalStorage = localStorage.getItem("Language");
+      if (languageLocalStorage != undefined) {
+        if (languageShow != languageLocalStorage) {
+          setLanguageShow(languageLocalStorage);
+        }
+      }
+    };
+    RefetchLanguage();
+  });
+
+  useEffect(() => {
+    if (languageShow == "th") {
+      setFieldDescription("NG_description_th");
+    }
+    if (languageShow == "en") {
+      setFieldDescription("NG_description_en");
+    }
+    if (languageShow == "cn") {
+      setFieldDescription("NG_description_cn");
+    }
+    if (languageShow == "vn") {
+      setFieldDescription("NG_description_vn");
+    }
+  }, [languageShow]);
+
   const columns: any = [
     /*{ field: "id", headerName: "No" },*/
-    { field: "NG_code", headerName: "Code" },
-    { field: "NG_description", headerName: "Description" },
-    { field: "Part_name", headerName: "Part component", width: 130 },
-    { field: "NG_qty", headerName: "Q'ty", type: "number", width: 70 },
+    { field: "NG_code", headerName: t("CodeNG") },
+    { field: fieldDescription, headerName: t("Description") },
+    { field: "Part_name", headerName: t("PartComponent"), width: 130 },
+    { field: "NG_qty", headerName: t("Qty"), type: "number", width: 70 },
     {
       field: "action",
-      headerName: "Delete",
+      headerName: t("Delete"),
       width: 70,
       sortable: false,
       disableColumnMenu: true,
@@ -135,7 +159,7 @@ export default function QuickFilteringCustomizedGrid() {
     },
     {
       field: "actionEdit",
-      headerName: "Edit",
+      headerName: t("Edit"),
       width: 70,
       sortable: false,
       disableColumnMenu: true,

@@ -30,6 +30,7 @@ import { i18n } from "../i18n";
 import Tablework1 from "./component/tableSelectWO";
 import Dashbord_Unit from "./Dashbord_Unit";
 import Register from "./Register";
+import TableDowntime from "./component/tableDownTime";
 
 const style = {
   position: "absolute" as "absolute",
@@ -95,6 +96,11 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 function PersistentDrawerLeft() {
   const { t, i18n } = useTranslation(); //language
+  const [languageShow, setLanguageShow] = useState<any>("");
+  useEffect(() => {
+    const languageDefult = localStorage.getItem("Language");
+    setLanguageShow(languageDefult);
+  }, []);
   const theme = useTheme();
   const router = useRouter();
   //=========================== refresh language ==================
@@ -412,6 +418,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("th");
                     localStorage.setItem("Language", "th");
+                    setLanguageShow("th");
                     setLanguage(null);
                   }}
                 >
@@ -421,6 +428,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("en");
                     localStorage.setItem("Language", "en");
+                    setLanguageShow("en");
                     setLanguage(null);
                   }}
                 >
@@ -430,6 +438,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("cn");
                     localStorage.setItem("Language", "cn");
+                    setLanguageShow("cn");
                     setLanguage(null);
                   }}
                 >
@@ -439,6 +448,7 @@ function PersistentDrawerLeft() {
                   onClick={(e) => {
                     i18n.changeLanguage("vn");
                     localStorage.setItem("Language", "vn");
+                    setLanguageShow("vn");
                     setLanguage(null);
                   }}
                 >

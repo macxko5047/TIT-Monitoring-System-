@@ -6,6 +6,7 @@ import { Typography } from "@mui/material";
 import supabase from "../../compunentConfig/supabase";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useTranslation } from "react-i18next";
+import Draw1 from "../draw1";
 
 function QuickSearchToolbar() {
   const { t, i18n } = useTranslation(); //language
@@ -32,19 +33,47 @@ function QuickSearchToolbar() {
 }
 
 export default function QuickFilteringCustomizedGrid() {
+  const { t, i18n } = useTranslation(); //language
   const [mounted, setMounted] = useState(false);
   const [data, setdata] = useState<any>([]);
+  const [languageShow, setLanguageShow] = useState<any>("");
+  const [fieldDescription, setFieldDescription] = useState<any>(
+    "Downtime_description_en"
+  );
+  useEffect(() => {
+    const RefetchLanguage = () => {
+      const languageLocalStorage = localStorage.getItem("Language");
+      if (languageLocalStorage != undefined) {
+        if (languageShow != languageLocalStorage) {
+          setLanguageShow(languageLocalStorage);
+        }
+      }
+    };
+    RefetchLanguage();
+  });
 
-  //รีเฟสเฉพาะอันนั้น
-  // console.log({ data });
-  // Otherwise filter will be applied on fields such as the hidden column id
+  useEffect(() => {
+    if (languageShow == "th") {
+      setFieldDescription("Downtime_description_th");
+    }
+    if (languageShow == "en") {
+      setFieldDescription("Downtime_description_en");
+    }
+    if (languageShow == "cn") {
+      setFieldDescription("Downtime_description_cn");
+    }
+    if (languageShow == "vn") {
+      setFieldDescription("Downtime_description_vn");
+    }
+  }, [languageShow]);
+
   const columns = [
-    { field: "id", headerName: "NO" },
-    { field: "Downtime_code", headerName: "Downtime_code" },
-    { field: "Begin_time", headerName: "Begin_time" },
-    { field: "End_time", headerName: "End_time" },
-    { field: "Duration_downtime", headerName: "Duration_downtime" },
-    { field: "Downtime_description", headerName: "Detail", width: 300 },
+    // { field: "id", headerName: "NO" },
+    { field: "Downtime_code", headerName: t("Downtimecode") },
+    { field: "Begin_time", headerName: t("Begintime") },
+    { field: "End_time", headerName: t("Endtime") },
+    { field: "Duration_downtime", headerName: t("Durationdowntime") },
+    { field: fieldDescription, headerName: t("Detail"), width: 300 },
   ];
   const [loading, setLoading] = useState(false); // ทำโหลดดิ้งรอข้อมูล
   // รีเฟสเฉพาะอันนั้น;
@@ -64,6 +93,8 @@ export default function QuickFilteringCustomizedGrid() {
     setLoading(false);
     // }, 1000);
     // return () => clearInterval(intervalId);
+    const lenguageDefault = localStorage.getItem("Language");
+    setLanguageShow(lenguageDefault);
   }, []);
 
   useEffect(() => {

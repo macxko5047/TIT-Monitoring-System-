@@ -8,7 +8,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 // import { CircularProgressbarWithChildren } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import Loadings from "./component/loadings";
-import Tablework2 from "./component/tableDownTime";
+import TableDowntime from "./component/tableDownTime";
 import Tablework3 from "./component/tableNG";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -102,6 +102,21 @@ function tableproduction() {
   // split string แบ่ง ออกเพื่อส่งไปเก็บใน database
   const menusplit = details.split(":");
 
+  const getDetailDowntimeClient = () => {
+    if (languages == "th") {
+      return menusplit[1];
+    }
+    if (languages == "en") {
+      return menusplit[2];
+    }
+    if (languages == "cn") {
+      return menusplit[3];
+    }
+    if (languages == "vn") {
+      return menusplit[4];
+    }
+  };
+
   const [datamenu, setDatamenu] = useState<any>([]);
   // console.log("menu :", datamenu);
   const [timeOtCel, setTimeOtCel] = useState<number>(0);
@@ -131,9 +146,11 @@ function tableproduction() {
                   ":" +
                   menus.desc_th +
                   ":" +
+                  menus.desc_eng +
+                  ":" +
                   menus.desc_china +
                   ":" +
-                  menus.desc_eng
+                  menus.desc_vn
                 }
               >
                 {menus.code} : {menus.desc_th}
@@ -163,9 +180,11 @@ function tableproduction() {
                   ":" +
                   menus.desc_th +
                   ":" +
+                  menus.desc_eng +
+                  ":" +
                   menus.desc_china +
                   ":" +
-                  menus.desc_eng
+                  menus.desc_vn
                 }
               >
                 {menus.code} : {menus.desc_eng}
@@ -195,9 +214,11 @@ function tableproduction() {
                   ":" +
                   menus.desc_th +
                   ":" +
+                  menus.desc_eng +
+                  ":" +
                   menus.desc_china +
                   ":" +
-                  menus.desc_eng
+                  menus.desc_vn
                 }
               >
                 {menus.code} : {menus.desc_china}
@@ -227,9 +248,11 @@ function tableproduction() {
                   ":" +
                   menus.desc_th +
                   ":" +
+                  menus.desc_eng +
+                  ":" +
                   menus.desc_china +
                   ":" +
-                  menus.desc_eng
+                  menus.desc_vn
                 }
               >
                 {menus.code} : {menus.desc_vn}
@@ -258,11 +281,13 @@ function tableproduction() {
               value={
                 menus.code +
                 ":" +
-                menus.desc +
+                menus.desc_th +
+                ":" +
+                menus.desc_eng +
                 ":" +
                 menus.desc_china +
                 ":" +
-                menus.desc_eng
+                menus.desc_vn
               }
             >
               <Stack
@@ -282,7 +307,7 @@ function tableproduction() {
                   {menus.code}
                 </Typography>
                 <Typography sx={{ fontSize: 24, color: "#000000" }}>
-                  {menus.desc}
+                  {menus.desc_th}
                 </Typography>
               </Stack>
             </MenuItem>
@@ -304,11 +329,13 @@ function tableproduction() {
               value={
                 menus.code +
                 ":" +
-                menus.desc +
+                menus.desc_th +
+                ":" +
+                menus.desc_eng +
                 ":" +
                 menus.desc_china +
                 ":" +
-                menus.desc_eng
+                menus.desc_vn
               }
             >
               <Stack
@@ -350,11 +377,13 @@ function tableproduction() {
               value={
                 menus.code +
                 ":" +
-                menus.desc +
+                menus.desc_th +
+                ":" +
+                menus.desc_eng +
                 ":" +
                 menus.desc_china +
                 ":" +
-                menus.desc_eng
+                menus.desc_vn
               }
             >
               <Stack
@@ -396,11 +425,13 @@ function tableproduction() {
               value={
                 menus.code +
                 ":" +
-                menus.desc +
+                menus.desc_th +
+                ":" +
+                menus.desc_eng +
                 ":" +
                 menus.desc_china +
                 ":" +
-                menus.desc_eng
+                menus.desc_vn
               }
             >
               <Stack
@@ -466,6 +497,18 @@ function tableproduction() {
     FetchData();
     setLanguage(localStorage.getItem("Language"));
   }, []);
+
+  //============= เคล็ดลับ วิชา ในตำลา บทที่ 1 บราๆ +=========
+  useEffect(() => {
+    const RefetchLanguage = () => {
+      const datalanguage = localStorage.getItem("Language");
+      if (languages != datalanguage) {
+        setLanguage(datalanguage);
+      }
+    };
+    RefetchLanguage();
+  });
+
   //เปิด - ปิด modal v.1
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => {
@@ -529,7 +572,10 @@ function tableproduction() {
             PD_key: localStorage.getItem("PD_key"),
             Downtime_code: menusplit[0],
             Begin_time: times,
-            Downtime_description: menusplit[1] + " : " + menusplit[2],
+            Downtime_description_th: menusplit[1],
+            Downtime_description_en: menusplit[2],
+            Downtime_description_cn: menusplit[3],
+            Downtime_description_vn: menusplit[4],
           },
         ]);
         if (error) {
@@ -1072,7 +1118,10 @@ function tableproduction() {
         {
           Work_order_id: localStorage.getItem("Work_order_id"),
           NG_code: NGsplit[0],
-          NG_description: NGsplit[1] + " : " + NGsplit[2],
+          NG_description_th: NGsplit[1],
+          NG_description_en: NGsplit[2],
+          NG_description_cn: NGsplit[3],
+          NG_description_vn: NGsplit[4],
           NG_qty: selectQty,
           Production_date: checkdates,
           Production_unit: localStorage.getItem("Production_unit"),
@@ -1092,7 +1141,10 @@ function tableproduction() {
         {
           Work_order_id: localStorage.getItem("Work_order_id"),
           NG_code: NGsplit[0],
-          NG_description: NGsplit[1] + " : " + NGsplit[2],
+          NG_description_th: NGsplit[1],
+          NG_description_en: NGsplit[2],
+          NG_description_cn: NGsplit[3],
+          NG_description_vn: NGsplit[4],
           NG_qty: selectQty,
           Production_date: checkdates,
           Production_unit: localStorage.getItem("Production_unit"),
@@ -1680,23 +1732,47 @@ function tableproduction() {
   //----------------------------------------------------------------
   const [DowntimeEndNull, setDowntimeEndNull] = useState<any>(0);
   // console.log("DowntimeEndNull", DowntimeEndNull);
+  const [detailDowntimeNow, setDetailDowntimeNow] = useState<any>("");
+  console.log("detailDowntimeNow", detailDowntimeNow);
 
   useEffect(() => {
     const fetchdataDowntime = async () => {
       let { data: Downtime_record, error } = await supabase
         .from("Downtime_record")
-        .select("Downtime_code")
+        .select(
+          "Downtime_code,Downtime_description_th,Downtime_description_en,Downtime_description_cn,Downtime_description_vn "
+        )
         .eq("PD_key", localStorage.getItem("PD_key"))
         .is("End_time", null);
 
       if (Downtime_record?.length) {
         setDowntimeEndNull(Downtime_record.length);
         setTimestamp01(localStorage.getItem("TimeStartDownTime"));
+        if (languages == "th") {
+          setDetailDowntimeNow(
+            Downtime_record.map((ress) => ress.Downtime_description_th)
+          );
+        }
+        if (languages == "en") {
+          setDetailDowntimeNow(
+            Downtime_record.map((ress) => ress.Downtime_description_en)
+          );
+        }
+        if (languages == "cn") {
+          setDetailDowntimeNow(
+            Downtime_record.map((ress) => ress.Downtime_description_cn)
+          );
+        }
+        if (languages == "vn") {
+          setDetailDowntimeNow(
+            Downtime_record.map((ress) => ress.Downtime_description_vn)
+          );
+        }
       }
     };
 
     fetchdataDowntime();
-  }, []);
+  }, [languages]);
 
   useEffect(() => {
     const OnDowntimeAuto = async () => {
@@ -1980,7 +2056,7 @@ function tableproduction() {
               <Grid container xs={12} md={12} lg={12} spacing={2}>
                 <Grid xs={12} md={6} lg={6}>
                   <Item>
-                    <Tablework2 />
+                    <TableDowntime />
                   </Item>
                 </Grid>
                 <Grid xs={12} md={6} lg={6}>
@@ -2007,7 +2083,7 @@ function tableproduction() {
                 {t("Time")} {t("pause")} : {times}
               </Typography>
               <InputLabel sx={{ fontSize: 30 }}>{t("Detail")}</InputLabel>
-              ShowCode {ShowCodeDowntime()}
+              {ShowCodeDowntime()}
               <div>
                 <br />
               </div>
@@ -2051,7 +2127,10 @@ function tableproduction() {
                 {t("Donwtimetell")}
               </Typography>
               <Typography style={{ fontSize: "30px" }}>
-                {t("Detail")} : {menusplit[1] + " : " + menusplit[2]}
+                {t("Detail")} :{" "}
+                {getDetailDowntimeClient()
+                  ? getDetailDowntimeClient()
+                  : detailDowntimeNow}
               </Typography>
               <div style={{ textAlign: "center" }}>
                 <Typography style={{ fontSize: "50px" }}>
