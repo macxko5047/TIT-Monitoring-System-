@@ -308,11 +308,13 @@ export default function tablework1() {
         },
       ]);
 
-      if (data) {
-        console.log(data);
+      if (!error) {
+        console.log("insert to Production_history Success :D", data);
+        await router.push("/draw1");
       }
       if (error) {
         console.log("insertDigit Error", error);
+        alert("กรุณาติดต่อเจ้าหน้าที่ โปรแกรมเม่อ เพื่อแก้ไข โดยด่วนครับ");
       }
     }
   };
@@ -436,10 +438,6 @@ export default function tablework1() {
   const handlerAgree = async () => {
     setLoading(true);
     await removeItem();
-
-    if (CheckdataPD != "") {
-      insertDigit();
-    }
     await localStorage.setItem("PDU", PduNum);
     await localStorage.setItem("Work_order_id", datasec[0].Work_order_id);
     await localStorage.setItem("Production_unit", dataUnit_select);
@@ -451,7 +449,11 @@ export default function tablework1() {
     await localStorage.setItem("Complete_qty", datasec[0].Complete_qty);
     await localStorage.setItem("ItemNumber", datasec[0].Item_number);
     await localStorage.setItem("NG_qty_WO", datasec[0].NG_qty);
-    await router.push("/draw1");
+
+    if (CheckdataPD != "") {
+      insertDigit();
+    }
+
     setLoading(false);
   };
   //=================================================================
